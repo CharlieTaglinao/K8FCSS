@@ -1,0 +1,26 @@
+name: Sync Main to Team Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Git
+      uses: actions/setup-git@v2
+
+    - name: Push to team branch
+      run: |
+        git fetch origin
+        git checkout team-branch
+        git merge origin/main --no-edit
+        git push origin team-branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

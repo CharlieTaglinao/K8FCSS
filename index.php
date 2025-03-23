@@ -1,7 +1,6 @@
 <?php
 include 'settings/check-if-loggedin.php';
 ?>
-<!-- tesssdtas -->
 <!DOCTYPE html>
 <html lang="en">
 

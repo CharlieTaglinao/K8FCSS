@@ -1,7 +1,7 @@
 <?php
 include '../settings/config.php'; // Include your database connection file
 include 'processes/activity-log-logic.php'; // Include the new logic file
-
+// test
 // Define how many results you want per page
 $results_per_page = 8;
 

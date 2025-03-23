@@ -1,0 +1,25 @@
+name: Sync to Team Branch
+
+on:
+  push:
+    branches:
+      - main # Replace 'main' with the branch you push to
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Push changes to team-branch
+        run: |
+          git checkout -b team-branch origin/team-branch || git checkout team-branch
+          git merge --no-ff ${{ github.ref_name }} -m "Sync from ${{ github.ref_name }}"
+          git push origin team-branch

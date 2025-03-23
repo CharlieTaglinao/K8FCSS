@@ -23,4 +23,4 @@ jobs:
         git merge origin/main --no-edit
         git push origin team-branch
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # This is the default token available for use

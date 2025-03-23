@@ -1,7 +1,7 @@
 <?php
 include 'settings/check-if-loggedin.php';
 ?>
-<!-- test -->
+<!-- testas -->
 <!DOCTYPE html>
 <html lang="en">
 

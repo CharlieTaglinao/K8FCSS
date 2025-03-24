@@ -7,6 +7,8 @@
     <link rel="icon" href="../assets/images/updated-logo.webp" type="image/png">
     <link rel="stylesheet" href="../assets/css/Login.css">
     <link rel="stylesheet" href="../assets/css/loader.css"><!-- Style for loader -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <script src="../assets/js/bootstrap.js" defer></script>
     <script src="../assets/js/script.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!-- JQuery for loader -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -112,37 +114,42 @@
 
     <div class="login-container">
         <div class="logo">
-            <a href="../index.php">
+            <a href="../index">
                 <img src="../assets/images/updated-logo.webp" width="150" height="150" alt="Company Logo" />
             </a>
         </div>
         <h3 class="subheader">Welcome to K8 Financial Consultancy Services</h3>
         <h1>Login</h1>
+        <?php
+        session_start();
+        $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+        unset($_SESSION['error']);
+        ?>
         <form action="process_login.php" method="post">
             
         
-        <div id="error-message" class="error-message"></div>
+        <div id="error-message" class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
         <label for="email">Email:</label>
             <div class="form-group">
-                <input type="email" id="email" name="email" value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : ''; ?>" />
+            <input type="email" id="email" name="email" class="form-control" value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : ''; ?>" />
             </div>
 
             <label for="password">Password: </label>
             <div class="form-group">
-                    <input type="password" id="password" name="password" />
-                    <div class="toggle-password-container">
-                        <span id="toggle-password" style="cursor: pointer;">
-                            <i class="fas fa-eye" style="color: gray;"></i>
-                        </span>
-                    </div>
+                <input type="password" id="password" name="password" class="form-control" />
+                <div class="toggle-password-container">
+                <span id="toggle-password" style="cursor: pointer;">
+                    <i class="fas fa-eye" style="color: gray;"></i>
+                </span>
+                </div>
             </div>
 
-            <a href="../login/forgot_password.php" class="forgot-password">Forgot Password?</a>
+            <a href="../login/forgot_password" class="forgot-password">Forgot Password?</a>
 
             <div class="signup-container">
-                <button type="submit">Sign In</button>
-                <p class="signup-caption">Don't have an account yet? <a href="../php/signup.php" class="forgot-password"
-                        id="signup">Sign up</a> </p>
+            <button type="submit">Sign In</button>
+            <p class="signup-caption">Don't have an account yet? <a href="../php/signup" class="forgot-password"
+                id="signup">Sign up</a> </p>
             </div>
             
         </form>

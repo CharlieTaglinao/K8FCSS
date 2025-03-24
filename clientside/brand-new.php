@@ -161,13 +161,13 @@ checkUserRole(['Client']);
                         <div class="form-group">
                             <label for="email">Email Address: <span class="required-asterisk">*</span></label>
                             <input type="email" id="email" name="email" class="form-control" placeholder="johndoe@example.com"
-                                value="<?php echo $_SESSION['email']; ?>"  readonly>
+                                value="<?php echo $_SESSION['email']; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="contact-number-1">Contact Number: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="contact-number-1" name="contact_number_1" class="form-control" placeholder="09123456789"
-                            value="<?php echo $_SESSION['phone']; ?>"  required>
+                            value="<?php echo $_SESSION['phone']; ?>" readonly>
                                 <span class="error-message"></span>
                         </div>
                         <div class="form-group">
@@ -273,28 +273,34 @@ checkUserRole(['Client']);
                             <label for="mother-maiden-first-name">Mother's Maiden First Name:</label>
                             <input type="text" id="mother-maiden-first-name" name="mother_maiden_first_name" class="form-control"
                                 placeholder="Jane">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-middle-name">Mother's Maiden Middle Name:</label>
                             <input type="text" id="mother-maiden-middle-name" name="mother_maiden_middle_name" class="form-control"
                                 placeholder="Bautista">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-last-name">Mother's Maiden Last Name:</label>
                             <input type="text" id="mother-maiden-last-name" name="mother_maiden_last_name" class="form-control"
                                 placeholder="Smith">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-first-name">Father's First Name:</label>
                             <input type="text" id="father-first-name" name="father_first_name" class="form-control" placeholder="Robert">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-middle-name">Father's Middle Name:</label>
                             <input type="text" id="father-middle-name" name="father_middle_name" class="form-control" placeholder="Cruz">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-last-name">Father's Last Name:</label>
                             <input type="text" id="father-last-name" name="father_last_name" class="form-control" placeholder="Doe">
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
                     <h2 id="header-title-below">Vehicle Information:</h2>
@@ -303,7 +309,8 @@ checkUserRole(['Client']);
                         <div class="form-group">
                                     <label for="year-model">Year Model: <span class="required-asterisk">*</span></label>
                                     <input type="text" id="year-model" name="year_model" class="form-control" placeholder="2024" >
-                                    <span class="error-message"></span>
+                                    <div class="invalid-feedback"></div>
+                                    
                                 </div>
                                 <div class="form-group">
                                     <label for="transmition-type">Transmission Type: <span class="required-asterisk">*</span></label>
@@ -312,14 +319,17 @@ checkUserRole(['Client']);
                                         <option value="Automatic">Automatic</option>
                                         <option value="Manual">Manual</option>
                                     </select>
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="make">Car Name: <span class="required-asterisk">*</span></label>
                                     <input type="text" id="make" name="make" class="form-control" placeholder="Toyota Vios 1.3E" >
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="type">Type of Car: <span class="required-asterisk">*</span></label>
                                     <input type="text" id="type" name="type" class="form-control" placeholder="Sedan" >
+                                    <div class="invalid-feedback"></div>
                                 </div>
                     </div>
                     <div class="form-row-button">
@@ -351,6 +361,7 @@ checkUserRole(['Client']);
                                 </select>
                                 <input type="text" id="income-source-other" name="income_source_other" class="form-control"
                                     placeholder="Specify if 'Other'" style="display: none;">
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <!-- Employer/Business Details -->
@@ -358,18 +369,20 @@ checkUserRole(['Client']);
                             <label for="employer-name">Present Employer / Business Name: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="employer-name" name="employer_name" class="form-control" placeholder="ABC Corp" >
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="office-address">Office / Business Address: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="office-address" name="office_address" class="form-control"
                                 placeholder="789 Maple St, Springfield">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="office-number">Office Number(s): <span
                                     class="required-asterisk">*</span></label>
-                            <input type="text" id="office-number" name="office_number" class="form-control" placeholder="5558765"
-                                >
+                            <input type="text" id="office-number" name="office_number" class="form-control" placeholder="5558765">
+                                <div class="invalid-feedback"></div>
                         </div>
 
                         <div class="form-group">
@@ -377,33 +390,37 @@ checkUserRole(['Client']);
                                     class="required-asterisk">*</span></label>
                             <input type="email" id="company-email" name="company_email" class="form-control"
                                 placeholder="contact@abccorp.com" >
-                            <span class="error-message"></span>
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="position">Position: <span class="required-asterisk">*</span></label>
                             <input type="text" id="position" name="position" class="form-control" placeholder="Software Engineer" >
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="years-service">Years of Service: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="years-service" name="years_service" class="form-control" placeholder="4" >
+                            <div class="invalid-feedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="monthly-income">Gross Monthly Income: <span
                             class="required-asterisk">*</span></label>
                             <input type="text" id="monthly-income" name="monthly_income" class="form-control" placeholder="50000" >
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="credit-cards">Credit Card: <span
                             class="required-asterisk">*</span></label>
                             <input type="text" id="credit-cards" name="credit_cards" class="form-control"
                                 placeholder="1234567891011121">
-                            <span class="error-message"></span> 
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="credit-history">Credit History:</label>
                             <input type="text" id="credit-history" name="credit_history" class="form-control" placeholder="Good">
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
                     <div class="form-row-button">
@@ -421,70 +438,77 @@ checkUserRole(['Client']);
                         <div class="form-group">
                             <label for="first-name-borrower">First Name: <span
                                     class="required-asterisk">*</span></label>
-                            <input type="text" id="first-name-borrower" name="first_name_borrower" class="form-control" placeholder="Ellen"
-                                >
+                            <input type="text" id="first-name-borrower" name="first_name_borrower" class="form-control" placeholder="Ellen">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="middle-name-borrower">Middle Name: <span
                                     class="required-asterisk">*</span></label>
-                            <input type="text" id="middle-name-borrower" name="middle_name_borrower" class="form-control" placeholder="Gonzales"
-                                >
+                            <input type="text" id="middle-name-borrower" name="middle_name_borrower" class="form-control" placeholder="Gonzales">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="last-name-borrower">Last Name: <span class="required-asterisk">*</span></label>
-                            <input type="text" id="last-name-borrower" name="last_name_borrower" class="form-control" placeholder="Joe"
-                                >
+                            <input type="text" id="last-name-borrower" name="last_name_borrower" class="form-control" placeholder="Joe">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="email-address-borrower">Email Address:</label>
                             <input type="email" id="email-address-borrower" name="email_address_borrower" class="form-control"
                                 placeholder="ellen@gmail.com" >
-                                <span class="error-message"></span>
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="date-of-birth-borrower">Date of Birth: <span
                                     class="required-asterisk">*</span></label>
                             <input type="date" id="date-of-birth-borrower" name="date_of_birth_borrower" class="form-control"
                                 placeholder="YYYY-MM-DD" >
-                            <span class="error-message"></span>
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="place-birth-borrower">Place of Birth:</label>
                             <input type="text" id="place-birth-borrower" name="place_birth_borrower" class="form-control"
                                 placeholder="General Trias Cavite">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="relationship-borrower">Relationship to Borrower: <span
                             class="required-asterisk">*</span></label> 
                             <input type="text" id="relationship-borrower" name="relationship_borrower" class="form-control"
                                 placeholder="Spouse" >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="residential-address-borrower">Residential Address (If different to
                                 borrower):</label>
                             <input type="text" id="residential-address-borrower" name="residential_address_borrower" class="form-control"
                                 placeholder="Dasmariñas Cavite">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="years-stay-borrower">Years of Stay:</label>
                             <input type="text" id="years-stay-borrower" name="years_stay_borrower" class="form-control"
                                 placeholder="7">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="contact-number-borrower">Contact Number: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="contact-number-borrower" name="contact_number_borrower" class="form-control"
                                 placeholder="09123456789" >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="tin_number_borrower">TIN Number:</label>
                             <input type="text" id="tin_number_borrower" name="tin_number_borrower" class="form-control"
                                 placeholder="111222333444">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="sss_number_borrower">SSS Number:</label>
                             <input type="text" id="sss_number_borrower" name="sss_number_borrower" class="form-control"
                                 placeholder="1122222223">
+                                <div class="invalid-feedback"></div>
 
                         </div>
                     </div>
@@ -495,30 +519,36 @@ checkUserRole(['Client']);
                             <label for="mother-maiden-first-name">Mother's Maiden First Name:</label>
                             <input type="text" id="mother-maiden-first-name" name="mother_maiden_first_name" class="form-control"
                                 placeholder="Jane">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-middle-name">Mother's Maiden Middle Name:</label>
                             <input type="text" id="mother-maiden-middle-name" name="mother_maiden_middle_name" class="form-control"
                                 placeholder="Zamora">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-last-name">Mother's Maiden Last Name:</label>
                             <input type="text" id="mother-maiden-last-name" name="mother_maiden_last_name" class="form-control"
                                 placeholder="Smith">
+                                <div class="invalid-feedback"></div>
                         </div>
 
                         <!-- Father's Name -->
                         <div class="form-group">
                             <label for="father-first-name">Father's First Name:</label>
                             <input type="text" id="father-first-name" name="father_first_name" class="form-control" placeholder="John">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-middle-name">Father's Middle Name:</label>
                             <input type="text" id="father-middle-name" name="father_middle_name" class="form-control" placeholder="Cruz">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-last-name">Father's Last Name:</label>
                             <input type="text" id="father-last-name" name="father_last_name" class="form-control" placeholder="Doe">
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
 
@@ -542,35 +572,40 @@ checkUserRole(['Client']);
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="employer-name-borrower" name="employer_name_borrower" class="form-control"
                                 placeholder="Tesla" >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="office-address-borrower">Office Address: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="office-address-borrower" name="office_address_borrower" class="form-control"
                                 placeholder="Block 1 Ph1 General Trias" >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="position-borrower">Position: <span
                             class="required-asterisk">*</span></label>
                             <input type="text" id="position-borrower" name="position_borrower" class="form-control"
                                 placeholder="Data Analyst" >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="years-service-borrower">Years of Service: <span
                             class="required-asterisk">*</span></label>
                             <input type="text" id="years-service-borrower" name="years_service_borrower" class="form-control"
                                 placeholder="10" >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="monthly-income-borrower">Gross Monthly Income:</label>
                             <input type="text" id="monthly-income-borrower" name="monthly_income_borrower" class="form-control"
                                 placeholder="50000">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="credit-cards-borrower">Credit Card:</label>
                             <input type="text" id="credit-cards-borrower" name="credit_cards_borrower" class="form-control"
                                 placeholder="1234567891011121">
-                            <span class="error-message"></span>
+                                <div class="invalid-feedback"></div>
                         </div>
                     </div>
                     <h2 id="header-title-below">Final Details:</h2>
@@ -579,7 +614,8 @@ checkUserRole(['Client']);
                         <div class="form-group column">
                             <label for="comments">Additional Comments:</label>
                             <textarea id="comments" name="comments" class="form-control"
-                                placeholder="I am looking forward to this opportunity."></textarea>
+                                placeholder="I am looking forward to this opportunity." maxlength="300"></textarea>
+                            <small id="char-count" class="form-text">0/250 characters</small>
                         </div>
                     </div>
                     <div class="form-row-button">

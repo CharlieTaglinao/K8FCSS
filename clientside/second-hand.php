@@ -15,7 +15,6 @@ checkUserRole(['Client']);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!-- JQuery for loader -->
     <script src="assets/js/script.js" defer></script>
-    <script src="assets/js/second-hand.js" defer></script> <!-- Link to your new JavaScript file -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
     <link href="../assets/css/bootstrap.css" rel="stylesheet">
@@ -123,13 +122,13 @@ checkUserRole(['Client']);
                         <div class="form-group">
                             <label for="appointment-date">Appointment Date: <span
                                     class="required-asterisk">*</span></label>
-                            <input type="date" id="appointment-date" name="appointment_date" class="form-control" required>
+                            <input type="date" id="appointment-date" name="appointment_date" class="form-control">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="appointment-time">Appointment Time: <span
                                     class="required-asterisk">*</span></label>
-                            <select id="appointment-time" name="appointment_time" class="form-control" required>
+                            <select id="appointment-time" name="appointment_time" class="form-control">
                                 <!-- Time slots will be populated here -->
                             </select>
                             <div class="invalid-feedback"></div>
@@ -139,36 +138,36 @@ checkUserRole(['Client']);
                     <div class="form-inputs">
                         <div class="form-group">
                             <label for="first-name">First Name: <span class="required-asterisk">*</span></label>
-                            <input type="text" id="first-name" name="first_name" class="form-control" placeholder="John" required
+                            <input type="text" id="first-name" name="first_name" class="form-control" placeholder="John"
                                 value="<?php echo $_SESSION['first_name']; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="middle-name">Middle Name: <span class="required-asterisk">*</span></label>
-                            <input type="text" id="middle-name" name="middle_name" class="form-control" placeholder="Rosales" required
+                            <input type="text" id="middle-name" name="middle_name" class="form-control" placeholder="Rosales"
                                 value="<?php echo $_SESSION['middle_name']; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="last-name">Last Name: <span class="required-asterisk">*</span></label>
-                            <input type="text" id="last-name" name="last_name" class="form-control" placeholder="Doe" required
+                            <input type="text" id="last-name" name="last_name" class="form-control" placeholder="Doe"
                                 value="<?php echo $_SESSION['last_name']; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="email">Email Address: <span class="required-asterisk">*</span></label>
                             <input type="email" id="email" name="email" class="form-control" placeholder="johndoe@example.com"
-                                value="<?php echo $_SESSION['email']; ?>" required readonly>
+                                value="<?php echo $_SESSION['email']; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="contact-number-1">Contact Number: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="contact-number-1" name="contact_number_1" class="form-control" placeholder="09123456789"
-                            value="<?php echo $_SESSION['phone']; ?>" readonly required pattern="\d{11}">
+                            value="<?php echo $_SESSION['phone']; ?>" readonly>
                             <div class="invalid-feedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="contact-number-2">Contact Number 2:</label>
                             <input type="text" id="contact-number-2" name="contact_number_2" class="form-control"
-                                placeholder="09123456789" pattern="\d{11}">
+                                placeholder="09123456789">
                                 <div class="invalid-feedback"></div>
                         </div>
 
@@ -176,25 +175,25 @@ checkUserRole(['Client']);
                             <label for="present-address">Present Address: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="present-address" name="present_address" class="form-control"
-                                placeholder="123 Main St, Springfield" value="<?php echo $_SESSION['address']; ?>" readonly required>
+                                placeholder="123 Main St, Springfield" value="<?php echo $_SESSION['address']; ?>" readonly>
                                 
                         </div>
 
                         <div class="form-group">
                             <label for="dob">Date of Birth: <span class="required-asterisk">*</span></label>
-                            <input type="date" id="dob" name="dob" class="form-control" placeholder="YYYY-MM-DD" value="<?php echo $_SESSION['dob']; ?>" readonly required>
+                            <input type="date" id="dob" name="dob" class="form-control" placeholder="YYYY-MM-DD" value="<?php echo $_SESSION['dob']; ?>" readonly>
                             
                         </div>
 
                         <div class="form-group">
                             <label for="place_of_birth">Place of Birth: <span class="required-asterisk">*</span></label>
                             <input type="text" id="place_of_birth" name="place_of_birth" class="form-control"
-                                placeholder="General Trias Cavite" required>
+                                placeholder="General Trias Cavite">
                                 <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="marital-status">Marital Status: <span class="required-asterisk">*</span></label>
-                            <select id="marital-status" name="marital_status" class="form-control" required>
+                            <select id="marital-status" name="marital_status" class="form-control">
                                 <option value="">--Select--</option>
                                 <option value="Single">Single</option>
                                 <option value="Married">Married</option>
@@ -208,12 +207,12 @@ checkUserRole(['Client']);
                             <label for="years-present-address">Years at Present Address: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="years-present-address" name="years_present_address" class="form-control" placeholder="5"
-                                required>
+                                >
                                 <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="ownership">Ownership: <span class="required-asterisk">*</span></label>
-                            <select id="ownership" name="ownership" class="form-control" required>
+                            <select id="ownership" name="ownership" class="form-control">
                                 <option value="">--Select--</option>
                                 <option value="Owned">Owned</option>
                                 <option value="Rented">Rented</option>
@@ -273,28 +272,34 @@ checkUserRole(['Client']);
                             <label for="mother-maiden-first-name">Mother's Maiden First Name:</label>
                             <input type="text" id="mother-maiden-first-name" name="mother_maiden_first_name" class="form-control"
                                 placeholder="Jane">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-middle-name">Mother's Maiden Middle Name:</label>
                             <input type="text" id="mother-maiden-middle-name" name="mother_maiden_middle_name" class="form-control"
                                 placeholder="Bautista">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-last-name">Mother's Maiden Last Name:</label>
                             <input type="text" id="mother-maiden-last-name" name="mother_maiden_last_name" class="form-control"
                                 placeholder="Smith">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-first-name">Father's First Name:</label>
                             <input type="text" id="father-first-name" name="father_first_name" class="form-control" placeholder="Robert">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-middle-name">Father's Middle Name:</label>
                             <input type="text" id="father-middle-name" name="father_middle_name" class="form-control" placeholder="Cruz">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-last-name">Father's Last Name:</label>
                             <input type="text" id="father-last-name" name="father_last_name" class="form-control" placeholder="Doe">
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
                     <h2 id="header-title-below">Vehicle Information:</h2>
@@ -302,25 +307,27 @@ checkUserRole(['Client']);
                     <div class="form-inputs">
                         <div class="form-group">
                                     <label for="year-model">Year Model: <span class="required-asterisk">*</span></label>
-                                    <input type="text" id="year-model" name="year_model" class="form-control" placeholder="2024" min="1980"
-                                        max="3000" required>
-                                    <span class="error-message"></span>
+                                    <input type="text" id="year-model" name="year_model" class="form-control" placeholder="2024">
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="transmition-type">Transmission Type: <span class="required-asterisk">*</span></label>
-                                    <select id="transmition-type" name="transmition_type" class="form-control" required>
+                                    <select id="transmition-type" name="transmition_type" class="form-control">
                                         <option value="">Select Transmission Type</option>
                                         <option value="Automatic">Automatic</option>
                                         <option value="Manual">Manual</option>
                                     </select>
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="make">Car Name: <span class="required-asterisk">*</span></label>
-                                    <input type="text" id="make" name="make" class="form-control" placeholder="Toyota Vios 1.3E" required>
+                                    <input type="text" id="make" name="make" class="form-control" placeholder="Toyota Vios 1.3E">
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="type">Type of Car: <span class="required-asterisk">*</span></label>
-                                    <input type="text" id="type" name="type" class="form-control" placeholder="Sedan" required>
+                                    <input type="text" id="type" name="type" class="form-control" placeholder="Sedan">
+                                    <div class="invalid-feedback"></div>
                                 </div>
                     </div>
                     <div class="form-row-button">
@@ -331,9 +338,6 @@ checkUserRole(['Client']);
 
                 <!-- Page 3 -->
                 <div class="form-page" id="page-3" style="display: none;">
-                    <div class="form-error-container">
-                        <span id="form-error-message"></span>
-                    </div>
                     <h2>Primary Borrower:</h2>
                     <!-- Source of Income -->
                     <div class="form-inputs">
@@ -343,7 +347,7 @@ checkUserRole(['Client']);
                                         class="required-asterisk">*</span></label>
                             </div>
                             <div class="income-source-select">
-                                <select id="income-source" name="income_source" class="form-control" required>
+                                <select id="income-source" name="income_source" class="form-control">
                                     <option value="">Select Source of Income</option>
                                     <option value="Employed">Employed</option>
                                     <option value="Business">Business</option>
@@ -352,59 +356,68 @@ checkUserRole(['Client']);
                                 </select>
                                 <input type="text" id="income-source-other" name="income_source_other" class="form-control"
                                     placeholder="Specify if 'Other'" style="display: none;">
+                                    <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <!-- Employer/Business Details -->
                         <div class="form-group">
                             <label for="employer-name">Present Employer / Business Name: <span
                                     class="required-asterisk">*</span></label>
-                            <input type="text" id="employer-name" name="employer_name" class="form-control" placeholder="ABC Corp" required>
+                            <input type="text" id="employer-name" name="employer_name" class="form-control" placeholder="ABC Corp">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="office-address">Office / Business Address: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="office-address" name="office_address" class="form-control"
-                                placeholder="789 Maple St, Springfield" required>
+                                placeholder="789 Maple St, Springfield">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="office-number">Office Number(s): <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="office-number" name="office_number" class="form-control" placeholder="5558765"
-                                required>
+                                >
+                                <div class="invalid-feedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="company-email">Company / Business Email Address: <span
                                     class="required-asterisk">*</span></label>
                             <input type="email" id="company-email" name="company_email" class="form-control"
-                                placeholder="contact@abccorp.com" required>
-                            <span class="error-message"></span>
+                                placeholder="contact@abccorp.com" >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="position">Position: <span class="required-asterisk">*</span></label>
-                            <input type="text" id="position" name="position" class="form-control" placeholder="Software Engineer" required>
+                            <input type="text" id="position" name="position" class="form-control" placeholder="Software Engineer" >
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="years-service">Years of Service: <span
                                     class="required-asterisk">*</span></label>
-                            <input type="text" id="years-service" name="years_service" class="form-control" placeholder="4" required>
+                            <input type="text" id="years-service" name="years_service" class="form-control" placeholder="4" >
+                            <div class="invalid-feedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="monthly-income">Gross Monthly Income: <span
                             class="required-asterisk">*</span></label>
-                            <input type="text" id="monthly-income" name="monthly_income" class="form-control" placeholder="50000" required>
+                            <input type="text" id="monthly-income" name="monthly_income" class="form-control" placeholder="50000" >
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="credit-cards">Credit Card: <span
                             class="required-asterisk">*</span></label>
                             <input type="text" id="credit-cards" name="credit_cards" class="form-control"
-                                placeholder="1234567891011121" required>
-                                <span class="error-message">
+                                placeholder="1234567891011121">
+                                <div class="invalid-feedback"></div>
+                               
                         </div>
                         <div class="form-group">
                             <label for="credit-history">Credit History:</label>
                             <input type="text" id="credit-history" name="credit_history" class="form-control" placeholder="Good">
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
                     <div class="form-row-button">
@@ -423,71 +436,82 @@ checkUserRole(['Client']);
                             <label for="first-name-borrower">First Name: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="first-name-borrower" name="first_name_borrower" class="form-control" placeholder="Ellen"
-                                required>
+                                >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="middle-name-borrower">Middle Name: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="middle-name-borrower" name="middle_name_borrower" class="form-control" placeholder="Gonzales"
-                                required>
+                                >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="last-name-borrower">Last Name: <span class="required-asterisk">*</span></label>
                             <input type="text" id="last-name-borrower" name="last_name_borrower" class="form-control" placeholder="Joe"
-                                required>
+                                >
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="email-address-borrower">Email Address:</label>
                             <input type="email" id="email-address-borrower" name="email_address_borrower" class="form-control"
                                 placeholder="ellen@gmail.com">
-                                <span class="error-message"></span>
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="date-of-birth-borrower">Date of Birth: <span
                                     class="required-asterisk">*</span></label>
                             <input type="date" id="date-of-birth-borrower" name="date_of_birth_borrower" class="form-control"
-                                placeholder="YYYY-MM-DD" required>
-                            <span class="error-message"></span>
+                                placeholder="YYYY-MM-DD" >
+                                <div class="invalid-feedback"></div>
+                            
                         </div>
                         <div class="form-group">
                             <label for="place-birth-borrower">Place of Birth:</label>
                             <input type="text" id="place-birth-borrower" name="place_birth_borrower" class="form-control"
                                 placeholder="General Trias Cavite">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="relationship-borrower">Relationship to Borrower: <span
                             class="required-asterisk">*</span></label> 
                             <input type="text" id="relationship-borrower" name="relationship_borrower" class="form-control"
-                                placeholder="Spouse" required>
+                                placeholder="Spouse">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="residential-address-borrower">Residential Address (If different to
                                 borrower):</label>
                             <input type="text" id="residential-address-borrower" name="residential_address_borrower" class="form-control"
                                 placeholder="Dasmariñas Cavite">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="years-stay-borrower">Years of Stay:</label>
                             <input type="text" id="years-stay-borrower" name="years_stay_borrower" class="form-control"
                                 placeholder="15">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="contact-number-borrower">Contact Number: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="contact-number-borrower" name="contact_number_borrower" class="form-control"
-                                placeholder="09123456789" required>
+                                placeholder="09123456789">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="tin_number_borrower">TIN Number:</label>
                             <input type="text" id="tin_number_borrower" name="tin_number_borrower" class="form-control"
                                 placeholder="111222333444">
-                                <span class="error-message">
+                                <div class="invalid-feedback"></div>
+                                
                         </div>
                         <div class="form-group">
                             <label for="sss_number_borrower">SSS Number:</label>
                             <input type="text" id="sss_number_borrower" name="sss_number_borrower" class="form-control"
                                 placeholder="1122222223">
-                                <span class="error-message">
+                                <div class="invalid-feedback"></div>
+                                
                         </div>
                     </div>
                     <h2 id="header-title-below">Co-borrower's Parent Information:</h2>
@@ -497,30 +521,36 @@ checkUserRole(['Client']);
                             <label for="mother-maiden-first-name">Mother's Maiden First Name:</label>
                             <input type="text" id="mother-maiden-first-name" name="mother_maiden_first_name" class="form-control"
                                 placeholder="Jane">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-middle-name">Mother's Maiden Middle Name:</label>
                             <input type="text" id="mother-maiden-middle-name" name="mother_maiden_middle_name" class="form-control"
                                 placeholder="Doe">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-last-name">Mother's Maiden Last Name:</label>
                             <input type="text" id="mother-maiden-last-name" name="mother_maiden_last_name" class="form-control"
                                 placeholder="Smith">
+                                <div class="invalid-feedback"></div>
                         </div>
 
                         <!-- Father's Name -->
                         <div class="form-group">
                             <label for="father-first-name">Father's First Name:</label>
                             <input type="text" id="father-first-name" name="father_first_name" class="form-control" placeholder="John">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-middle-name">Father's Middle Name:</label>
                             <input type="text" id="father-middle-name" name="father_middle_name" class="form-control" placeholder="Cruz">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-last-name">Father's Last Name:</label>
                             <input type="text" id="father-last-name" name="father_last_name" class="form-control" placeholder="Doe">
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
 
@@ -543,36 +573,52 @@ checkUserRole(['Client']);
                             <label for="employer-name-borrower">Employer / Business Name: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="employer-name-borrower" name="employer_name_borrower" class="form-control"
-                                placeholder="Tesla" required>
+                                placeholder="Tesla">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="office-address-borrower">Office Address: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="office-address-borrower" name="office_address_borrower" class="form-control"
-                                placeholder="Block 1 Ph1 General Trias" required>
+                                placeholder="Block 1 Ph1 General Trias">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="position-borrower">Position: <span
                             class="required-asterisk">*</span></label>
                             <input type="text" id="position-borrower" name="position_borrower" class="form-control"
-                                placeholder="Data Analyst" required>
+                                placeholder="Data Analyst">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="years-service-borrower">Years of Service: <span
                             class="required-asterisk">*</span></label>
                             <input type="text" id="years-service-borrower" name="years_service_borrower" class="form-control"
-                                placeholder="10" required>
+                                placeholder="10">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="monthly-income-borrower">Gross Monthly Income:</label>
                             <input type="text" id="monthly-income-borrower" name="monthly_income_borrower" class="form-control"
                                 placeholder="50000">
+                                <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="credit-cards-borrower">Credit Card:</label>
                             <input type="text" id="credit-cards-borrower" name="credit_cards_borrower" class="form-control"
                                 placeholder="1234567891011121">
-                                <span class="error-message">
+                                <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+
+                    <h2 id="header-title-below">Final Details:</h2>
+                    <!-- Additional Comments -->
+                    <div class="form-row">
+                        <div class="form-group column">
+                            <label for="comments">Additional Comments:</label>
+                            <textarea id="comments" name="comments" class="form-control"
+                                placeholder="I am looking forward to this opportunity." maxlength="300"></textarea>
+                            <small id="char-count" class="form-text">0/250 characters</small>
                         </div>
                     </div>
                     <div class="form-row-button">
@@ -586,14 +632,11 @@ checkUserRole(['Client']);
 <!-- testgid -->
 
     <?php include '../required/footerOnLogin.php' ?>
+    <script src="assets/js/second-hand.js"></script> <!-- Link to your JavaScript file -->
+    <script src="../assets/js/loader.js"></script>
 
     <script>
         $(document).ready(function () {
-            // Previous button functionality
-            $('#prev-page-2, #prev-page-3, #prev-page-4, #prev-page-5').on('click', function () {
-                $(this).closest('.form-page').hide().prev('.form-page').show();
-            });
-
             // Show input for "Other" source of income
             $('#income-source').on('change', function () {
                 if ($(this).val() === 'Other') {

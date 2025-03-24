@@ -16,7 +16,7 @@
     <div class="footer-content">
         <div class="footer-image-container">
             <div class="footer-item" id="k8logofooter">
-                <a href="<?php echo $basePath; ?>index.php">
+                <a href="<?php echo $basePath; ?>index">
                     <img src="<?php echo $basePath; ?>assets/images/updated-logo.webp" alt="K8 FCS Logo" class="footer-logo">
                 </a>
                 <div class="footer-content">
@@ -38,7 +38,7 @@
                     <h2 class="footer-title">About Us</h2>
                     <p class="footer-text">
                         <a href="https://www.facebook.com/k8carloan" target="_blank">Facebook</a><br>
-                        <a href="<?php echo $basePath; ?>php/meettheteam.php">Meet the Team</a><br>
+                        <a href="<?php echo $basePath; ?>php/meettheteam">Meet the Team</a><br>
                         <a href="https://maps.app.goo.gl/g4Wxyhau343AX8ck9" target="_blank">Location</a>
                     </p>
                 </div>

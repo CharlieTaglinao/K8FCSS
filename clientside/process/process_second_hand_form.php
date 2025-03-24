@@ -67,10 +67,11 @@ $fields = [
     'years_stay_borrower' => $_POST['years_stay_borrower'] ?? '',
     'contact_number_borrower' => $_POST['contact_number_borrower'] ?? '',
     'email_address_borrower' => $_POST['email_address_borrower'] ?? '',
-    'tin_number_coborrower' => $_POST['tin_number_coborrower'] ?? '',
-    'sss_number_coborrower' => $_POST['sss_number_coborrower'] ?? '',
+    'tin_number_borrower' => $_POST['tin_number_borrower'] ?? '',
+    'sss_number_borrower' => $_POST['sss_number_borrower'] ?? '',
     'appointment_date' => $_POST['appointment_date'] ?? '',
-    'appointment_time' => $_POST['appointment_time'] ?? ''
+    'appointment_time' => $_POST['appointment_time'] ?? '', 
+    'comments' => $_POST['comments'] ?? ''
 ];
 
 $columns = implode(", ", array_keys($fields));

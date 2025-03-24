@@ -37,39 +37,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add event listener for form submission
   form.addEventListener("submit", function (event) {
-    const invalidFields = Array.from(form.querySelectorAll("input.is-invalid, select.is-invalid"));
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Validate all fields in the form
+    const fields = Array.from(form.querySelectorAll("input, select, textarea"));
+    fields.forEach((field) => validateField(field));
+
+    // Check for invalid fields
+    const invalidFields = Array.from(form.querySelectorAll(".is-invalid"));
 
     if (invalidFields.length > 0) {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const invalidFieldNames = invalidFields.map((field) => {
-        return `
-          <span 
-        style="
-          color: rgb(255, 152, 111); 
-          font-weight: 900; 
-          font-size: 18px;
-        ">
-        ${field.name
-          .replace(/_/g, " ")
-          .replace(/\b\w/g, (char) => char.toUpperCase())}
-          </span>
-        `;
-      });
       Swal.fire({
         icon: "warning",
-        title: "Missing or invalid fields",
-        html: `${invalidFieldNames.map((name) => `${name}<br>`).join("")}`,
+        title: "Missing or Invalid Fields",
+        text: "Please correct the errors and check the optional fields if applicable before submitting the form.",
       });
     } else {
-      event.preventDefault(); // Prevent default form submission for demonstration
       Swal.fire({
-        icon: "success",
-        title: "Form Submitted",
-        text: "Your form has been successfully submitted!",
-      }).then(() => {
-        form.submit(); // Submit the form after clicking OK
+        icon: "warning",
+        title: "Are you sure?",
+        text: "Do you want to submit the form?",
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: "success",
+            title: "Form Submitted",
+            text: "Your form has been successfully submitted!",
+          }).then(() => {
+            form.submit(); // Submit the form after clicking OK
+          });
+        }
       });
     }
   });
@@ -335,14 +336,14 @@ document.addEventListener("DOMContentLoaded", function () {
       if (feedback) {
         feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must contain only numbers.`;
       }
-    }else if(field.value !== "" && field.value.length !== 10) {
+    }else if(field.value !== "" && field.value.length !== 9) {
       isValid = false;
       field.classList.add("is-invalid");
       field.classList.remove("is-valid");
 
       let feedback = field.parentNode.querySelector(".invalid-feedback");
       if (feedback) {
-        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 12 digits`;
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 9 digits`;
       }
       }
     }else if (field.name === "dependents"){
@@ -885,56 +886,60 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     } else if (field.name === "tin_number_borrower") {
       const tinNumber = form.querySelector("input[name='tin_number']");
+      if (field.value !== "") {
       if (isNaN(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
         feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must contain only numbers.`;
-      }
-      } else if (field.value !== "" && field.value.length !== 12) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
+        }
+      } else if (field.value.length !== 12) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
         feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 12 digits.`;
-      }
+        }
       } else if (tinNumber && tinNumber.value === field.value) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
         feedback.textContent = `TIN Number Borrower must not be the same as primary TIN Number.`;
+        }
       }
       }
     } else if (field.name === "sss_number_borrower") {
       const sssNumber = form.querySelector("input[name='sss_number']");
+      if (field.value !== "") {
       if (isNaN(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
         feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must contain only numbers.`;
-      }
-      } else if (field.value !== "" && field.value.length !== 10) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 10 digits.`;
-      }
+        }
+      } else if (field.value.length !== 9) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 9 digits.`;
+        }
       } else if (sssNumber && sssNumber.value === field.value) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
         feedback.textContent = `SSS Number Borrower must not be the same as primary SSS Number.`;
+        }
       }
       }
     }

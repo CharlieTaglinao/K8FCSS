@@ -379,7 +379,7 @@ checkUserRole(['Client']);
                                 <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
-                            <label for="office-number">Office Number(s): <span
+                            <label for="office-number">Telephone Number: <span
                                     class="required-asterisk">*</span></label>
                             <input type="text" id="office-number" name="office_number" class="form-control" placeholder="5558765">
                                 <div class="invalid-feedback"></div>

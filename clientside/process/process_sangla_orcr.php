@@ -79,6 +79,7 @@ $fields = [
     'father_first_name_CoBorrower' => $_POST['father_first_name_CoBorrower'] ?? '',
     'father_last_name_CoBorrower' => $_POST['father_last_name_CoBorrower'] ?? '',
     'father_middle_name_CoBorrower' => $_POST['father_middle_name_CoBorrower'] ?? '',
+    'comments' => $_POST['comments'] ?? ''
     
 ];
 
@@ -95,18 +96,28 @@ $sql_applications = "INSERT INTO forms_sanglaorcr_applicants ($columns, transact
                      marital_status=VALUES(marital_status), present_address=VALUES(present_address), years_present_address=VALUES(years_present_address), 
                      ownership=VALUES(ownership), ownership_other=VALUES(ownership_other), previous_address=VALUES(previous_address), 
                      years_previous_address=VALUES(years_previous_address), contact_number_1=VALUES(contact_number_1), contact_number_2=VALUES(contact_number_2), 
-                     email=VALUES(email), tin_number=VALUES(tin_number),sss_number=VALUES(sss_number), dependents=VALUES(dependents), mother_maiden_first_name=VALUES(mother_maiden_first_name), 
-                     mother_maiden_last_name=VALUES(mother_maiden_last_name), mother_maiden_middle_name=VALUES(mother_maiden_middle_name), 
-                     father_first_name=VALUES(father_first_name), father_last_name=VALUES(father_last_name), father_middle_name=VALUES(father_middle_name), 
-                     income_source=VALUES(income_source), income_source_other=VALUES(income_source_other), employer_name=VALUES(employer_name), 
-                     office_address=VALUES(office_address), office_number=VALUES(office_number), company_email=VALUES(company_email), 
-                     position=VALUES(position), years_service=VALUES(years_service), monthly_income=VALUES(monthly_income), credit_cards=VALUES(credit_cards), 
-                     credit_history=VALUES(credit_history), relationship_borrower=VALUES(relationship_borrower), first_name_borrower=VALUES(first_name_borrower), 
-                     last_name_borrower=VALUES(last_name_borrower), middle_name_borrower=VALUES(middle_name_borrower), date_of_birth_borrower=VALUES(date_of_birth_borrower), 
+                     email=VALUES(email), tin_number=VALUES(tin_number), sss_number=VALUES(sss_number), dependents=VALUES(dependents), 
+                     mother_maiden_first_name=VALUES(mother_maiden_first_name), mother_maiden_last_name=VALUES(mother_maiden_last_name), 
+                     mother_maiden_middle_name=VALUES(mother_maiden_middle_name), father_first_name=VALUES(father_first_name), 
+                     father_last_name=VALUES(father_last_name), father_middle_name=VALUES(father_middle_name), income_source=VALUES(income_source), 
+                     income_source_other=VALUES(income_source_other), employer_name=VALUES(employer_name), office_address=VALUES(office_address), 
+                     office_number=VALUES(office_number), company_email=VALUES(company_email), position=VALUES(position), 
+                     years_service=VALUES(years_service), monthly_income=VALUES(monthly_income), credit_cards=VALUES(credit_cards), 
+                     credit_history=VALUES(credit_history), relationship_borrower=VALUES(relationship_borrower), 
+                     first_name_borrower=VALUES(first_name_borrower), last_name_borrower=VALUES(last_name_borrower), 
+                     middle_name_borrower=VALUES(middle_name_borrower), date_of_birth_borrower=VALUES(date_of_birth_borrower), 
                      place_birth_borrower=VALUES(place_birth_borrower), residential_address_borrower=VALUES(residential_address_borrower), 
                      years_stay_borrower=VALUES(years_stay_borrower), contact_number_borrower=VALUES(contact_number_borrower), 
-                     email_address_borrower=VALUES(email_address_borrower), tin_number_borrower=VALUES(tin_number_borrower), sss_number_borrower=VALUES(sss_number_borrower),
-                     appointment_date=VALUES(appointment_date), appointment_time=VALUES(appointment_time), ORCR_filename=VALUES(ORCR_filename)";
+                     email_address_borrower=VALUES(email_address_borrower), tin_number_borrower=VALUES(tin_number_borrower), 
+                     sss_number_borrower=VALUES(sss_number_borrower), appointment_date=VALUES(appointment_date), 
+                     appointment_time=VALUES(appointment_time), ORCR_filename=VALUES(ORCR_filename),
+                     mother_maiden_first_name_CoBorrower=VALUES(mother_maiden_first_name_CoBorrower),
+                     mother_maiden_last_name_CoBorrower=VALUES(mother_maiden_last_name_CoBorrower),
+                     mother_maiden_middle_name_CoBorrower=VALUES(mother_maiden_middle_name_CoBorrower),
+                     father_first_name_CoBorrower=VALUES(father_first_name_CoBorrower),
+                     father_last_name_CoBorrower=VALUES(father_last_name_CoBorrower),
+                     father_middle_name_CoBorrower=VALUES(father_middle_name_CoBorrower),
+                     comments=VALUES(comments)";
 
 // Prepare the statement
 $stmt_app = $conn->prepare($sql_applications);
@@ -159,6 +170,7 @@ $stmt_app->bind_param(
 
 // Execute the statement and check for errors
 if (!$stmt_app->execute()) {
+    error_log("Error in applications query: {$stmt_app->error}");
     die("Error: {$stmt_app->error}");
 }
 

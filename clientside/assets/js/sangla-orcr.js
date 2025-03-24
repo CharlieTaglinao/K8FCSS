@@ -1,815 +1,1141 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const pages = document.querySelectorAll(".form-page");
-  const nextButtons = document.querySelectorAll('[id^="next-page-"]');
-  const prevButtons = document.querySelectorAll('[id^="prev-page-"]');
-  const ownershipSelect = document.getElementById("ownership");
-  const ownershipOtherInput = document.getElementById("ownership-other");
-  const incomeSourceRadios = document.getElementsByName("income_source");
-  const incomeSourceOtherInput = document.getElementById("income-source-other");
-  const dobInput = document.getElementById("dob");
-  const formErrorMessage = document.getElementById("form-error-message");
-  const submitButton = document.querySelector('button[type="submit"]');
-  const errorNote = document.getElementById("error-note");
+document.addEventListener("DOMContentLoaded", function () {
+  const commentsField = document.getElementById("comments");
+  const charCount = document.getElementById("char-count");
+  const form = document.querySelector(".needs-validation");
+  const submitButton = document.getElementById("submit-button");
 
-  let currentPage = 0;
+  commentsField.addEventListener("input", () => {
+    const currentLength = commentsField.value.length;
+    charCount.textContent = `${currentLength}/250 characters`;
 
-  // Function to show the current page and hide others
-  function showPage(pageIndex) {
-    pages.forEach((page, index) => {
-      page.style.display = index === pageIndex ? "block" : "none";
-    });
-  }
-
-  // Function to calculate age
-  function calculateAge(dob) {
-    const birthDate = new Date(dob);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  }
-
-  // Function to validate the current page
-  function validatePage(pageIndex) {
-    const inputs = pages[pageIndex].querySelectorAll("input, select, textarea");
-    let isValid = true;
-    let errorMessages = [];
-
-    inputs.forEach(input => {
-      const trimmedValue = input.value.trim();
-      if (trimmedValue && !input.checkValidity()) {
-        isValid = false;
-        input.parentElement.classList.add("error");
-        input.parentElement.classList.remove("valid");
-        if (input.validity.patternMismatch) {
-          errorMessages.push("");
-        } else if (input.type === "email" && !input.value.includes("@")) {
-          errorMessages.push("");
-        }
-      } else if (trimmedValue) {
-        input.parentElement.classList.remove("error");
-        input.parentElement.classList.add("valid");
-      }
-    });
-
-    const contactNumber1Input = document.getElementById("contact-number-1");
-    const contactNumber2Input = document.getElementById("contact-number-2");
-    const contactNumberInput = document.getElementById("contact-number-borrower");
-
-    if (contactNumber1Input && contactNumber2Input && contactNumber1Input.value === contactNumber2Input.value) {
-      isValid = false;
-      contactNumber1Input.parentElement.classList.add("error");
-      contactNumber2Input.parentElement.classList.add("error");
-      const errorMessage2 = contactNumber2Input.nextElementSibling;
-      if (errorMessage2) {
-        errorMessage2.textContent = "Contact number already used";
-      }
-    }
-
-    if (contactNumberInput && (contactNumberInput.value === contactNumber1Input.value || contactNumberInput.value === contactNumber2Input.value)) {
-      isValid = false;
-      contactNumberInput.parentElement.classList.add("error");
-      const errorMessage = contactNumberInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "Contact number already used";
-      }
-    }
-
-    formErrorMessage.innerHTML = errorMessages.join("<br>");
-
-    return isValid;
-  }
-
-  // Function to validate specific field lengths
-  function validateFieldLengths() {
-    const creditCardInput = document.querySelector("#credit-card");
-    const tinIdInput = document.querySelector("#tin-id");
-    const sssNumberInput = document.querySelector("#sss-number");
-    const tinNumberBorrowerInput = document.querySelector("#tin_number_borrower");
-    const sssNumberBorrowerInput = document.querySelector("#sss_number_borrower");
-    const creditCardBorrowerInput = document.querySelector("#credit-cards-borrower");
-
-    let isValid = true;
-
-    if (creditCardInput && creditCardInput.value.trim() && creditCardInput.value.length !== 16) {
-      isValid = false;
-      creditCardInput.parentElement.classList.add("error");
-      creditCardInput.parentElement.classList.remove("valid");
-    }
-
-    if (tinIdInput && tinIdInput.value.trim() && tinIdInput.value.length !== 12) {
-      isValid = false;
-      tinIdInput.parentElement.classList.add("error");
-      tinIdInput.parentElement.classList.remove("valid");
-    }
-
-    if (sssNumberInput && sssNumberInput.value.trim() && sssNumberInput.value.length !== 10) {
-      isValid = false;
-      sssNumberInput.parentElement.classList.add("error");
-      sssNumberInput.parentElement.classList.remove("valid");
-    }
-
-    if (tinNumberBorrowerInput && tinNumberBorrowerInput.value.trim() && tinNumberBorrowerInput.value.length !== 12) {
-      isValid = false;
-      tinNumberBorrowerInput.parentElement.classList.add("error");
-      tinNumberBorrowerInput.parentElement.classList.remove("valid");
-      const errorMessage = tinNumberBorrowerInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "Please enter exactly 12 digits.";
-      }
-    } else if (tinNumberBorrowerInput && tinNumberBorrowerInput.value.trim()) {
-      tinNumberBorrowerInput.parentElement.classList.remove("error");
-      tinNumberBorrowerInput.parentElement.classList.add("valid");
-      const errorMessage = tinNumberBorrowerInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "";
-      }
-    }
-
-    if (sssNumberBorrowerInput && sssNumberBorrowerInput.value.trim() && sssNumberBorrowerInput.value.length !== 10) {
-      isValid = false;
-      sssNumberBorrowerInput.parentElement.classList.add("error");
-      sssNumberBorrowerInput.parentElement.classList.remove("valid");
-      const errorMessage = sssNumberBorrowerInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "Please enter exactly 10 digits.";
-      }
-    } else if (sssNumberBorrowerInput && sssNumberBorrowerInput.value.trim()) {
-      sssNumberBorrowerInput.parentElement.classList.remove("error");
-      sssNumberBorrowerInput.parentElement.classList.add("valid");
-      const errorMessage = sssNumberBorrowerInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "";
-      }
-    }
-
-    if (creditCardBorrowerInput && creditCardBorrowerInput.value.trim() && creditCardBorrowerInput.value.length !== 16) {
-      isValid = false;
-      creditCardBorrowerInput.parentElement.classList.add("error");
-      creditCardBorrowerInput.parentElement.classList.remove("valid");
-      const errorMessage = creditCardBorrowerInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "Please enter exactly 16 digits.";
-      }
-    } else if (creditCardBorrowerInput && creditCardBorrowerInput.value.trim()) {
-      creditCardBorrowerInput.parentElement.classList.remove("error");
-      creditCardBorrowerInput.parentElement.classList.add("valid");
-      const errorMessage = creditCardBorrowerInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "";
-      }
-    }
-
-    return isValid;
-  }
-
-  // Function to check if contact number already exists
-  function contactNumberExists(contactNumber) {
-    // Replace this with actual logic to check if the contact number exists
-    // For example, you might make an AJAX request to the server to check
-    return false; // Placeholder: always returns false
-  }
-
-  // Function to check if contact number is unique
-  function isContactNumberUnique(contactNumber) {
-    const contactNumbers = document.querySelectorAll("#contact-number-borrower, #contact-number-1, #contact-number-2");
-    let count = 0;
-    contactNumbers.forEach(input => {
-      if (input.value === contactNumber) {
-        count++;
-      }
-    });
-    return count <= 1;
-  }
-
-  // Function to check if contact number is already used
-  function isContactNumberUsed(contactNumber) {
-    const contactNumber1 = document.getElementById("contact-number-1");
-    return contactNumber1 && contactNumber1.value === contactNumber;
-  }
-
-  // Event listener for Submit button
-  submitButton.addEventListener("click", (event) => {
-    const contactNumberInput = document.getElementById("contact-number-borrower");
-    const contactNumber1Input = document.getElementById("contact-number-1");
-    const contactNumber2Input = document.getElementById("contact-number-2");
-    const tinNumberBorrowerInput = document.getElementById("tin_number_borrower");
-    const sssNumberBorrowerInput = document.getElementById("sss_number_borrower");
-    const creditCardBorrowerInput = document.getElementById("credit-cards-borrower");
-
-    if (contactNumberInput && contactNumberExists(contactNumberInput.value)) {
-      event.preventDefault();
-      alertify.alert("Form Submission Error", "The contact number already exists. Please use a different number.");
-      return;
-    }
-
-    if (contactNumberInput && !isContactNumberUnique(contactNumberInput.value)) {
-      event.preventDefault();
-      alertify.alert("Form Submission Error", "The contact number must be unique. Please use a different number.");
-      return;
-    }
-
-    if (contactNumber2Input && (isContactNumberUsed(contactNumber2Input.value) || contactNumber2Input.value === contactNumberInput.value)) {
-      event.preventDefault();
-      alertify.alert("Form Submission Error", "Contact number 2 must be different from contact number 1 and contact number borrower.");
-      return;
-    }
-
-    if (contactNumberInput && (contactNumberInput.value === contactNumber1Input.value || contactNumberInput.value === contactNumber2Input.value)) {
-      event.preventDefault();
-      alertify.alert("Form Submission Error", "Contact number of the co-borrower must be different from Contact number 1 and Contact number 2 of the primary borrower.");
-      return;
-    }
-
-    if (!validatePage(currentPage) || !validateFieldLengths()) {
-      event.preventDefault();
-
-      // Display the AlertifyJS alert for missing fields or invalid inputs
-      alertify.alert("Form Submission Error", "Please fill up all the fields correctly to submit the form.");
-
-      // Move and position the AlertifyJS container
-      setTimeout(() => {
-        const alertifyContainer = document.querySelector(".alertify");
-        if (alertifyContainer) {
-          alertifyContainer.style.position = "absolute"; // Ensure it appears above other elements
-        }
-      }, 0); // Delay to ensure the alert container is created
-    } else if (document.querySelector('.form-group.error')) {
-      event.preventDefault();
-
-      // Display the AlertifyJS alert for invalid inputs
-      alertify.alert("Form Submission Error", "There are invalid inputs in the form. Please correct them first before submitting.");
-
-      // Move and position the AlertifyJS container
-      setTimeout(() => {
-        const alertifyContainer = document.querySelector(".alertify");
-        if (alertifyContainer) {
-          alertifyContainer.style.position = "absolute"; // Ensure it appears above other elements
-        }
-      }, 0); // Delay to ensure the alert container is created
+    if (currentLength > 250) {
+      commentsField.classList.add("is-invalid");
+      commentsField.classList.remove("is-valid"); // Ensure is-valid is removed
+      charCount.textContent = `${currentLength}/250 characters (${currentLength - 250} characters over limit)`;
     } else {
-      event.preventDefault();
+      commentsField.classList.remove("is-invalid");
+      commentsField.classList.add("is-valid");
+    }
+  });
 
-      // Display the SweetAlert2 confirmation message
+
+  if (!form || !submitButton) return;
+
+  const fields = Array.from(form.querySelectorAll("input, select"));
+
+  // Validate fields on blur and input
+  fields.forEach((field) => {
+    field.addEventListener("blur", () => {
+      validateField(field);
+    });
+
+    if (field.tagName.toLowerCase() === "input") {
+      field.addEventListener("input", () => {
+        validateField(field);
+      });
+    }
+  });
+
+  // Add event listener for form submission
+  submitButton.addEventListener("click", function () {
+    // Validate all fields in the form
+    const fields = Array.from(form.querySelectorAll("input, select, textarea"));
+    fields.forEach((field) => validateField(field));
+
+    // Check for invalid fields
+    const invalidFields = Array.from(form.querySelectorAll(".is-invalid"));
+
+    if (invalidFields.length > 0) {
       Swal.fire({
-        title: "Are you sure?",
-        text: "Please confirm that all your details are correct before submitting.",
         icon: "warning",
+        title: "Missing or Invalid Fields",
+        text: "Please correct the errors and check the optional fields if applicable before submitting the form.",
+      });
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Are you sure?",
+        text: "Do you want to submit the form?",
         showCancelButton: true,
-        confirmButtonText: "Submit",
+        confirmButtonText: "OK",
         cancelButtonText: "Cancel",
-        reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          // Submit the form programmatically
-          document.querySelector('#application-form').submit();
+          form.submit(); // Submit the form only if "OK" is clicked
         }
       });
     }
   });
 
-  // Add input event listeners to display error messages in real-time
-  const tinNumberBorrowerInput = document.getElementById("tin_number_borrower");
-  const sssNumberBorrowerInput = document.getElementById("sss_number_borrower");
-  const creditCardBorrowerInput = document.getElementById("credit-cards-borrower");
+  $(document).ready(function () {
+    var timeSelect = $("#appointment-time");
+  
+    // Function to populate time slots with 30-minute intervals
+    function populateTimeSlots() {
+      // Clear any existing options to prevent duplication
+      timeSelect.empty();
+      // Add default option
+      timeSelect.append(new Option("Select a time", ""));
+      for (var hour = 9; hour <= 17; hour++) {
+        var time = ("0" + hour).slice(-2) + ":00";
+        timeSelect.append(new Option(time, time));
+        if (hour < 17) {
+          var halfHour = ("0" + hour).slice(-2) + ":30";
+          timeSelect.append(new Option(halfHour, halfHour));
+        }
+      }
+    }
+  
+    // Initial population of time slots
+    populateTimeSlots();
+  
+    $("#appointment-date").on("change blur", function () {
+      var appointmentDate = $(this).val();
+      var feedback = $(this).siblings(".invalid-feedback");
 
-  if (tinNumberBorrowerInput) {
-    tinNumberBorrowerInput.addEventListener("input", () => {
-      const errorMessage = tinNumberBorrowerInput.nextElementSibling;
-      if (tinNumberBorrowerInput.value !== "" && tinNumberBorrowerInput.value.length !== 12) {
-        tinNumberBorrowerInput.parentElement.classList.add("error");
-        tinNumberBorrowerInput.parentElement.classList.remove("valid");
-        if (errorMessage) {
-          errorMessage.textContent = "Please enter exactly 12 digits.";
+      if (appointmentDate) {
+        var date = new Date(appointmentDate);
+        var day = date.getUTCDay();
+  
+        // Check if the selected date is a weekend (Saturday or Sunday)
+        if (day === 6 || day === 0) {
+          $(this).addClass("is-invalid").removeClass("is-valid");
+          if (feedback.length) {
+            feedback.text("Please select another date. Office is closed on weekends.");
+          }
+          timeSelect.empty();
+          timeSelect.append(new Option("Office is closed", ""));
+        } else {
+          $(this).removeClass("is-invalid").addClass("is-valid");
+          if (feedback.length) {
+            feedback.text("");
+          }
+          // Re-enable all options if a valid weekday is selected
+          populateTimeSlots();
         }
       } else {
-        tinNumberBorrowerInput.parentElement.classList.remove("error");
-        tinNumberBorrowerInput.parentElement.classList.add("valid");
-        if (errorMessage) {
-          errorMessage.textContent = "";
+        // If no date is selected, mark as invalid
+        $(this).addClass("is-invalid").removeClass("is-valid");
+        if (feedback.length) {
+          feedback.text("Please select a valid date.");
         }
       }
     });
-  }
 
-  if (sssNumberBorrowerInput) {
-    sssNumberBorrowerInput.addEventListener("input", () => {
-      const errorMessage = sssNumberBorrowerInput.nextElementSibling;
-      if (sssNumberBorrowerInput.value !== "" && sssNumberBorrowerInput.value.length !== 10) {
-        sssNumberBorrowerInput.parentElement.classList.add("error");
-        sssNumberBorrowerInput.parentElement.classList.remove("valid");
-        if (errorMessage) {
-          errorMessage.textContent = "Please enter exactly 10 digits.";
+    $("#appointment-time").on("change blur", function () {
+      var appointmentDate = $("#appointment-date").val();
+      var appointmentTime = $(this).val();
+      var feedback = $(this).siblings(".invalid-feedback");
+
+      if (appointmentDate) {
+        var date = new Date(appointmentDate);
+        var day = date.getUTCDay();
+
+        // Check if the selected date is a weekend (Saturday or Sunday)
+        if ((day === 6 || day === 0) || appointmentTime === "Office is closed") {
+          $(this).addClass("is-invalid").removeClass("is-valid");
+          if (feedback.length) {
+            feedback.text("Please select another date and time. Office is closed on weekends.");
+          }
+        } else if (appointmentTime === "") {
+          // If no time is selected, mark as invalid
+          $(this).addClass("is-invalid").removeClass("is-valid");
+          if (feedback.length) {
+            feedback.text("Please select a valid time.");
+          }
+        } else {
+          // Valid time selected
+          $(this).removeClass("is-invalid").addClass("is-valid");
+          if (feedback.length) {
+            feedback.text("");
+          }
         }
       } else {
-        sssNumberBorrowerInput.parentElement.classList.remove("error");
-        sssNumberBorrowerInput.parentElement.classList.add("valid");
-        if (errorMessage) {
-          errorMessage.textContent = "";
+        // If no date is selected, mark time as invalid
+        $(this).addClass("is-invalid").removeClass("is-valid");
+        if (feedback.length) {
+          feedback.text("Please select a valid date first.");
         }
       }
     });
-  }
+  });
 
-  if (creditCardBorrowerInput) {
-    creditCardBorrowerInput.addEventListener("input", () => {
-      const errorMessage = creditCardBorrowerInput.nextElementSibling;
-      if (creditCardBorrowerInput.value !== "" && creditCardBorrowerInput.value.length !== 16) {
-        creditCardBorrowerInput.parentElement.classList.add("error");
-        creditCardBorrowerInput.parentElement.classList.remove("valid");
-        if (errorMessage) {
-          errorMessage.textContent = "Please enter exactly 16 digits.";
-        }
-      } else {
-        creditCardBorrowerInput.parentElement.classList.remove("error");
-        creditCardBorrowerInput.parentElement.classList.add("valid");
-        if (errorMessage) {
-          errorMessage.textContent = "";
-        }
-      }
-    });
-  }
+   // Disable past dates in #appointment-date
+   const appointmentDateField = document.querySelector("#appointment-date");
+   if (appointmentDateField) {
+     const today = new Date().toISOString().split("T")[0];
+     appointmentDateField.setAttribute("min", today);
+   }
+ 
 
-  // Function to validate exact number requirements for TIN and SSS numbers
-  function validateExactNumberRequirements() {
-    const tinNumberInput = document.querySelector("#tin_number");
-    const sssNumberInput = document.querySelector("#sss_number");
-    const contactNumberInput = document.querySelector("#contact-number-borrower");
-    const tinNumberBorrowerInput = document.querySelector("#tin_number_borrower");
-    const sssNumberBorrowerInput = document.querySelector("#sss_number_borrower");
-
+  // Validate field function
+  function validateField(field) {
     let isValid = true;
 
-    if (tinNumberInput && tinNumberInput.value !== "" && tinNumberInput.value.length !== 12) {
+    if (field.tagName.toLowerCase() === "select" && field.value === "") {
       isValid = false;
-      tinNumberInput.parentElement.classList.add("error");
-      tinNumberInput.parentElement.classList.remove("valid");
-    }
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
 
-    if (sssNumberInput && sssNumberInput.value !== "" && sssNumberInput.value.length !== 10) {
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please select a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+    } else if (field.tagName.toLowerCase() === "input" && field.type === "date" && field.value === "") {
       isValid = false;
-      sssNumberInput.parentElement.classList.add("error");
-      sssNumberInput.parentElement.classList.remove("valid");
-    }
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
 
-    if (contactNumberInput && contactNumberInput.value !== "" && contactNumberInput.value.length !== 11) {
+      let feedback = field.parentNode.querySelector(".invalid-feedback")
+
+      if (feedback) {
+      feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+    } else if (field.name === "contact_number_2" && field.value !== "") {
+      if (isNaN(field.value)) {
       isValid = false;
-      contactNumberInput.parentElement.classList.add("error");
-      contactNumberInput.parentElement.classList.remove("valid");
-    }
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
 
-    if (tinNumberBorrowerInput && tinNumberBorrowerInput.value !== "" && tinNumberBorrowerInput.value.length !== 12) {
-      tinNumberBorrowerInput.parentElement.classList.add("error");
-      tinNumberBorrowerInput.parentElement.classList.remove("valid");
-      const errorMessage = tinNumberBorrowerInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "Please enter exactly 12 digits.";
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid number for ${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())}.`;
       }
-    }
+      } else if (field.value.length !== 11) {
+      isValid = false;  
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
 
-    if (sssNumberBorrowerInput && sssNumberBorrowerInput.value !== "" && sssNumberBorrowerInput.value.length !== 10) {
-      sssNumberBorrowerInput.parentElement.classList.add("error");
-      sssNumberBorrowerInput.parentElement.classList.remove("valid");
-      const errorMessage = sssNumberBorrowerInput.nextElementSibling;
-      if (errorMessage) {
-        errorMessage.textContent = "Please enter exactly 10 digits.";
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 11 digits.`;
       }
-    }
-
-    return isValid;
-  }
-
-  // Function to disable past dates in the appointment date input field
-  function disablePastDates() {
-    const appointmentDateInput = document.getElementById("appointment-date");
-    if (appointmentDateInput) {
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-      const dd = String(today.getDate()).padStart(2, '0');
-      const minDate = `${yyyy}-${mm}-${dd}`;
-      appointmentDateInput.setAttribute("min", minDate);
-    }
-  }
-
-  // Call the function to disable past dates
-  disablePastDates();
-
-  // Event listener for Next buttons
-  nextButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      if (validatePage(currentPage) && currentPage < pages.length - 1) {
-        currentPage++;
-        showPage(currentPage);
-      }
-      window.scrollTo(0, 0); // Scroll to the top of the page
-    });
-  });
-
-  // Event listener for Previous buttons
-  prevButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      if (currentPage > 0) {
-        currentPage--;
-        showPage(currentPage);
-      }
-      window.scrollTo(0, 0); // Scroll to the top of the page
-    });
-  });
-
-  // Event listener for Ownership select
-  ownershipSelect.addEventListener("change", () => {
-    if (ownershipSelect.value === "Others") {
-      ownershipOtherInput.style.display = "block";
-    } else {
-      ownershipOtherInput.style.display = "none";
-    }
-  });
-
-  // Event listener for Source of Income radios
-  incomeSourceRadios.forEach((radio) => {
-    radio.addEventListener("change", () => {
-      if (document.getElementById("other-income").checked) {
-        incomeSourceOtherInput.style.display = "block";
       } else {
-        incomeSourceOtherInput.style.display = "none";
+      const contactNumber1 = form.querySelector("input[name='contact_number_1']");
+      if (contactNumber1 && contactNumber1.value === field.value) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `${field.value} is already used in Contact Number 1.`;
+        }
       }
-    });
-  });
+      }
+    }else if (field.name === "place_of_birth") {
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
 
-  // Initialize form by showing the first page
-  showPage(currentPage);
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    }  else if (field.name === "years_present_address") {
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid number.`;
+      }
+      } else if (isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+      }
+      } else if (parseInt(field.value, 10) > 100) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = feedback.textContent = `The provided years at the present address is too high.`;
+      }
+      }
+    }else if (field.name === "previous_address") {
+      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
 
-  // Add blur event listeners to inputs for real-time validation
-  const inputs = document.querySelectorAll("input, select, textarea");
-  inputs.forEach(input => {
-    input.addEventListener("blur", () => {
-      const errorMessage = input.nextElementSibling;
-      if (!input.checkValidity()) {
-        input.parentElement.classList.add("error");
-        input.parentElement.classList.remove("valid");
-        if (errorMessage) {
-          if (input.validity.patternMismatch) {
-            errorMessage.textContent = "Please enter exactly 11 digits.";
-          } else if (input.type === "email" && !input.value.includes("@")) {
-            errorMessage.textContent = "Please enter a valid email address.";
-          }
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    } else if (field.name === "years_previous_address") {
+      const previousAddress = form.querySelector("input[name='previous_address']");
+      if (previousAddress && previousAddress.value !== "" && field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+      feedback.textContent = "This field is required when Previous Address is filled.";
+      }
+      } else if (field.value !== "" && isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+      feedback.textContent = "Please provide a valid number.";
+      }
+      } else if (parseInt(field.value, 10) > 100) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `The provided years at the previous address is too high.`;
+      }
+      }
+    } else if (field.name === "tin_number") {
+      if (isNaN(field.value)){
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must contain only numbers.`;
+      }
+    }else if(field.value !== "" && field.value.length !== 12) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 12 digits`;
+      }
+      }
+    }else if (field.name === "sss_number") {
+      if (isNaN(field.value)){
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must contain only numbers.`;
+      }
+    }else if(field.value !== "" && field.value.length !== 9) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 9 digits`;
+      }
+      }
+    }else if (field.name === "dependents"){
+      if (field.value !== "" && isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = "Please provide a valid number.";
+      }
+      }
+    }
+    // start validation for page 2 of form
+    else if (field.name === "mother_maiden_first_name") {
+      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    } else if (field.name === "mother_maiden_middle_name") {
+      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    }else if (field.name === "mother_maiden_last_name") {
+      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    }else if (field.name === "father_first_name") {
+      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    }else if (field.name === "father_middle_name") {
+      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    }
+    else if (field.name === "father_last_name") {
+      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    } else if (field.name === "year_model") {
+      const currentYear = new Date().getFullYear();
+      const yearModel = parseInt(field.value, 10);
+
+      if (isNaN(yearModel) || yearModel < 1980 || yearModel > currentYear + 1) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    } else if (field.name === "make") {
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid car name.`;
+      }
+      }
+    }else if(field.name === "type"){
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")} of car.`;
+        }
+      }
+    }
+    // start validation for page 3 of form
+    else if (field.name === "income_source") {
+      const incomeSourceOther = form.querySelector("input[name='income_source_other']");
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      } else if (field.value === "Other") {
+      if (!incomeSourceOther || incomeSourceOther.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        if (incomeSourceOther) {
+        incomeSourceOther.classList.add("is-invalid");
+        incomeSourceOther.classList.remove("is-valid");
+        }
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = "Please specify the income source.";
         }
       } else {
-        input.parentElement.classList.remove("error");
-        input.parentElement.classList.add("valid");
-        if (errorMessage) {
-          errorMessage.textContent = "";
+        field.classList.add("is-valid");
+        field.classList.remove("is-invalid");
+        if (incomeSourceOther) {
+        incomeSourceOther.classList.add("is-valid");
+        incomeSourceOther.classList.remove("is-invalid");
         }
       }
-    });
-
-    // Add input event listener to clear error message when the field becomes valid
-    input.addEventListener("input", () => {
-      if (input.checkValidity()) {
-        input.parentElement.classList.remove("error");
-        input.parentElement.classList.add("valid");
-        const errorMessage = input.nextElementSibling;
-        if (errorMessage) {
-          errorMessage.textContent = "";
+      }
+    }else if (field.name === "employer_name"){
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
         }
       }
-    });
-  });
 
-  // Add blur event listener to ownership select for real-time validation
-  ownershipSelect.addEventListener("blur", () => {
-    if (!ownershipSelect.checkValidity()) {
-      ownershipSelect.parentElement.classList.add("error");
-      ownershipSelect.parentElement.classList.remove("valid");
-    } else {
-      ownershipSelect.parentElement.classList.remove("error");
-      ownershipSelect.parentElement.classList.add("valid");
-    }
-  });
-
-  // Add input event listener to ownership select to clear error message when the field becomes valid
-  ownershipSelect.addEventListener("input", () => {
-    if (ownershipSelect.checkValidity()) {
-      ownershipSelect.parentElement.classList.remove("error");
-      ownershipSelect.parentElement.classList.add("valid");
-    }
-  });
-});
-
-
-// error - validation
-document.addEventListener("DOMContentLoaded", () => {
-    const nextButtons = document.querySelectorAll('#next-page-1, #next-page-2, #next-page-3, #next-page-4');
-    const prevButtons = document.querySelectorAll('#prev-page-2, #prev-page-3, #prev-page-4, #prev-page-5');
-    const form = document.querySelector('#application-form');
-    const ownershipSelect = document.querySelector('#ownership');
-    const ownershipOtherInput = document.querySelector('#ownership-other');
-
-    // Show or hide the "ownership-other" input field based on the selected option
-    ownershipSelect.addEventListener('change', () => {
-        if (ownershipSelect.value === 'Others') {
-            ownershipOtherInput.style.display = 'block';
-            ownershipOtherInput.setAttribute('required', 'required');
-        } else {
-            ownershipOtherInput.style.display = 'none';
-            ownershipOtherInput.removeAttribute('required');
+    }else if(field.name === "office_address"){
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
         }
-    });
+      }
+    }else if (field.name === "office_number"){
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      } else if (isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+      }
+      } else if (field.value.length < 7 || field.value.length > 11) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be between 7 and 11 digits.`;
+      }
+      }
+    } else if (field.name === "company_email") {
+      const primaryEmail = form.querySelector("input[name='email']").value;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      } else if (field.value === primaryEmail) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `This email is already used as the primary email.`;
+      }
+      } else if (!emailPattern.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid email address.`;
+      }
+      }
+    } else if (field.name === "position"){
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        }
+      }
+    } else if (field.name === "years_service") {
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid number.`;
+      }
+      } else if (isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+      }
+      } else if (parseInt(field.value, 10) > 100) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `The provided year of service is too high.`;
+      }
+      }
+    }else if (field.name === "monthly_income"){
+      if(field.value == ""){
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }else if(isNaN(field.value)){
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+      }
+      }else if(parseInt(field.value, 10) < 30000){
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Monthly income must be at least 30,000.`;
+      }
+      }
+    } else if (field.name === "credit_cards") {
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid number.`;
+      }
+      } else if (isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+      }
+      } else if (field.value.length !== 16) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Credit card number must be exactly 16 digits.`;
+      }
+      }
+    } else if (field.name === "credit_history") {
+      if (field.value !== "" && !/^[a-zA-Z\s]+$/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}. Only letters are allowed.`;
+      }
+      }
+    }
 
-    function validatePage(button) {
-      let isValid = true;
-      const currentPage = button.closest('.form-page');
-      const requiredFields = currentPage.querySelectorAll('input[required], select[required], textarea[required]');
-      const contactNumberPattern = /^\d{11}$/;
-      const creditCardPattern = /^\d{16}$/;
-      const tinNumberPattern = /^\d{12}$/;
-      const sssNumberPattern = /^\d{10}$/;
-    
-      requiredFields.forEach(field => {
-        const formGroup = field.closest('.form-group');
-        const errorMessage = formGroup.querySelector('.error-message');
-    
-        if (!field.checkValidity() || 
-            !validateDOB(field) || !validateAppointmentDate(field) || 
-            (field.id === "dob" || field.id === "date-of-birth-borrower") && !validateFutureDate(field) || 
-            (field.id === "contact-number-borrower" || field.id === "contact-number-1" || field.id === "contact-number-2") && !contactNumberPattern.test(field.value) || 
-            (field.id === "credit-cards") && !creditCardPattern.test(field.value) || 
-            (field.id === "tin_number") && !tinNumberPattern.test(field.value) || 
-            (field.id === "sss_number") && !sssNumberPattern.test(field.value)) {
-          
+    // start validation for page 4 of form
+    else if (field.name === "first_name_borrower") {
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        }
+      }
+    } else if (field.name === "middle_name_borrower") {
+      if (field.value !== "" && !/^[a-zA-Z\s]+$/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {l
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    }else if (field.name === "last_name_borrower") {
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        }
+      }
+    }else if (field.name === "email_address_borrower") {
+      const primaryEmail = form.querySelector("input[name='email']").value;
+      const companyEmail = form.querySelector("input[name='company_email']").value;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid co-borrower ${field.name.replace(/_/g, " ")}.`;
+      }
+      } else if (field.value === primaryEmail) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `This email is already used as the primary email.`;
+      }
+      }else if (field.value === companyEmail) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `This email is already used as the company email.`;
+      }
+      }
+       else if (!emailPattern.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid date of birth for the co-borrower.`;
+      }
+      }
+    } else if (field.name === "date_of_birth_borrower") {
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid date of birth for the co-borrower.`;
+        }
+      } else {
+        const dob = new Date(field.value);
+        if (isNaN(dob.getTime())) {
           isValid = false;
-          formGroup.classList.add('error');
-          formGroup.classList.remove('valid');
-          
-          if (errorMessage && field.dataset.touched) {
-            if (field.validity.rangeOverflow || field.validity.rangeUnderflow) {
-              errorMessage.textContent = `Please enter a year between ${field.min} and ${field.max}.`;
-            } else if (field.id === "contact-number-borrower" || field.id === "contact-number-1" || field.id === "contact-number-2") {
-              errorMessage.textContent = "Please enter exactly 11 digits.";
-            } else if (field.id === "credit-cards") {
-              errorMessage.textContent = "Please enter exactly 16 digits.";
-            } else if (field.id === "tin_number") {
-              errorMessage.textContent = "Please enter exactly 12 digits.";
-            } else if (field.id === "sss_number") {
-              errorMessage.textContent = "Please enter exactly 10 digits.";
-            } else if (field.type === "email" && !field.value.includes("@")) {
-              errorMessage.textContent = "Please enter a valid email address.";
-            } else if ((field.id === "dob") && !validateDOB(field)) {
-              errorMessage.textContent = "You must be at least 18 years old.";
-            } else if ((field.id === "date-of-birth-borrower") && !validateDOB(field)) {
-              errorMessage.textContent = "Co-borrower must be at least 18 years old.";
-            } else if ((field.id === "dob" || field.id === "date-of-birth-borrower") && !validateFutureDate(field)) {
-              errorMessage.textContent = "The date cannot be in the future.";
-            } else if (field.id === "appointment-date" && !validateAppointmentDate(field)) {
-              errorMessage.textContent = "Date not available.";
-            } else {
-              errorMessage.textContent = "Invalid input.";
-            }
+          field.classList.add("is-invalid");
+          field.classList.remove("is-valid");
+          let feedback = field.parentNode.querySelector(".invalid-feedback");
+          if (feedback) {
+            feedback.textContent = `Invalid date format. Please provide a valid ${field.name.replace(/_/g, " ")}.`;
           }
         } else {
-          formGroup.classList.remove('error');
-          formGroup.classList.add('valid');
-          if (errorMessage) {
-            errorMessage.textContent = "";
+          const today = new Date();
+          let age = today.getFullYear() - dob.getFullYear();
+          const monthDiff = today.getMonth() - dob.getMonth();
+          const dayDiff = today.getDate() - dob.getDate();
+
+          if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            age--;
+          }
+
+          if (age < 18) {
+            isValid = false;
+            field.classList.add("is-invalid");
+            field.classList.remove("is-valid");
+            let feedback = field.parentNode.querySelector(".invalid-feedback");
+            if (feedback) {
+              feedback.textContent = `You must be at least 18 years old.`;
+            }
+          } else {
+            isValid = true;
+            field.classList.add("is-valid");
+            field.classList.remove("is-invalid");
           }
         }
-      });
-
-      const contactNumber1Input = document.getElementById("contact-number-1");
-      const contactNumber2Input = document.getElementById("contact-number-2");
-      const contactNumberInput = document.getElementById("contact-number-borrower");
-  
-      if (contactNumber1Input && contactNumber2Input && contactNumber1Input.value === contactNumber2Input.value) {
+      }
+    } else if (field.name === "place_birth_borrower") {
+      if (field.value !== "" && !/[a-zA-Z0-9\s]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid place of birth for the co-borrower.`;
+      }
+      }
+    } else if (field.name === "relationship_borrower") {
+      if (field.value === "" || !/^[a-zA-Z\s]+$/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid relationship to the primary borrower.`;
+      }
+      }
+    }else if (field.name === "residential_address_borrower"){
+      if (field.value !== "" && !/[a-zA-Z0-9\s]/.test(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+      }
+      }
+    } else if (field.name === "years_stay_borrower") {
+      const residentialAddressBorrower = form.querySelector("input[name='residential_address_borrower']");
+      if (residentialAddressBorrower && residentialAddressBorrower.value !== "" && field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+      feedback.textContent = "Please provide a valid year of stay.";
+      }
+      } else if (field.value !== "" && isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+      feedback.textContent = "Only numbers are accepted.";
+      }
+      } else if (parseInt(field.value, 10) > 100) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `The provided years of stay in the residential address of the co-borrower is too high.`;
+      }
+      }
+    } else if (field.name === "contact_number_borrower") {
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid contact number.`;
+      }
+      } else if (isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+      }
+      } else if (field.value.length !== 11) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Contact number must be exactly 11 digits.`;
+      }
+      } else {
+      const contactNumber1 = form.querySelector("input[name='contact_number_1']");
+      const contactNumber2 = form.querySelector("input[name='contact_number_2']");
+      if (contactNumber1 && contactNumber1.value === field.value) {
         isValid = false;
-        contactNumber1Input.parentElement.classList.add("error");
-        contactNumber2Input.parentElement.classList.add("error");
-        const errorMessage1 = contactNumber1Input.nextElementSibling;
-        const errorMessage2 = contactNumber2Input.nextElementSibling;
-
-        if (errorMessage2) {
-          errorMessage2.textContent = "Contact number already used";
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `This contact number is already used in Contact Number 1.`;
+        }
+      } else if (contactNumber2 && contactNumber2.value === field.value) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `This contact number is already used in Contact Number 2.`;
         }
       }
-
-      if (contactNumberInput && (contactNumberInput.value === contactNumber1Input.value || contactNumberInput.value === contactNumber2Input.value)) {
+      }
+    } else if (field.name === "tin_number_borrower") {
+      const tinNumber = form.querySelector("input[name='tin_number']");
+      if (field.value !== "") {
+      if (isNaN(field.value)) {
         isValid = false;
-        contactNumberInput.parentElement.classList.add("error");
-        const errorMessage = contactNumberInput.nextElementSibling;
-        if (errorMessage) {
-          errorMessage.textContent = "Contact number already used";
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must contain only numbers.`;
+        }
+      } else if (field.value.length !== 12) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 12 digits.`;
+        }
+      } else if (tinNumber && tinNumber.value === field.value) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `TIN Number Borrower must not be the same as primary TIN Number.`;
         }
       }
-    
-      return isValid;
+      }
+    } else if (field.name === "sss_number_borrower") {
+      const sssNumber = form.querySelector("input[name='sss_number']");
+      if (field.value !== "") {
+      if (isNaN(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must contain only numbers.`;
+        }
+      } else if (field.value.length !== 9) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 9 digits.`;
+        }
+      } else if (sssNumber && sssNumber.value === field.value) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `SSS Number Borrower must not be the same as primary SSS Number.`;
+        }
+      }
+      }
     }
 
-    function validateDOB(input) {
-      if (input.id !== "dob" && input.id !== "date-of-birth-borrower") return true;
-      const dob = new Date(input.value);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Set time to midnight to compare only dates
-  
-      // Calculate age
-      let age = today.getFullYear() - dob.getFullYear();
-      const birthDateThisYear = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
-      if (today < birthDateThisYear) {
-          age--;
+    // start of validation for page 5 of form
+    else if(field.name === "employer_name_borrower"){
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        }
       }
-  
-      // Check if the date of birth is in the future
-      const isFutureDate = dob.getTime() > today.getTime();
+    }else if(field.name === "office_address_borrower"){
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        }
+      }
+    }else if(field.name === "position_borrower"){
+      if (field.value === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        }
+      }
+    }else if (field.name === "years_service_borrower") {
+      if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please provide a valid number.`;
+      }
+      } else if (isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+      }
+      } else if (parseInt(field.value, 10) > 100) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `The provided year of service is too high.`;
+      }
+      }
+    } else if (field.name === "monthly_income_borrower") {
+      if (field.value !== "") {
+      if (isNaN(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+        }
+      } else if (parseInt(field.value, 10) < 30000) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `Monthly income must be at least 30,000.`;
+        }
+      }
+      }
+    } else if (field.name === "credit_cards_borrower") {
+      const creditCards = form.querySelector("input[name='credit_cards']");
+      if (field.value !== "") {
+      if (isNaN(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `Only numbers are accepted.`;
+        }
+      } else if (field.value.length !== 16) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `Credit Cards Borrower must be exactly 16 digits.`;
+        }
+      } else if (creditCards && creditCards.value === field.value) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = `Credit Cards Borrower must not be the same as primary Credit Cards.`;
+        }
+      } else {
+        isValid = true;
+        field.classList.add("is-valid");
+        field.classList.remove("is-invalid");
+      }
+      }
+    } else if (field.name === "combined_file[]") {
+      if (field.files.length === 0) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+      feedback.textContent = `Please upload at least one file for ${field.name.replace(/_/g, " ")}.`;
+      }
+      } else {
+      const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+      const maxFileSize = 20 * 1024 * 1024; // 20 MB
+      let invalidFile = false;
 
-      return age >= 18 && !isFutureDate;
+      Array.from(field.files).forEach((file) => {
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension) || file.size > maxFileSize) {
+      invalidFile = true;
+      }
+      });
+
+      if (invalidFile) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+      feedback.textContent = `Each file must be a valid format (${allowedExtensions.join(", ")}) and not exceed 20 MB.`;
+      }
+      }
+      }
+    }
+
+    if (isValid) {
+      field.classList.add("is-valid");
+      field.classList.remove("is-invalid");
+    } else {
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+    }
   }
 
-    function validateFutureDate(input) {
-        const date = new Date(input.value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Set time to midnight to compare only dates
-        return date.getTime() <= today.getTime();
-    }
+  // Validate uploaded files
+  function validateUploadedFiles(field) {
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    const maxFileSize = 20 * 1024 * 1024; // 20 MB
+    let isValid = true;
 
-    function validateAppointmentDate(input) {
-      if (input.id !== "appointment-date") return true;
-      const appointmentDate = new Date(input.value);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Set time to midnight to compare only dates
-    
-      const maxDate = new Date();
-      maxDate.setMonth(today.getMonth() + 2); // Set the maximum date to two months from today
-    
-      if (appointmentDate < today) {
-        input.setCustomValidity("Date not available.");
-        return false;
-      } else if (appointmentDate > maxDate) {
-        input.setCustomValidity("The appointment date must be within the next one month.");
-        return false;
-      } else {
-        input.setCustomValidity(""); // Clear any previous error message
-        return true;
+    if (field.files.length === 0) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `Please upload at least one file.`;
       }
-    }
+    } else {
+      let invalidFile = false;
 
-    nextButtons.forEach(button => {
-      button.addEventListener('click', () => {
-          const currentPage = button.closest('.form-page');
-          const formErrorMessage = currentPage.querySelector('#form-error-message');
-          if (validatePage(button)) {
-              currentPage.style.display = 'none';
-              currentPage.nextElementSibling.style.display = 'block';
-              if (formErrorMessage) {
-                  formErrorMessage.textContent = '';
-              }
-          } else {
-              if (formErrorMessage) {
-                  formErrorMessage.textContent = 'Please fill out all the required fields.';
-              }
-          }
-      });
-  });
-  
-  prevButtons.forEach(button => {
-      button.addEventListener('click', () => {
-          const currentPage = button.closest('.form-page');
-          const formErrorMessage = currentPage.querySelector('#form-error-message');
-          if (validatePage(button)) {
-              currentPage.style.display = 'none';
-              currentPage.previousElementSibling.style.display = 'block';
-              if (formErrorMessage) {
-                  formErrorMessage.textContent = '';
-              }
-          } else {
-              if (formErrorMessage) {
-                  formErrorMessage.textContent = 'Please fill out all the required fields.';
-              }
-          }
-      });
-  });
-
-    const inputs = document.querySelectorAll("input, select, textarea");
-    inputs.forEach(input => {
-        input.addEventListener("blur", () => {
-            input.dataset.touched = true;
-            validateInput(input);
-        });
-
-        input.addEventListener("input", () => {
-            validateInput(input);
-        });
-
-        // Restrict input to numeric characters for specific fields
-        input.addEventListener("keypress", (event) => {
-            if (input.id === "contact-number-1" || input.id === "contact-number-2") {
-                const charCode = event.charCode;
-                if (charCode < 48 || charCode > 57) {
-                    event.preventDefault();
-                }
-            }
-        });
-    });
-
-    // Prevent form submission on Enter key press
-    form.addEventListener("keypress", (event) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
+      Array.from(field.files).forEach((file) => {
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension) || file.size > maxFileSize) {
+          invalidFile = true;
         }
-    });
+      });
 
-    function validateInput(input) {
-      const formGroup = input.closest('.form-group');
-      const errorMessage = formGroup ? formGroup.querySelector('.error-message') : null;
-      const contactNumberPattern = /^\d{11}$/;
-      const creditCardPattern = /^\d{16}$/;
-      const tinNumberPattern = /^\d{12}$/;
-      const sssNumberPattern = /^\d{10}$/;
-
-      let isValid = true;
-      const trimmedValue = input.value.trim();
-
-      if (trimmedValue && (!input.checkValidity() || 
-          ((input.id === "dob" || input.id === "date-of-birth-borrower") && (!validateDOB(input) || !validateFutureDate(input))) || 
-          (input.id === "appointment-date" && !validateAppointmentDate(input)) || 
-          ((input.id === "contact-number-borrower" || input.id === "contact-number-1" || input.id === "contact-number-2") && !contactNumberPattern.test(trimmedValue)) || 
-          ((input.id === "credit-cards") && !creditCardPattern.test(trimmedValue)) || 
-          ((input.id === "tin_number") && trimmedValue !== "" && !tinNumberPattern.test(trimmedValue)) || 
-          ((input.id === "sss_number") && trimmedValue !== "" && !sssNumberPattern.test(trimmedValue)))) {
-        
+      if (invalidFile) {
         isValid = false;
-        formGroup.classList.add("error");
-        formGroup.classList.remove("valid");
-        
-        if (errorMessage && input.dataset.touched) {
-          if (input.validity.rangeOverflow || input.validity.rangeUnderflow) {
-            errorMessage.textContent = `Please enter a year between ${input.min} and ${input.max}.`;
-          } else if (input.id === "contact-number-borrower" || input.id === "contact-number-1" || input.id === "contact-number-2") {
-            errorMessage.textContent = "Please enter exactly 11 digits.";
-          } else if (input.id === "credit-cards") {
-            errorMessage.textContent = "Please enter exactly 16 digits.";
-          } else if (input.id === "tin_number") {
-            errorMessage.textContent = "Please enter exactly 12 digits.";
-          } else if (input.id === "sss_number") {
-            errorMessage.textContent = "Please enter exactly 10 digits.";
-          } else if (input.type === "email" && !input.value.includes("@")) {
-            errorMessage.textContent = "Please enter a valid email address.";
-          } else if ((input.id === "dob") && !validateDOB(input)) {
-            errorMessage.textContent = "You must be at least 18 years old.";
-          } else if ((input.id === "date-of-birth-borrower") && !validateDOB(input)) {
-            errorMessage.textContent = "Co-borrower must be at least 18 years old.";
-          } else if ((input.id === "dob" || input.id === "date-of-birth-borrower") && !validateFutureDate(input)) {
-            errorMessage.textContent = "Date not available.";
-          } else if (input.id === "appointment-date" && !validateAppointmentDate(input)) {
-            errorMessage.textContent = "Date not available.";
-          } else {
-            errorMessage.textContent = "Invalid input.";
-          }
-          console.log(`Error message for ${input.id}: ${errorMessage.textContent}`);
-        }
-      } else if (trimmedValue) {
-        formGroup.classList.remove("error");
-        formGroup.classList.add("valid");
-        if (errorMessage) {
-          errorMessage.textContent = "";
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Each file must be a valid format (${allowedExtensions.join(", ")}) and not exceed 20 MB.`;
         }
       }
-
-      const contactNumber1Input = document.getElementById("contact-number-1");
-      const contactNumber2Input = document.getElementById("contact-number-2");
-      const contactNumberInput = document.getElementById("contact-number-borrower");
-  
-      if (contactNumber1Input && contactNumber2Input && contactNumber1Input.value === contactNumber2Input.value) {
-        contactNumber1Input.parentElement.classList.add("error");
-        contactNumber2Input.parentElement.classList.add("error");
-        const errorMessage2 = contactNumber2Input.nextElementSibling;
-        if (errorMessage2) {
-          errorMessage2.textContent = "Contact number already used";
-        }
-      }
-
-      if (contactNumberInput && (contactNumberInput.value === contactNumber1Input.value || contactNumberInput.value === contactNumber2Input.value)) {
-        contactNumberInput.parentElement.classList.add("error");
-        const errorMessage = contactNumberInput.nextElementSibling;
-        if (errorMessage) {
-          errorMessage.textContent = "Contact number already used";
-        }
-      }
-    
-      // Remove form group error if the input is not required and is blank
-      if (!input.required && trimmedValue === "") {
-        formGroup.classList.remove("error");
-        formGroup.classList.add("valid");
-      }
-    
-      // Always remove the error message if the input is blank
-      if (trimmedValue === "") {
-        if (errorMessage) {
-          errorMessage.textContent = "";
-        }
-      }
-    
-      return isValid;
     }
+
+    if (isValid) {
+      field.classList.add("is-valid");
+      field.classList.remove("is-invalid");
+    } else {
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+    }
+  }
+
+  // Add validation for file input
+  const fileInput = document.querySelector("input[name='combined_file[]']");
+  if (fileInput) {
+    fileInput.addEventListener("change", () => validateUploadedFiles(fileInput));
+  }
+
 });

@@ -29,18 +29,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (strtotime($expiry) > time()) {
                 // Token is valid and not expired
 
-                // Update password in the database
-                $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-                $stmt = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
-                $stmt->bind_param('ss', $hashedPassword, $email);
+                // Check if the new password is the same as the old password
+                $stmt = $conn->prepare("SELECT password FROM users WHERE email = ?");
+                $stmt->bind_param('s', $email);
                 $stmt->execute();
+                $result = $stmt->get_result();
 
-                // Delete the token from the database
-                $stmt = $conn->prepare("DELETE FROM password_resets WHERE token = ?");
-                $stmt->bind_param('s', $token);
-                $stmt->execute();
+                if ($result->num_rows === 1) {
+                    $user = $result->fetch_assoc();
+                    if (password_verify($newPassword, $user['password'])) {
+                        $response = ['status' => 'error', 'message' => 'You cannot use the old password.'];
+                    } else {
+                        // Update password in the database
+                        $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+                        $stmt = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
+                        $stmt->bind_param('ss', $hashedPassword, $email);
+                        $stmt->execute();
 
-                $response = ['status' => 'success', 'message' => 'Password has been updated successfully.'];
+                        // Delete the token from the database
+                        $stmt = $conn->prepare("DELETE FROM password_resets WHERE token = ?");
+                        $stmt->bind_param('s', $token);
+                        $stmt->execute();
+
+                        $response = ['status' => 'success', 'message' => 'Password has been updated successfully.'];
+                    }
+                }
             } else {
                 // Token has expired
                 $response = ['status' => 'error', 'message' => 'Already used, Token not found or expired token.'];

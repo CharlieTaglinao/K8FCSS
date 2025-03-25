@@ -71,4 +71,19 @@ document.addEventListener("DOMContentLoaded", function () {
     sidebar.classList.toggle("show");
     hideAllDropdowns();
   });
+
+  document.querySelectorAll(".accordion").forEach((accordion) => {
+    accordion.addEventListener("click", function () {
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+      } else {
+        document.querySelectorAll(".panel").forEach((p) => {
+          p.style.maxHeight = null; // Collapse other panels
+        });
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
+  });
 });

@@ -1,4 +1,46 @@
+
 document.addEventListener("DOMContentLoaded", function () {
+  window.addEventListener("scroll", reveal);
+
+  function reveal() {
+    var reveals = document.querySelectorAll(".reveal");
+
+    for (var i = 0; i < reveals.length; i++) {
+      var windowheight = window.innerHeight;
+      var revealtop = reveals[i].getBoundingClientRect().top;
+      var revealpoint = 150;
+
+      if (revealtop < windowheight - revealpoint) {
+        reveals[i].classList.add("active");
+      }
+    }
+  }
+
+  var acc = document.getElementsByClassName("accordion");
+
+  for (var i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function () {
+      // Close all other accordions
+      for (var j = 0; j < acc.length; j++) {
+        if (acc[j] !== this) {
+          acc[j].classList.remove("activeaccordion");
+          var otherPanel = acc[j].nextElementSibling;
+          if (otherPanel.style.display === "block") {
+            otherPanel.style.display = "none";
+          }
+        }
+      }
+
+      // Toggle the clicked accordion
+      this.classList.toggle("activeaccordion");
+      var panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
   const form = document.querySelector(".needs-validation");
 
   if (!form) return;
@@ -84,36 +126,6 @@ document.addEventListener("DOMContentLoaded", function () {
     console.warn("Element with ID 'toggle-password' not found."); // Debugging log
   }
 
-  window.addEventListener("scroll", reveal);
-
-  function reveal() {
-    var reveals = document.querySelectorAll(".reveal");
-
-    for (var i = 0; i < reveals.length; i++) {
-      var windowheight = window.innerHeight;
-      var revealtop = reveals[i].getBoundingClientRect().top;
-      var revealpoint = 150;
-
-      if (revealtop < windowheight - revealpoint) {
-        reveals[i].classList.add("active");
-      }
-    }
-  }
-
-  var acc = document.getElementsByClassName("accordion");
-  var i;
-
-  for (i = 0; i < acc.length; i++) {
-    acc[i].addEventListener("click", function () {
-      this.classList.toggle("activeaccordion");
-      var panel = this.nextElementSibling;
-      if (panel.style.display === "block") {
-        panel.style.display = "none";
-      } else {
-        panel.style.display = "block";
-      }
-    });
-  }
 
   // Remove SWAL alert for login
   $(document).ready(function () {

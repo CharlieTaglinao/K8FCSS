@@ -73,13 +73,25 @@ $fields = [
     'email_address_borrower' => $_POST['email_address_borrower'] ?? '',
     'tin_number_borrower' => $_POST['tin_number_borrower'] ?? '',
     'sss_number_borrower ' => $_POST['sss_number_borrower'] ?? '',
+
+    // Co Borrower Parents Information
     'mother_maiden_first_name_CoBorrower' => $_POST['mother_maiden_first_name_CoBorrower'] ?? '',
     'mother_maiden_last_name_CoBorrower' => $_POST['mother_maiden_last_name_CoBorrower'] ?? '',
     'mother_maiden_middle_name_CoBorrower' => $_POST['mother_maiden_middle_name_CoBorrower'] ?? '',
     'father_first_name_CoBorrower' => $_POST['father_first_name_CoBorrower'] ?? '',
     'father_last_name_CoBorrower' => $_POST['father_last_name_CoBorrower'] ?? '',
     'father_middle_name_CoBorrower' => $_POST['father_middle_name_CoBorrower'] ?? '',
-    'comments' => $_POST['comments'] ?? ''
+
+    //Source of Income - Co-borrower:
+    'employer_name_borrower' => $_POST['employer_name_borrower'] ?? '',
+    'office_address_borrower' => $_POST['office_address_borrower'] ?? '',
+    'position_borrower' => $_POST['position_borrower'] ?? '',
+    'years_service_borrower' => $_POST['years_service_borrower'] ?? '',
+    'monthly_income_borrower' => $_POST['monthly_income_borrower'] ?? '',
+    'credit_cards_borrower' => $_POST['credit_cards_borrower'] ?? '',
+    
+    //Final Details:
+    'comments' => $_POST['comments'] ?? '',
     
 ];
 

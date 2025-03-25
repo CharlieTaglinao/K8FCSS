@@ -517,19 +517,19 @@ checkUserRole(['Client']);
                         <!-- Mother's Maiden Name -->
                         <div class="form-group">
                             <label for="mother-maiden-first-name">Mother's Maiden First Name:</label>
-                            <input type="text" id="mother-maiden-first-name" name="mother_maiden_first_name" class="form-control"
+                            <input type="text" id="mother-maiden-first-name" name="mother_maiden_first_name_CoBorrower" class="form-control"
                                 placeholder="Jane">
                                 <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-middle-name">Mother's Maiden Middle Name:</label>
-                            <input type="text" id="mother-maiden-middle-name" name="mother_maiden_middle_name" class="form-control"
+                            <input type="text" id="mother-maiden-middle-name" name="mother_maiden_middle_name_CoBorrower" class="form-control"
                                 placeholder="Zamora">
                                 <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="mother-maiden-last-name">Mother's Maiden Last Name:</label>
-                            <input type="text" id="mother-maiden-last-name" name="mother_maiden_last_name" class="form-control"
+                            <input type="text" id="mother-maiden-last-name" name="mother_maiden_last_name_CoBorrower" class="form-control"
                                 placeholder="Smith">
                                 <div class="invalid-feedback"></div>
                         </div>
@@ -537,17 +537,17 @@ checkUserRole(['Client']);
                         <!-- Father's Name -->
                         <div class="form-group">
                             <label for="father-first-name">Father's First Name:</label>
-                            <input type="text" id="father-first-name" name="father_first_name" class="form-control" placeholder="John">
+                            <input type="text" id="father-first-name" name="father_first_name_CoBorrower" class="form-control" placeholder="John">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-middle-name">Father's Middle Name:</label>
-                            <input type="text" id="father-middle-name" name="father_middle_name" class="form-control" placeholder="Cruz">
+                            <input type="text" id="father-middle-name" name="father_middle_name_CoBorrower" class="form-control" placeholder="Cruz">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
                             <label for="father-last-name">Father's Last Name:</label>
-                            <input type="text" id="father-last-name" name="father_last_name" class="form-control" placeholder="Doe">
+                            <input type="text" id="father-last-name" name="father_last_name_CoBorrower" class="form-control" placeholder="Doe">
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>

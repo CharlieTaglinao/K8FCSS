@@ -142,7 +142,7 @@ checkUserRole(['Client']);
                                 value="<?php echo $_SESSION['first_name']; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="middle-name">Middle Name: <span class="required-asterisk">*</span></label>
+                            <label for="middle-name">Middle Name: </label>
                             <input type="text" id="middle-name" name="middle_name" class="form-control" placeholder="Rosales"
                                 value="<?php echo $_SESSION['middle_name']; ?>" readonly>
                         </div>
@@ -440,8 +440,7 @@ checkUserRole(['Client']);
                                 <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
-                            <label for="middle-name-borrower">Middle Name: <span
-                                    class="required-asterisk">*</span></label>
+                            <label for="middle-name-borrower">Middle Name: </label>
                             <input type="text" id="middle-name-borrower" name="middle_name_borrower" class="form-control" placeholder="Gonzales"
                                 >
                                 <div class="invalid-feedback"></div>
@@ -583,6 +582,13 @@ checkUserRole(['Client']);
                                 placeholder="Block 1 Ph1 General Trias">
                                 <div class="invalid-feedback"></div>
                         </div>
+                        <!-- <div class="form-group">
+                            <label for="office-number-borrower">Office Number: <span
+                                    class="required-asterisk">*</span></label>
+                            <input type="text" id="office-number-borrower" name="office_number_borrower" class="form-control"
+                                placeholder="Block 1 Ph1 General Trias">
+                                <div class="invalid-feedback"></div>
+                        </div> -->
                         <div class="form-group">
                             <label for="position-borrower">Position: <span
                             class="required-asterisk">*</span></label>

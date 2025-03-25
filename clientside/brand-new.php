@@ -147,8 +147,7 @@ checkUserRole(['Client']);
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
-                            <label for="middle-name">Middle Name: <span
-                            class="required-asterisk">*</span></label>
+                            <label for="middle-name">Middle Name: </label>
                             <input type="text" id="middle-name" name="middle_name" class="form-control" placeholder="Cruz" 
                                 value="<?php echo $_SESSION['middle_name']; ?>" readonly>
                         </div>
@@ -442,8 +441,7 @@ checkUserRole(['Client']);
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
-                            <label for="middle-name-borrower">Middle Name: <span
-                                    class="required-asterisk">*</span></label>
+                            <label for="middle-name-borrower">Middle Name: </label>
                             <input type="text" id="middle-name-borrower" name="middle_name_borrower" class="form-control" placeholder="Gonzales">
                             <div class="invalid-feedback"></div>
                         </div>

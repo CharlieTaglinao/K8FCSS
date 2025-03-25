@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (currentLength > 250) {
       commentsField.classList.add("is-invalid");
-      commentsField.classList.remove("is-valid"); // Ensure is-valid is removed
+      commentsField.classList.remove("is-valid"); 
       charCount.textContent = `${currentLength}/250 characters (${currentLength - 250} characters over limit)`;
     } else {
       commentsField.classList.remove("is-invalid");
@@ -178,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Validate field function
   function validateField(field) {
+    //start of page 1 of form
     let isValid = true;
 
     if (field.tagName.toLowerCase() === "select" && field.value === "") {
@@ -187,88 +188,180 @@ document.addEventListener("DOMContentLoaded", function () {
 
       let feedback = field.parentNode.querySelector(".invalid-feedback");
       if (feedback) {
-        feedback.textContent = `Please select a valid ${field.name.replace(/_/g, " ")}.`;
+        if (field.name === "transmition_type") {
+          feedback.textContent = "Please select a valid transmission type.";
+        } else {
+          feedback.textContent = `Please select a valid ${field.name.replace(
+            /_/g,
+            " "
+          )}.`;
+        }
       }
-    } else if (field.tagName.toLowerCase() === "input" && field.type === "date" && field.value === "") {
+    } else if (
+      field.tagName.toLowerCase() === "input" &&
+      field.type === "date" &&
+      field.value === ""
+    ) {
       isValid = false;
       field.classList.add("is-invalid");
       field.classList.remove("is-valid");
 
-      let feedback = field.parentNode.querySelector(".invalid-feedback")
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
 
       if (feedback) {
-      feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        feedback.textContent = `Please provide a valid ${field.name.replace(
+          /_/g,
+          " "
+        )}.`;
       }
     } else if (field.name === "contact_number_2" && field.value !== "") {
       if (isNaN(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid number for ${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())}.`;
-      }
-      } else if (field.value.length !== 11) {
-      isValid = false;  
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `${field.name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())} must be exactly 11 digits.`;
-      }
-      } else {
-      const contactNumber1 = form.querySelector("input[name='contact_number_1']");
-      if (contactNumber1 && contactNumber1.value === field.value) {
         isValid = false;
         field.classList.add("is-invalid");
         field.classList.remove("is-valid");
 
         let feedback = field.parentNode.querySelector(".invalid-feedback");
         if (feedback) {
-        feedback.textContent = `${field.value} is already used in Contact Number 1.`;
+          feedback.textContent = `Please provide a valid number for ${field.name
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (char) => char.toUpperCase())}.`;
+        }
+      } else if (field.value.length !== 11) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `${field.name
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (char) =>
+              char.toUpperCase()
+            )} must be exactly 11 digits.`;
+        }
+      } else {
+        const contactNumber1 = form.querySelector(
+          "input[name='contact_number_1']"
+        );
+        if (contactNumber1 && contactNumber1.value === field.value) {
+          isValid = false;
+          field.classList.add("is-invalid");
+          field.classList.remove("is-valid");
+
+          let feedback = field.parentNode.querySelector(".invalid-feedback");
+          if (feedback) {
+            feedback.textContent = `${field.value} is already used in Contact Number 1.`;
+          }
         }
       }
-      }
-    }else if (field.name === "place_of_birth") {
+    } else if (field.name === "place_of_birth") {
       if (field.value === "") {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
 
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(
+            /_/g,
+            " "
+          )}.`;
+        }
       }
-      }
-    }  else if (field.name === "years_present_address") {
+    } else if (field.name === "years_present_address") {
       if (field.value === "") {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid number.`;
-      }
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid number.`;
+        }
       } else if (isNaN(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Only numbers are accepted.`;
-      }
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Only numbers are accepted.`;
+        }
       } else if (parseInt(field.value, 10) > 100) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = feedback.textContent = `The provided years at the present address is too high.`;
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent =
+            feedback.textContent = `The provided years at the present address is too high.`;
+        }
       }
+    } else if (field.name === "ownership") {
+      const ownershipOther = form.querySelector(
+      "input[name='ownership_other']"
+      );
+
+      // Step 1: Define the validation logic
+      const validateOwnership = () => {
+      if (!field.value || field.value === "") {
+        // Case 1: No value selected
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = "Please select a valid ownership.";
+        }
+        if (ownershipOther) {
+        ownershipOther.classList.remove("is-valid");
+        ownershipOther.classList.remove("is-invalid");
+        }
+      } else if (field.value === "Others") {
+        // Case 2: "Others" selected but no additional input provided
+        if (!ownershipOther || ownershipOther.value.trim() === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        if (ownershipOther) {
+          ownershipOther.classList.add("is-invalid");
+          ownershipOther.classList.remove("is-valid");
+        }
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = "Please specify the ownership.";
+        }
+        } else {
+        // Case 3: "Others" selected with valid additional input
+        isValid = true;
+        field.classList.add("is-valid");
+        field.classList.remove("is-invalid");
+        if (ownershipOther) {
+          ownershipOther.classList.add("is-valid");
+          ownershipOther.classList.remove("is-invalid");
+        }
+        }
+      } else {
+        // Case 4: Valid selection other than "Others"
+        if (ownershipOther) {
+        ownershipOther.classList.remove("is-invalid");
+        ownershipOther.classList.remove("is-valid");
+        }
+        if (field.value !== "") {
+        field.classList.add("is-valid");
+        field.classList.remove("is-invalid");
+        }
       }
-    }else if (field.name === "previous_address") {
+      };
+
+      // Step 2: Attach event listeners for validation
+      field.addEventListener("input", validateOwnership);
+      if (ownershipOther) {
+      ownershipOther.addEventListener("input", validateOwnership);
+      ownershipOther.addEventListener("blur", validateOwnership);
+      }
+
+      // Step 3: Perform initial validation
+      validateOwnership();
+    }if (field.name === "previous_address") {
       if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
       isValid = false;
       field.classList.add("is-invalid");
@@ -360,72 +453,72 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     // start validation for page 2 of form
     else if (field.name === "mother_maiden_first_name") {
-      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
+      if (field.value !== "" && !/^[a-zA-Z\s]+$/.test(field.value)) {
       isValid = false;
       field.classList.add("is-invalid");
       field.classList.remove("is-valid");
 
       let feedback = field.parentNode.querySelector(".invalid-feedback");
       if (feedback) {
-        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
+        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}`;
       }
       }
     } else if (field.name === "mother_maiden_middle_name") {
-      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
-      }
-      }
+      if (field.value !== "" && !/^[a-zA-Z\s]+$/.test(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+  
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}`;
+        }
+        }
     }else if (field.name === "mother_maiden_last_name") {
-      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
-      }
-      }
+      if (field.value !== "" && !/^[a-zA-Z\s]+$/.test(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+  
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}`;
+        }
+        }
     }else if (field.name === "father_first_name") {
-      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
-      }
-      }
+      if (field.value !== "" && !/^[a-zA-Z\s]+$/.test(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+  
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}`;
+        }
+        }
     }else if (field.name === "father_middle_name") {
-      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
-      }
-      }
+      if (field.value !== "" && !/^[a-zA-Z\s]+$/.test(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+  
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}`;
+        }
+        }
     }
     else if (field.name === "father_last_name") {
-      if (field.value !== "" && !/[a-zA-Z]/.test(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
-      }
-      }
+      if (field.value !== "" && !/^[a-zA-Z\s]+$/.test(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+  
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+          feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}`;
+        }
+        }
     } else if (field.name === "year_model") {
       const currentYear = new Date().getFullYear();
       const yearModel = parseInt(field.value, 10);
@@ -439,7 +532,7 @@ document.addEventListener("DOMContentLoaded", function () {
         feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
       }
       }
-    } else if (field.name === "make") {
+    }  else if (field.name === "make") {
       if (field.value === "") {
       isValid = false;
       field.classList.add("is-invalid");
@@ -461,38 +554,73 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
     // start validation for page 3 of form
+    
     else if (field.name === "income_source") {
-      const incomeSourceOther = form.querySelector("input[name='income_source_other']");
-      if (field.value === "") {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-        feedback.textContent = `Please provide a valid ${field.name.replace(/_/g, " ")}.`;
-      }
-      } else if (field.value === "Other") {
-      if (!incomeSourceOther || incomeSourceOther.value === "") {
+      const ownershipOther = form.querySelector(
+      "input[name='income_source_other']"
+      );
+
+      // Step 1: Define the validation logic
+      const validateOwnership = () => {
+      if (!field.value || field.value === "") {
+        // Case 1: No value selected
         isValid = false;
         field.classList.add("is-invalid");
         field.classList.remove("is-valid");
-        if (incomeSourceOther) {
-        incomeSourceOther.classList.add("is-invalid");
-        incomeSourceOther.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = "Please select a valid source of income.";
+        }
+        if (ownershipOther) {
+        ownershipOther.classList.remove("is-valid");
+        ownershipOther.classList.remove("is-invalid");
+        }
+      } else if (field.value === "Other") {
+        // Case 2: "Others" selected but no additional input provided
+        if (!ownershipOther || ownershipOther.value.trim() === "") {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        if (ownershipOther) {
+          ownershipOther.classList.add("is-invalid");
+          ownershipOther.classList.remove("is-valid");
         }
         let feedback = field.parentNode.querySelector(".invalid-feedback");
         if (feedback) {
-        feedback.textContent = "Please specify the income source.";
+          feedback.textContent = "Please specify the souce of income.";
         }
-      } else {
+        } else {
+        // Case 3: "Others" selected with valid additional input
+        isValid = true;
         field.classList.add("is-valid");
         field.classList.remove("is-invalid");
-        if (incomeSourceOther) {
-        incomeSourceOther.classList.add("is-valid");
-        incomeSourceOther.classList.remove("is-invalid");
+        if (ownershipOther) {
+          ownershipOther.classList.add("is-valid");
+          ownershipOther.classList.remove("is-invalid");
+        }
+        }
+      } else {
+        // Case 4: Valid selection other than "Others"
+        if (ownershipOther) {
+        ownershipOther.classList.remove("is-invalid");
+        ownershipOther.classList.remove("is-valid");
+        }
+        if (field.value !== "") {
+        field.classList.add("is-valid");
+        field.classList.remove("is-invalid");
         }
       }
+      };
+
+      // Step 2: Attach event listeners for validation
+      field.addEventListener("input", validateOwnership);
+      if (ownershipOther) {
+      ownershipOther.addEventListener("input", validateOwnership);
+      ownershipOther.addEventListener("blur", validateOwnership);
       }
+
+      // Step 3: Perform initial validation
+      validateOwnership();
     }else if (field.name === "employer_name"){
       if (field.value === "") {
         isValid = false;

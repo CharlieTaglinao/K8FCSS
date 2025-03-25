@@ -25,7 +25,7 @@ $fields = [
     'first_name' => $_POST['first_name'] ?? '',
     'last_name' => $_POST['last_name'] ?? '',
     'middle_name' => $_POST['middle_name'] ?? '',
-    'dob' => $_POST['date_of_birth'] ?? '',
+    'dob' => $_POST['dob'] ?? '',
     'place_of_birth' => $_POST['place_of_birth'] ?? '',
     'marital_status' => $_POST['marital_status'] ?? '',
     'present_address' => $_POST['present_address'] ?? '',
@@ -85,11 +85,12 @@ $fields = [
     //Source of Income - Co-borrower:
     'employer_name_borrower' => $_POST['employer_name_borrower'] ?? '',
     'office_address_borrower' => $_POST['office_address_borrower'] ?? '',
+    'office_number_borrower' => $_POST['office_number_borrower'] ?? '',
     'position_borrower' => $_POST['position_borrower'] ?? '',
     'years_service_borrower' => $_POST['years_service_borrower'] ?? '',
     'monthly_income_borrower' => $_POST['monthly_income_borrower'] ?? '',
     'credit_cards_borrower' => $_POST['credit_cards_borrower'] ?? '',
-    
+
     //Final Details:
     'comments' => $_POST['comments'] ?? '',
     
@@ -129,6 +130,13 @@ $sql_applications = "INSERT INTO forms_sanglaorcr_applicants ($columns, transact
                      father_first_name_CoBorrower=VALUES(father_first_name_CoBorrower),
                      father_last_name_CoBorrower=VALUES(father_last_name_CoBorrower),
                      father_middle_name_CoBorrower=VALUES(father_middle_name_CoBorrower),
+                        employer_name_borrower=VALUES(employer_name_borrower),
+                        office_address_borrower=VALUES(office_address_borrower),
+                        office_number_borrower=VALUES(office_number_borrower),
+                        position_borrower=VALUES(position_borrower),
+                        years_service_borrower=VALUES(years_service_borrower),
+                        monthly_income_borrower=VALUES(monthly_income_borrower),
+                        credit_cards_borrower=VALUES(credit_cards_borrower),
                      comments=VALUES(comments)";
 
 // Prepare the statement

@@ -94,6 +94,7 @@ $fields = [
     //Source of Income - Co-borrower:
     'employer_name_borrower' => $_POST['employer_name_borrower'] ?? '',
     'office_address_borrower' => $_POST['office_address_borrower'] ?? '',
+    'office_number_borrower' => $_POST['office_number_borrower'] ?? '',
     'position_borrower' => $_POST['position_borrower'] ?? '',
     'years_service_borrower' => $_POST['years_service_borrower'] ?? '',
     'monthly_income_borrower' => $_POST['monthly_income_borrower'] ?? '',

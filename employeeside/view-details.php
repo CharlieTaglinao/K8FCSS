@@ -40,7 +40,7 @@ $form_fields = [
         'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
         'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
         'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
-        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards__borrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
         'Comments' => ['comments']
     ],
     'sangla-orcr' => [
@@ -50,7 +50,7 @@ $form_fields = [
         'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
         'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
         'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
-        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards__borrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
         'Comments' => ['comments']
     ],
     'second-hand' => [
@@ -60,7 +60,7 @@ $form_fields = [
         'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
         'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
         'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
-        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards__borrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
         'Comments' => ['comments']
     ]
 ];

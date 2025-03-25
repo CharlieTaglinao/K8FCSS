@@ -8,7 +8,7 @@ body {
   background-repeat: no-repeat;
   color: #fff;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
 }
 
 h1,
@@ -95,10 +95,6 @@ input[type="password"],
 input[type="text"] {
   width: 30%;
   padding: 10px;
-  background-color: #e8f0fe;
-  /* dark grey background */
-  color: #000000;
-  border: 1px solid black;
   border-radius: 4px;
   font-size: 16px;
 

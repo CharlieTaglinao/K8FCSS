@@ -9,9 +9,11 @@
     <link rel="stylesheet" href="../assets/css/Login.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <script src="../assets/js/bootstrap.js" defer></script>
     <script src="../assets/js/script.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <style>
     .swal2-confirm {
@@ -34,9 +36,10 @@
         </div>
         <h3 class="subheader">Forgot Password</h3> <!-- Changed h1 to h3 for consistency -->
         <label for="email" id="forget-password-label">Enter your email:</label>
-        <form action="process_forgot_password.php" method="post">
+        <form action="process_forgot_password.php" method="post" class="needs-validation">
             <div class="form-group" id="forget-password-form-group">
-                <input type="email" id="email" name="email"/>
+                <input type="email" id="email" name="email" class="form-control"/>
+                <div class="invalid-feedback"></div>
             </div>
             <button type="submit">Submit</button>
         </form>
@@ -45,7 +48,8 @@
     </div>
     <footer>
         <p>Copyright© 2024. All rights reserved</p>
-    </footer>
+    </footer>    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/js/loader.js"></script>
 </body>
 

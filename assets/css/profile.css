@@ -190,7 +190,17 @@ body {
 }
 
 .form-group {
+    position: relative;
+    align-items: center;
+    margin-left: 0;
     margin-bottom: 1rem;
+}
+
+.toggle-password-container {
+    position: absolute;
+    right: 10px;
+    top: 3.5rem;
+    transform: translateY(-50%);
 }
 
 .form-label {

@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Add event listener for form submission
   submitButton.addEventListener("click", function () {
     // Validate all fields in the form
-    const fields = Array.from(form.querySelectorAll("input, select, textarea"));
+    const fields = Array.from(form.querySelectorAll("input, select"));
     fields.forEach((field) => validateField(field));
 
     // Check for invalid fields
@@ -1148,38 +1148,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       }
     } else if (field.name === "combined_file[]") {
-      if (field.files.length === 0) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-      feedback.textContent = `Please upload at least one file for ${field.name.replace(/_/g, " ")}.`;
-      }
-      } else {
-      const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
-      const maxFileSize = 20 * 1024 * 1024; // 20 MB
-      let invalidFile = false;
-
-      Array.from(field.files).forEach((file) => {
-      const fileExtension = file.name.split(".").pop().toLowerCase();
-      if (!allowedExtensions.includes(fileExtension) || file.size > maxFileSize) {
-      invalidFile = true;
-      }
-      });
-
-      if (invalidFile) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-      feedback.textContent = `Each file must be a valid format (${allowedExtensions.join(", ")}) and not exceed 20 MB.`;
-      }
-      }
-      }
+      validateUploadedFiles(field); // Reuse the validateUploadedFiles function
+      return; // Exit early since validation is handled by validateUploadedFiles
     }
-
     if (isValid) {
       field.classList.add("is-valid");
       field.classList.remove("is-invalid");
@@ -1191,7 +1162,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Validate uploaded files
   function validateUploadedFiles(field) {
-    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "webp", "svg"];
     const maxFileSize = 20 * 1024 * 1024; // 20 MB
     let isValid = true;
 
@@ -1208,7 +1179,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       Array.from(field.files).forEach((file) => {
         const fileExtension = file.name.split(".").pop().toLowerCase();
-        if (!allowedExtensions.includes(fileExtension) || file.size > maxFileSize) {
+        if (!allowedExtensions.includes(fileExtension)) {
+          console.error(`Invalid file extension: ${file.name}`);
+          invalidFile = true;
+        }
+        if (file.size > maxFileSize) {
+          console.error(`File size exceeds limit: ${file.name}`);
           invalidFile = true;
         }
       });
@@ -1221,6 +1197,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (feedback) {
           feedback.textContent = `Each file must be a valid format (${allowedExtensions.join(", ")}) and not exceed 20 MB.`;
         }
+      } else {
+        isValid = true;
+        field.classList.add("is-valid");
+        field.classList.remove("is-invalid");
       }
     }
 
@@ -1236,7 +1216,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Add validation for file input
   const fileInput = document.querySelector("input[name='combined_file[]']");
   if (fileInput) {
-    fileInput.addEventListener("change", () => validateUploadedFiles(fileInput));
+    const validateFileInput = () => validateUploadedFiles(fileInput);
+    fileInput.addEventListener("change", validateFileInput);
+    fileInput.addEventListener("blur", validateFileInput); // Attach blur event
   }
 
 });

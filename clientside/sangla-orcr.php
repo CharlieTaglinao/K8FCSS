@@ -26,50 +26,6 @@ checkUserRole(['Client']);
         .error textarea {
             border: 1px solid red;
         }
-
-        .file-upload-wrapper {
-            position: relative;
-            width: 100%;
-            height: 50px;
-            border: 2px dashed #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .file-upload-wrapper input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-        .file-upload-wrapper .file-upload-text {
-            font-size: 16px;
-            color: #666;
-        }
-        .file-upload-wrapper .file-names {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #333;
-        }
-        .file-upload-wrapper .file-name {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 5px;
-            width: 100%;
-        }
-        .file-upload-wrapper .file-name span {
-            flex-grow: 1;
-        }
-        .file-upload-wrapper .file-name button {
-            background: none;
-            border: none;
-            color: red;
-            cursor: pointer;
-        }
         .progress-bar {
             width: 100%;
             background-color: #f3f3f3;
@@ -676,12 +632,7 @@ checkUserRole(['Client']);
                     <div class="form-group">
                             <label for="combined-file">Upload OR/CR <span class="required-asterisk">*</span></label>
                             <div class="file-upload-wrapper">
-                                <input type="file" id="combined-file" name="combined_file[]" multiple class="form-control" accept=".jpg,.jpeg,.png,.pdf">
-                                <p class="file-upload-text">Drag and drop files here or click to select files</p>
-                            </div>
-                            <div class="file-names" id="file-names"></div>
-                            <div class="progress-bar" id="progress-bar">
-                                <div class="progress-bar-fill" id="progress-bar-fill">0%</div>
+                                <input type="file" id="combined-file" name="combined_file[]" multiple class="form-control" accept=".jpg,.jpeg,.png,.pdf,.webp,.svg">
                             </div>
                             <div class="invalid-feedback"></div>
                     </div>

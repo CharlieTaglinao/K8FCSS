@@ -14,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = isset($_POST['email']) ? $conn->real_escape_string(trim($_POST['email'])) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
+    // Store the email in the session to retain it in the form
+    $_SESSION['email'] = $email;
+
     if (empty($email) || empty($password)) {
         $_SESSION['error'] = "Please fill all required fields.";
         header("Location: ../php/login");
@@ -61,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $stmt->execute();
 
+
         // Redirect based on role
         if ($result === 'Admin') {
             header("Location: ../adminside/index");
@@ -72,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $_SESSION['error'] = "Incorrect email or password.";
         header("Location: ../php/login");
+      
+        exit();
     }
 } else {
     $_SESSION['error'] = "Invalid request.";

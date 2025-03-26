@@ -108,16 +108,17 @@
         <?php
         session_start();
         $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+        $email_value = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : ''; // Retrieve email from session
         unset($_SESSION['error']);
         ?>
         <form action="process_login.php" method="post" class="needs-validation">
-            
-        
-        <div id="error-message" class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
-        <label for="email">Email:</label>
+            <div id="error-message" class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
+            <label for="email">Email:</label>
             <div class="form-group">
-            <input type="email" id="email" name="email" class="form-control" value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : ''; ?>" placeholder="Enter your email" style="width: 100%;"/>
-            <div class="invalid-feedback"></div>
+                <input type="email" id="email" name="email" class="form-control" 
+                       value="<?php echo $email_value; ?>" 
+                       placeholder="Enter your email" style="width: 100%;"/>
+                <div class="invalid-feedback"></div>
             </div>
 
             <label for="password">Password: </label>

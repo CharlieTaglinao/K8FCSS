@@ -41,7 +41,7 @@
                 <p><strong>Owner of K8 FCS</strong></p>
                 <p>The owner of K8FCS is a visionary leader, driving innovation and growth in financial services, focused on client satisfaction, operational excellence, and expanding the company’s reach in the industry.</p>
                 <div class="social-icons">
-                    <a href="https://www.facebook.com/mildred.pena.353"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/mildred.pena.353" target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
             <div class="team-card">
@@ -53,7 +53,7 @@
                 <p>Marketing an auto loan focuses on attracting customers with competitive rates, flexible terms, and quick approvals, 
                     using online ads, social media, and dealership partnerships with dealerships to reach a broader audience.</p>
                 <div class="social-icons">
-                    <a href="https://www.facebook.com/jhoy.silos.baltazar"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/jhoy.silos.baltazar" target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
             <div class="team-card">
@@ -65,7 +65,7 @@
                 <p>Marketing car insurance emphasizes affordable, comprehensive coverage, and reliable customer support. 
                     Targeted campaigns, partnerships with car dealerships and policy sign-ups effectively.</p>
                 <div class="social-icons">
-                    <a href="https://www.facebook.com/manelia.liongson?mibextid=ZbWKwL"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/manelia.liongson?mibextid=ZbWKwL" target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
         </div>

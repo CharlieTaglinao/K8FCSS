@@ -73,12 +73,6 @@ function generatePDF($data, $reportTitle, $outputFileName, $orientation = 'P') {
     $sectionCount = 0;
     $html = ''; // Initialize HTML content
     foreach ($sections as $section => $rows) {
-        if ($sectionCount > 0 && $sectionCount % 3 == 0) {
-            $pdf->writeHTML($html, true, false, true, false, '');
-            $pdf->AddPage();
-            $pdf->Ln(10); // Add margin-top for the new page
-            $html = ''; // Reset HTML content for the new page
-        }
         $html .= '<h3 style="margin-top: 40px;">' . htmlspecialchars($section) . '</h3>';
         $html .= '<table border="0" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">';
         $html .= '<tbody>';
@@ -137,7 +131,7 @@ function generatePDF($data, $reportTitle, $outputFileName, $orientation = 'P') {
         $pdf->SetTextColor(0, 0, 0); 
     }
 
-    // Close and output PDF document
+    ob_end_clean();
     $pdf->Output($outputFileName, 'I');
 }
 ?>

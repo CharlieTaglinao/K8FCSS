@@ -941,29 +941,23 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     } else if (field.name === "years_stay_borrower") {
       const residentialAddressBorrower = form.querySelector("input[name='residential_address_borrower']");
-      if (residentialAddressBorrower && residentialAddressBorrower.value !== "" && field.value === "") {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-      feedback.textContent = "Please provide a valid year of stay.";
-      }
-      } else if (field.value !== "" && isNaN(field.value)) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
-      feedback.textContent = "Only numbers are accepted.";
-      }
+      if (residentialAddressBorrower && residentialAddressBorrower.value !== "" && field.value !== "") {
+      if (isNaN(field.value)) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+        feedback.textContent = "Only numbers are accepted.";
+        }
       } else if (parseInt(field.value, 10) > 100) {
-      isValid = false;
-      field.classList.add("is-invalid");
-      field.classList.remove("is-valid");
-      let feedback = field.parentNode.querySelector(".invalid-feedback");
-      if (feedback) {
+        isValid = false;
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        let feedback = field.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
         feedback.textContent = `The provided years of stay in the residential address of the co-borrower is too high.`;
+        }
       }
       }
     } else if (field.name === "contact_number_borrower") {

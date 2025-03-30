@@ -106,6 +106,7 @@ ob_start();
                             
                             <label for="term">Select Term:</label>
                             <select id="term" name="term" required>
+                                <option value="">Select term</option>
                                 <option value="6">6 months</option>
                                 <option value="12">12 months</option>
                                 <option value="18">18 months</option>
@@ -326,9 +327,22 @@ ob_start();
     <script src="../assets/js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var today = new Date().toISOString().split('T')[0];
+            let today = new Date().toISOString().split('T')[0];
             document.getElementById('maturity').setAttribute('min', today);
             document.getElementById('check-release').setAttribute('min', today);
+
+            let termSelect = document.getElementById('term');
+            let maturityInput = document.getElementById('maturity');
+
+            termSelect.addEventListener('change', function() {
+                let termMonths = parseInt(termSelect.value);
+                if (!isNaN(termMonths)) {
+                    let currentDate = new Date();
+                    currentDate.setMonth(currentDate.getMonth() + termMonths);
+                    let maturityDate = currentDate.toISOString().split('T')[0];
+                    maturityInput.value = maturityDate;
+                }
+            });
         });
     </script>
 </body>

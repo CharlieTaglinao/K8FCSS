@@ -35,25 +35,25 @@ function toggleCard(cardId) {
   }
 }
 document.addEventListener("DOMContentLoaded", function () {
-  var today = new Date().toISOString().split("T")[0];
-  var maturityInput = document.getElementById("maturity");
-  var checkReleaseInput = document.getElementById("check-release");
 
-  maturityInput.setAttribute("min", today);
-  checkReleaseInput.setAttribute("min", today);
+  let today = new Date().toISOString().split('T')[0];
+  document.getElementById('maturity').setAttribute('min', today);
+  document.getElementById('check-release').setAttribute('min', today);
 
-  function validateDates() {
-    if (maturityInput.value === checkReleaseInput.value) {
-      checkReleaseInput.setCustomValidity(
-        "Maturity date and Check Release date must not be the same."
-      );
+  let termSelect = document.getElementById('term');
+  let maturityInput = document.getElementById('maturity');
+
+  termSelect.addEventListener('change', function() {
+    let termMonths = parseInt(termSelect.value);
+    if (!isNaN(termMonths)) {
+      let currentDate = new Date();
+      currentDate.setMonth(currentDate.getMonth() + termMonths);
+      let maturityDate = currentDate.toISOString().split('T')[0];
+      maturityInput.value = maturityDate;
     } else {
-      checkReleaseInput.setCustomValidity("");
+      maturityInput.value = null; // Set maturity date to null if term is null
     }
-  }
-
-  maturityInput.addEventListener("change", validateDates);
-  checkReleaseInput.addEventListener("change", validateDates);
+  });
 });
 //pagination automatic close previously opened
 

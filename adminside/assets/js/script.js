@@ -315,19 +315,87 @@ function showDeclineSwal(clientId) {
 }
 
 function downloadAndPrintPDF() {
-  const url = "?generate_pdf=1&report_duration=<?php echo $report_duration; ?>";
-  fetch(url)
-    .then((response) => response.blob())
-    .then((blob) => {
-      const url = URL.createObjectURL(blob);
-      const iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      iframe.src = url;
-      document.body.appendChild(iframe);
-      iframe.onload = () => {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-      };
-    })
-    .catch((error) => console.error("Error downloading PDF:", error));
+  // Get the current report duration from the select element
+  const reportDuration = document.getElementById("report-duration").value;
+  
+  // Create the URL with the report duration parameter
+  const url = `?generate_pdf=1&report_duration=${reportDuration}`;
+  
+  // Check if we're using a custom date range
+  if (reportDuration === "custom") {
+    // Extract start and end dates from URL if they exist
+    const urlParams = new URLSearchParams(window.location.search);
+    const startDate = urlParams.get("start_date");
+    const endDate = urlParams.get("end_date");
+    
+    // Add date parameters if they exist
+    if (startDate && endDate) {
+      fetch(`${url}&start_date=${startDate}&end_date=${endDate}`)
+        .then((response) => response.blob())
+        .then((blob) => {
+          printPdfBlob(blob);
+        })
+        .catch((error) => console.error("Error downloading PDF:", error));
+    } else {
+      console.error("Custom date range selected but dates not provided");
+    }
+  } else {
+    // Regular report duration without custom dates
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        printPdfBlob(blob);
+      })
+      .catch((error) => console.error("Error downloading PDF:", error));
+  }
+}
+
+// Helper function to print the PDF blob
+function printPdfBlob(blob) {
+  const url = URL.createObjectURL(blob);
+  const iframe = document.createElement("iframe");
+  // Make iframe visible but positioned off-screen so it doesn't disturb layout
+  iframe.style.position = "fixed";
+  iframe.style.right = "-9999px";
+  iframe.style.bottom = "-9999px";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.src = url;
+  document.body.appendChild(iframe);
+  
+  iframe.onload = () => {
+    try {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+      
+      // Don't remove the iframe immediately after printing
+      // Let the user interact with the print dialog
+      
+      // Only clean up resources after user has had time to print
+      // Listen for the afterprint event if supported
+      if (window.matchMedia) {
+        const mediaQueryList = window.matchMedia('print');
+        mediaQueryList.addEventListener('change', function(mql) {
+          if (!mql.matches) {
+            // Print dialog was closed, now it's safe to clean up
+            setTimeout(() => {
+              document.body.removeChild(iframe);
+              URL.revokeObjectURL(url);
+            }, 1000);
+          }
+        });
+      } else {
+        // For older browsers without afterprint support
+        // Keep the iframe longer to ensure print dialog completes
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+          URL.revokeObjectURL(url);
+        }, 60000); // 1 minute
+      }
+    } catch (e) {
+      console.error("Printing failed:", e);
+      document.body.removeChild(iframe);
+      URL.revokeObjectURL(url);
+    }
+  };
 }

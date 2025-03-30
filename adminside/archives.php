@@ -14,7 +14,7 @@ $order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
 $form_type = isset($_GET['form_type']) ? $_GET['form_type'] : '';
 
 // Fetch only the approved and archived appointments once
-$query = "SELECT a.*, 
+$query = "SELECT a.*,
           COALESCE(f.transaction_id, s.transaction_id, b.transaction_id) as form_transaction_id,
           COALESCE(f.year_model, s.year_model, b.year_model) as year_model,
           COALESCE(f.make, s.make, b.make) as make,
@@ -37,6 +37,7 @@ $query = "SELECT a.*,
           COALESCE(f.contact_number_1, s.contact_number_1, b.contact_number_1) as contact_number_1,
           COALESCE(f.contact_number_2, s.contact_number_2, b.contact_number_2) as contact_number_2,
           COALESCE(f.email, s.email, b.email) as email,
+          COALESCE(a.email, u.email) as user_email,
           COALESCE(f.dependents, s.dependents, b.dependents) as dependents,
           COALESCE(f.mother_maiden_first_name, s.mother_maiden_first_name, b.mother_maiden_first_name) as mother_maiden_first_name,
           COALESCE(f.mother_maiden_last_name, s.mother_maiden_last_name, b.mother_maiden_last_name) as mother_maiden_last_name,
@@ -76,6 +77,7 @@ $query = "SELECT a.*,
           LEFT JOIN forms_secondhand_applicants f ON a.transaction_id = f.transaction_id AND a.form_type = 'second-hand'
           LEFT JOIN forms_sanglaorcr_applicants s ON a.transaction_id = s.transaction_id AND a.form_type = 'sangla-orcr'
           LEFT JOIN forms_brandnew_applicants b ON a.transaction_id = b.transaction_id AND a.form_type = 'brand-new'
+          LEFT JOIN users u ON a.email = u.email
           WHERE a.status IN ('Approved', 'Declined') AND a.archived = 1";
 if ($form_type) {
     $query .= " AND a.form_type = ?";
@@ -110,30 +112,33 @@ $client_details = $all_client_details;
 // Define the fields for each form type
 $form_fields = [
     'forms_brandnew_applicants' => [
-        'Vehicle Details' => ['year_model', 'make', 'type', 'transmition_type'],
-        'Personal Information' => ['first_name', 'last_name', 'middle_name', 'dob', 'place_of_birth', 'marital_status', 'present_address', 'years_present_address', 'ownership', 'ownership_other', 'previous_address', 'years_previous_address', 'tin_number', 'sss_number'],
-        'Contact Information' => ['contact_number_1', 'contact_number_2', 'email'],
-        'Family Information' => ['mother_maiden_first_name', 'mother_maiden_last_name', 'mother_maiden_middle_name', 'father_first_name', 'father_last_name', 'father_middle_name'],
-        'Employment Details' => ['employer_name', 'office_address', 'office_number', 'company_email', 'position', 'years_service', 'monthly_income'],
-        'Additional Information' => ['dependents', 'income_source', 'income_source_other', 'credit_cards', 'credit_history'],
+        'Applicants Information' => ['first_name', 'last_name', 'middle_name','email','contact_number_1','contact_number_2','present_address', 'years_present_address','previous_address','years_previous_address','dob','place_of_birth','marital_status','ownership','tin_number','sss_number','dependents'],
+        'Applicants Parent Information' => ['mother_maiden_first_name','mother_maiden_middle_name', 'mother_maiden_last_name', 'father_first_name','father_middle_name', 'father_last_name'],
+        'Vehicle Information' => ['year_model', 'make', 'type', 'transmition_type'],
+        'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
+        'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
+        'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
         'Comments' => ['comments']
     ],
     'forms_sanglaorcr_applicants' => [
+        'Applicants Information' => ['first_name', 'last_name', 'middle_name','email','contact_number_1','contact_number_2','present_address', 'years_present_address','previous_address','years_previous_address','dob','place_of_birth','marital_status','ownership','tin_number','sss_number','dependents'],
+        'Applicants Parent Information' => ['mother_maiden_first_name','mother_maiden_middle_name', 'mother_maiden_last_name', 'father_first_name','father_middle_name', 'father_last_name'],
         'Vehicle Details' => ['year_model', 'make', 'type', 'transmition_type'],
-        'Personal Information' => ['first_name', 'last_name', 'middle_name', 'dob', 'place_of_birth', 'marital_status', 'present_address', 'years_present_address', 'ownership', 'ownership_other', 'previous_address', 'years_previous_address', 'tin_number', 'sss_number'],
-        'Contact Information' => ['contact_number_1', 'contact_number_2', 'email',],
-        'Family Information' => ['mother_maiden_first_name', 'mother_maiden_last_name', 'mother_maiden_middle_name', 'father_first_name', 'father_last_name', 'father_middle_name'],
-        'Borrower Information' => ['first_name_borrower', 'last_name_borrower', 'middle_name_borrower', 'date_of_birth_borrower', 'place_birth_borrower', 'residential_address_borrower', 'years_stay_borrower', 'contact_number_borrower', 'email_address_borrower', 'tin_number_borrower', 'sss_number_borrower'],
-        'Co-Borrower Information' => ['mother_maiden_first_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'mother_maiden_middle_name_CoBorrower', 'father_first_name_CoBorrower', 'father_last_name_CoBorrower', 'father_middle_name_CoBorrower'],
+        'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
+        'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
+        'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
         'Comments' => ['comments']
     ],
     'forms_secondhand_applicants' => [
+        'Applicants Information' => ['first_name', 'last_name', 'middle_name','email','contact_number_1','contact_number_2','present_address', 'years_present_address','previous_address','years_previous_address','dob','place_of_birth','marital_status','ownership','tin_number','sss_number','dependents'],
+        'Applicants Parent Information' => ['mother_maiden_first_name','mother_maiden_middle_name', 'mother_maiden_last_name', 'father_first_name','father_middle_name', 'father_last_name'],
         'Vehicle Details' => ['year_model', 'make', 'type', 'transmition_type'],
-        'Personal Information' => ['first_name', 'last_name', 'middle_name', 'dob', 'place_of_birth', 'marital_status', 'present_address', 'years_present_address', 'ownership', 'ownership_other', 'previous_address', 'years_previous_address', 'tin_number', 'sss_number'],
-        'Contact Information' => ['contact_number_1', 'contact_number_2', 'email'],
-        'Family Information' => ['mother_maiden_first_name', 'mother_maiden_last_name', 'mother_maiden_middle_name', 'father_first_name', 'father_last_name', 'father_middle_name'],
-        'Employment Details' => ['employer_name', 'office_address', 'office_number', 'company_email', 'position', 'years_service', 'monthly_income'],
-        'Borrower Information' => ['first_name_borrower', 'last_name_borrower', 'middle_name_borrower', 'date_of_birth_borrower', 'place_birth_borrower', 'residential_address_borrower', 'years_stay_borrower', 'contact_number_borrower', 'email_address_borrower', 'tin_number_coborrower', 'sss_number_coborrower'],
+        'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
+        'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
+        'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
         'Comments' => ['comments']
     ]
 ];
@@ -237,9 +242,18 @@ $form_fields = [
                                 </h3>
                                 <div class="card-content" style="display: none;">
                                     <div class="view-details-header-actions">
-                                        <button class="details-action-button" onclick="window.location.href='view-client-files.php?email=<?php echo urlencode($client['email']); ?>'">View Files</button>
-                                        <button class="details-action-button" onclick="window.print()">Print</button>
-                                        <button class="details-action-button" onclick="downloadPDF()">Download</button>
+                                        <form action="view-client-files.php" method="get">
+                                           
+                                            <input type="hidden" name="email"
+                                                value="<?php echo htmlspecialchars(($client['user_email'] ?? $client['email']) ?? ''); ?>">
+                                            <button type="submit" class="btn files" id="pending-file-button">Files</button>
+                                        </form>
+                                        
+                                        
+                                        <!-- <button type="submit" class="btn files" id="pending-file-button">Print</button> -->
+                                        <!-- <button type="submit" class="btn files" id="pending-file-button">Download</button> -->
+                                        
+                                       
                                     </div>
                                     <div class="view-details-header">
                                         <div class="view-details-header-title">

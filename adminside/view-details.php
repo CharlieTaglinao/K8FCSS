@@ -33,27 +33,33 @@ $details = $result->fetch_assoc();
 // Define the fields for each form type
 $form_fields = [
     'brand-new' => [
-        'Vehicle Details' => ['year_model', 'make', 'type', 'transmition_type'],
-        'Personal Information' => ['first_name', 'last_name', 'middle_name', 'dob', 'marital_status', 'present_address', 'years_present_address'],
-        'Contact Information' => ['contact_number_1', 'contact_number_2', 'email', 'tin_number', 'sss_number'],
-        'Family Information' => ['mother_maiden_first_name', 'mother_maiden_last_name', 'father_first_name', 'father_last_name'],
-        'Employment Details' => ['employer_name', 'office_address', 'office_number', 'company_email', 'position', 'years_service', 'monthly_income']
+        'Applicants Information' => ['first_name', 'last_name', 'middle_name','email','contact_number_1','contact_number_2','present_address', 'years_present_address','previous_address','years_previous_address','dob','place_of_birth','marital_status','ownership','tin_number','sss_number','dependents'],
+        'Applicants Parent Information' => ['mother_maiden_first_name','mother_maiden_middle_name', 'mother_maiden_last_name', 'father_first_name','father_middle_name', 'father_last_name'],
+        'Vehicle Information' => ['year_model', 'make', 'type', 'transmition_type'],
+        'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
+        'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
+        'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
+        'Comments' => ['comments']
     ],
     'sangla-orcr' => [
+        'Applicants Information' => ['first_name', 'last_name', 'middle_name','email','contact_number_1','contact_number_2','present_address', 'years_present_address','previous_address','years_previous_address','dob','place_of_birth','marital_status','ownership','tin_number','sss_number','dependents'],
+        'Applicants Parent Information' => ['mother_maiden_first_name','mother_maiden_middle_name', 'mother_maiden_last_name', 'father_first_name','father_middle_name', 'father_last_name'],
         'Vehicle Details' => ['year_model', 'make', 'type', 'transmition_type'],
-        'Personal Information' => ['first_name', 'last_name', 'middle_name', 'dob', 'place_of_birth', 'marital_status', 'present_address', 'years_present_address'],
-        'Contact Information' => ['contact_number_1', 'contact_number_2', 'email', 'tin_number', 'sss_number'],
-        'Family Information' => ['mother_maiden_first_name', 'mother_maiden_last_name', 'father_first_name', 'father_last_name'],
-        'Borrower Information' => ['first_name_borrower', 'last_name_borrower', 'middle_name_borrower', 'date_of_birth_borrower', 'place_birth_borrower'],
+        'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
+        'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
+        'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
         'Comments' => ['comments']
     ],
     'second-hand' => [
+        'Applicants Information' => ['first_name', 'last_name', 'middle_name','email','contact_number_1','contact_number_2','present_address', 'years_present_address','previous_address','years_previous_address','dob','place_of_birth','marital_status','ownership','tin_number','sss_number','dependents'],
+        'Applicants Parent Information' => ['mother_maiden_first_name','mother_maiden_middle_name', 'mother_maiden_last_name', 'father_first_name','father_middle_name', 'father_last_name'],
         'Vehicle Details' => ['year_model', 'make', 'type', 'transmition_type'],
-        'Personal Information' => ['first_name', 'last_name', 'middle_name', 'dob', 'marital_status', 'present_address', 'years_present_address'],
-        'Contact Information' => ['contact_number_1', 'contact_number_2', 'email', 'tin_number', 'sss_number'],
-        'Family Information' => ['mother_maiden_first_name', 'mother_maiden_last_name', 'father_first_name', 'father_last_name'],
-        'Employment Details' => ['employer_name', 'office_address', 'office_number', 'company_email', 'position', 'years_service', 'monthly_income'],
-        'Borrower Information' => ['first_name_borrower', 'last_name_borrower', 'middle_name_borrower', 'date_of_birth_borrower', 'place_birth_borrower'],
+        'Primary Borrower' => ['income_source', 'income_source_other', 'employer_name', 'office_address', 'office_number','company_email','position','years_service','monthly_income','credit_cards','credit_history'],
+        'Co-Borrower Information' => ['first_name_borrower', 'middle_name_borrower', 'last_name_borrower','email_address_borrower','date_of_birth_borrower','place_birth_borrower', 'relationship_borrower','residential_address_borrower','years_stay_borrower','contact_number_borrower','tin_number_borrower','sss_number_borrower'],
+        'Co-Borrowers Parent Information' => ['mother_maiden_first_name_CoBorrower','mother_maiden_middle_name_CoBorrower', 'mother_maiden_last_name_CoBorrower', 'father_first_name_CoBorrower','father_middle_name_CoBorrower', 'father_last_name_CoBorrower'],
+        'Source of Income of Co-borrower' => ['employer_name_borrower', 'office_address_borrower', 'office_number_borrower', 'position_borrower', 'years_service_borrower', 'monthly_income_borrower','credit_cards_borrower'],
         'Comments' => ['comments']
     ]
 ];

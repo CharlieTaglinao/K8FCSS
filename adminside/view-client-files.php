@@ -89,7 +89,7 @@ $fileResult = $fileStmt->get_result();
             </div>
 
             <div class="container">
-                <a href="pending-appointments.php" class="back-button">
+                <a href="<?php echo $_SERVER['HTTP_REFERER'] ?? 'javascript:history.back()'; ?>" class="back-button">
                     <span class="material-icons-outlined">arrow_back</span> Back
                 </a>
 
@@ -100,7 +100,7 @@ $fileResult = $fileStmt->get_result();
                             <div class="file-card">
                                 <div class="file-name"><?php echo htmlspecialchars($row['file_name']); ?></div>
                                 <div class="file-action-buttons">
-                                    <a class="edit-button" id="preview-view-client-files" data-file-path="/K8FCS/uploads/<?php echo htmlspecialchars($email); ?>/<?php echo htmlspecialchars($row['file_name']); ?>">Preview</a>
+                                    <a class="edit-button" id="preview-view-client-files" data-file-path="../uploads/<?php echo htmlspecialchars($email); ?>/<?php echo htmlspecialchars($row['file_name']); ?>">Preview</a>
                                     <?php if ($row['file_description'] === 'ORCR File'): ?>
                                         <a class="edit-button" id="download-view-client-files"
                                             href="processes/download.php?file=<?php echo urlencode($row['file_name']); ?>&type=orcr&email=<?php echo urlencode($email); ?>&transaction_id=<?php echo urlencode($row['transaction_id']); ?>"

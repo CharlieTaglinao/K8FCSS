@@ -6,14 +6,14 @@ $searchTerm = isset($_POST['search']) ? $_POST['search'] : '';
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 
 $query = "
-    SELECT file_name, file_description, DATE_FORMAT(upload_date, '%M %e, %Y %h:%i %p') AS formatted_upload_date 
+    SELECT file_name, file_description, DATE_FORMAT(upload_date, '%M %e, %Y %h:%i %p') AS formatted_upload_date, NULL AS transaction_id 
     FROM files
     WHERE user_email = ? AND (file_name LIKE ? OR file_description LIKE ?)
     UNION ALL
-    SELECT ORCR_filename AS file_name, 'ORCR File' AS file_description, DATE_FORMAT(appointed_at, '%M %e, %Y %h:%i %p') AS formatted_upload_date
+    SELECT ORCR_filename AS file_name, 'ORCR File' AS file_description, DATE_FORMAT(appointed_at, '%M %e, %Y %h:%i %p') AS formatted_upload_date, fsa.transaction_id
     FROM forms_sanglaorcr_applicants fsa
     JOIN appointments a ON fsa.transaction_id = a.transaction_id
-    WHERE a.email = ? AND (a.email LIKE ? OR a.transaction_id LIKE ?)
+    WHERE a.email = ? AND (ORCR_filename LIKE ? OR a.transaction_id LIKE ?)
 ";
 $searchTermWildcard = '%' . $searchTerm . '%';
 $stmt = $conn->prepare($query);
@@ -26,12 +26,16 @@ if ($result->num_rows > 0) {
         $fileName = htmlspecialchars($row['file_name']);
         $fileDescription = htmlspecialchars($row['file_description']);
         $uploadDate = htmlspecialchars($row['formatted_upload_date']);
-        // Create a safe download link
-        if ($fileDescription === 'ORCR File' && isset($row['transaction_id'])) {
+        
+        // Create a safe download link and set ORCR parameters
+        if ($fileDescription === 'ORCR File') {
             $transactionId = htmlspecialchars($row['transaction_id']);
-            $downloadLink = "../../clientside/uploads/orcr/". urldecode($email) . "/" . urldecode($transactionId) . "/" . rawurlencode($fileName);
+            $downloadLink = "../clientside/uploads/orcr/" . urlencode($email) . "/" . urlencode($transactionId) . "/" . rawurlencode($fileName);
+            $isORCR = '1';
         } else {
             $downloadLink = "../uploads/" . rawurlencode($email) . "/" . rawurlencode($fileName);
+            $isORCR = '0';
+            $transactionId = '';
         }
         ?>
         <div class="file-item">
@@ -40,24 +44,20 @@ if ($result->num_rows > 0) {
                 <span class="more-actions">&#x22EE;</span>
             </div>
             <div class="actions-popup">
-                <div class="file-description"><?php echo $fileDescription; ?></div>
-                
-                <a href="processes/download-file.php?file=<?php echo urlencode($fileName); ?>" class="download-button">
+                <a href="processes/download-client-file.php?file=<?php echo rawurlencode($fileName); ?>&email=<?php echo urlencode($email); ?>&transaction_id=<?php echo urlencode($transactionId); ?>&is_orcr=<?php echo $isORCR; ?>" class="download-button">
                     <i class="fas fa-download"></i> Download
                 </a>
-                <button class="delete-button" data-file="<?php echo htmlspecialchars($item['name']); ?>"><i class="fas fa-trash-alt"></i> Delete</button>
             </div>
-            <div class="file-preview" data-file-path="uploads/<?php echo htmlspecialchars($email); ?>/<?php echo htmlspecialchars($row['file_name']); ?>">
+            <div class="file-preview" data-file-path="<?php echo $downloadLink; ?>">
                 <?php 
-                $filePath = "uploads/" . htmlspecialchars($email) . "/" . htmlspecialchars($row['file_name']);
                 $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
                 $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
                 if (in_array(strtolower($fileExtension), $imageExtensions)): ?>
-                    <img src="<?php echo $filePath; ?>" alt="Preview of <?php echo $fileName; ?>" class="preview-image">
+                    <img src="<?php echo $downloadLink; ?>" alt="Preview of <?php echo $fileName; ?>" class="preview-image">
                 <?php elseif (strtolower($fileExtension) == 'pdf'): ?>
                     <img src="../assets/images/pdflogo.webp" alt="PDF Icon" class="preview-image">
                 <?php else: ?>
-                    <img src="../../assets/images/default-preview.png" alt="No preview available">
+                    <img src="../assets/images/default-preview.png" alt="No preview available">
                 <?php endif; ?>
             </div>
         </div>
@@ -121,24 +121,4 @@ if ($result->num_rows > 0) {
             modal.style.opacity = '1';
         });
     });
-
-    document.querySelector('.close-preview-button').addEventListener('click', function() {
-        var modal = document.getElementById('filePreviewModal');
-        modal.style.display = 'none';
-        modal.style.visibility = 'hidden';
-        modal.style.opacity = '0';
-        document.getElementById('preview-picture').src = '';
-        document.getElementById('preview-object').data = '';
-    });
-
-    window.onclick = function(event) {
-        var modal = document.getElementById('filePreviewModal');
-        if (event.target == modal) {
-            modal.style.display = 'none';
-            modal.style.visibility = 'hidden';
-            modal.style.opacity = '0';
-            document.getElementById('preview-picture').src = '';
-            document.getElementById('preview-object').data = '';
-        }
-    };
 </script>

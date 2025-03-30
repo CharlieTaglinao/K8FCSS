@@ -269,31 +269,43 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     } else if (field.name === "years_present_address") {
-      if (field.value === "") {
-        isValid = false;
-        field.classList.add("is-invalid");
-        field.classList.remove("is-valid");
-        let feedback = field.parentNode.querySelector(".invalid-feedback");
-        if (feedback) {
-          feedback.textContent = `Please provide a valid number.`;
-        }
+      const residentialAddressBorrower = form.querySelector("input[name='present_address']");
+      if (!residentialAddressBorrower || residentialAddressBorrower.value.trim() === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = "Please edit your address on your profile.";
+      }
+      } else if (field.value === "") {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = "This field is required when Present Address is filled.";
+      }
       } else if (isNaN(field.value)) {
-        isValid = false;
-        field.classList.add("is-invalid");
-        field.classList.remove("is-valid");
-        let feedback = field.parentNode.querySelector(".invalid-feedback");
-        if (feedback) {
-          feedback.textContent = `Only numbers are accepted.`;
-        }
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = "Only numbers are accepted.";
+      }
       } else if (parseInt(field.value, 10) > 100) {
-        isValid = false;
-        field.classList.add("is-invalid");
-        field.classList.remove("is-valid");
-        let feedback = field.parentNode.querySelector(".invalid-feedback");
-        if (feedback) {
-          feedback.textContent =
-            feedback.textContent = `The provided years at the present address is too high.`;
-        }
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `The provided years of stay at the present address is invalid.`;
+      }
+      } else {
+      isValid = true;
+      field.classList.add("is-valid");
+      field.classList.remove("is-invalid");
       }
     } else if (field.name === "ownership") {
       const ownershipOther = form.querySelector(
@@ -373,33 +385,40 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       }
     } else if (field.name === "years_previous_address") {
-      const previousAddress = form.querySelector("input[name='previous_address']");
-      if (previousAddress && previousAddress.value !== "" && field.value === "") {
+      const residentialAddressBorrower = form.querySelector("input[name='previous_address']");
+      if (field.value !== "" && (!residentialAddressBorrower || residentialAddressBorrower.value.trim() === "")) {
       isValid = false;
       field.classList.add("is-invalid");
       field.classList.remove("is-valid");
-
       let feedback = field.parentNode.querySelector(".invalid-feedback");
       if (feedback) {
-      feedback.textContent = "This field is required when Previous Address is filled.";
+        feedback.textContent = "Please provide a Previous Address first.";
       }
+      } else if (field.value === "" && residentialAddressBorrower && residentialAddressBorrower.value.trim() === "") {
+      // Optional case: both fields are empty
+      isValid = true;
+      field.classList.remove("is-invalid");
+      field.classList.remove("is-valid");
       } else if (field.value !== "" && isNaN(field.value)) {
       isValid = false;
       field.classList.add("is-invalid");
       field.classList.remove("is-valid");
-
       let feedback = field.parentNode.querySelector(".invalid-feedback");
       if (feedback) {
-      feedback.textContent = "Please provide a valid number.";
+        feedback.textContent = "Only numbers are accepted.";
       }
-      } else if (parseInt(field.value, 10) > 100) {
+      } else if (field.value !== "" && parseInt(field.value, 10) > 100) {
       isValid = false;
       field.classList.add("is-invalid");
       field.classList.remove("is-valid");
       let feedback = field.parentNode.querySelector(".invalid-feedback");
       if (feedback) {
-        feedback.textContent = `The provided years at the previous address is too high.`;
+        feedback.textContent = `The provided years of stay in the residential address of the co-borrower is too high.`;
       }
+      } else {
+      isValid = true;
+      field.classList.add("is-valid");
+      field.classList.remove("is-invalid");
       }
     } else if (field.name === "tin_number") {
       if (isNaN(field.value)){
@@ -941,24 +960,39 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     } else if (field.name === "years_stay_borrower") {
       const residentialAddressBorrower = form.querySelector("input[name='residential_address_borrower']");
-      if (residentialAddressBorrower && residentialAddressBorrower.value !== "" && field.value !== "") {
-      if (isNaN(field.value)) {
-        isValid = false;
-        field.classList.add("is-invalid");
-        field.classList.remove("is-valid");
-        let feedback = field.parentNode.querySelector(".invalid-feedback");
-        if (feedback) {
-        feedback.textContent = "Only numbers are accepted.";
-        }
-      } else if (parseInt(field.value, 10) > 100) {
-        isValid = false;
-        field.classList.add("is-invalid");
-        field.classList.remove("is-valid");
-        let feedback = field.parentNode.querySelector(".invalid-feedback");
-        if (feedback) {
-        feedback.textContent = `The provided years of stay in the residential address of the co-borrower is too high.`;
-        }
+      if (field.value !== "" && (!residentialAddressBorrower || residentialAddressBorrower.value.trim() === "")) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = "This field is required when Residential Address is filled.";
       }
+      } else if (field.value === "" && residentialAddressBorrower && residentialAddressBorrower.value.trim() === "") {
+      // Optional case: both fields are empty
+      isValid = true;
+      field.classList.remove("is-invalid");
+      field.classList.remove("is-valid");
+      } else if (field.value !== "" && isNaN(field.value)) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = "Only numbers are accepted.";
+      }
+      } else if (field.value !== "" && parseInt(field.value, 10) > 100) {
+      isValid = false;
+      field.classList.add("is-invalid");
+      field.classList.remove("is-valid");
+      let feedback = field.parentNode.querySelector(".invalid-feedback");
+      if (feedback) {
+        feedback.textContent = `The provided years of stay in the residential address of the co-borrower is too high.`;
+      }
+      } else {
+      isValid = true;
+      field.classList.add("is-valid");
+      field.classList.remove("is-invalid");
       }
     } else if (field.name === "contact_number_borrower") {
       if (field.value === "") {

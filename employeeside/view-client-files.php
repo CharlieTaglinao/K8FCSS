@@ -75,6 +75,18 @@ $fileStmt = $conn->prepare($fileSql);
 $fileStmt->bind_param("ss", $email, $email);
 $fileStmt->execute();
 $fileResult = $fileStmt->get_result();
+
+// Debugging: Output client email to console
+echo "<script>console.log('Debug: Client email is " . addslashes($email) . "');</script>";
+
+// Debugging: Output sort option to console
+echo "<script>console.log('Debug: Sort option is " . addslashes($sort_option) . "');</script>";
+
+// Debugging: Output client name to console
+echo "<script>console.log('Debug: Client name is " . addslashes($firstName . ' ' . $lastName) . "');</script>";
+
+// Debugging: Output number of files retrieved
+echo "<script>console.log('Debug: Number of files retrieved is " . $fileResult->num_rows . "');</script>";
 ?>
 
 <!DOCTYPE html>
@@ -151,8 +163,11 @@ $fileResult = $fileStmt->get_result();
                             if ($fileDescription === 'ORCR File') {
                                 $transactionId = htmlspecialchars($row['transaction_id']);
                                 $downloadLink = "../clientside/uploads/orcr/" . urldecode($email) . "/" . urldecode($transactionId) . "/" . rawurlencode($fileName);
+                                $isORCR = '1';
                             } else {
                                 $downloadLink = "../uploads/" . rawurlencode($email) . "/" . rawurlencode($fileName);
+                                $isORCR = '0';
+                                $transactionId = '';
                             }
                             ?>
                             <div class="file-item">
@@ -161,7 +176,7 @@ $fileResult = $fileStmt->get_result();
                                     <span class="more-actions">&#x22EE;</span>
                                 </div>
                                 <div class="actions-popup">
-                                    <a href="processes/download-file.php?file=<?php echo $fileName; ?>" class="download-button">
+                                    <a href="processes/download-client-file.php?file=<?php echo rawurlencode($fileName); ?>&email=<?php echo urlencode($email); ?>&transaction_id=<?php echo urlencode($transactionId); ?>&is_orcr=<?php echo $isORCR; ?>" class="download-button">
                                         <i class="fas fa-download"></i> Download
                                     </a>
                                 </div>

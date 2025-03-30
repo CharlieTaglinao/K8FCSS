@@ -1,5 +1,5 @@
 <?php
-function generatePDF($data, $reportTitle, $columns, $outputFileName, $includeTotal = false, $includeStatus = true, $orientation = 'P') {
+function generatePDF($data, $reportTitle, $columns, $outputFileName, $includeAmount = false,$includeCommision=false, $includeStatus = true, $orientation = 'P') {
     $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
     $pdf->SetCreator(PDF_CREATOR);
@@ -87,16 +87,24 @@ function generatePDF($data, $reportTitle, $columns, $outputFileName, $includeTot
                 $totalAmount += floatval($value);
                 $commissionFee = floatval($value) * 0.05;
                 $totalCommission += $commissionFee;
+            } else if ($key === 'amount') {
+                $totalAmount += floatval($value);
             }
         }
         $html .= '</tr>';
     }
 
     // Add total amount and commission fee row if $includeTotal is true
-    if ($includeTotal) {
+    if ($includeAmount) {
         $html .= '<tr>';
-        $html .= '<td colspan="' . (count($columns) - 2) . '" style="border-bottom: 1px solid #ddd; padding: 8px; text-align:right; font-weight: bold;">Total</td>';
+        $html .= '<td colspan="' . (count($columns) - 1) . '" style="border-bottom: 1px solid #ddd; padding: 8px; text-align:right; font-weight: bold;">Total Amount</td>';
         $html .= '<td style="border-bottom: 1px solid #ddd; padding: 8px; text-align:center; font-weight: bold;">' . htmlspecialchars(number_format($totalAmount, 2)) . '</td>';
+        $html .= '</tr>';
+    }
+
+    if($includeCommision){
+        $html .= '<tr>';
+        $html .= '<td colspan="' . (count($columns) - 1) . '" style="border-bottom: 1px solid #ddd; padding: 8px; text-align:right; font-weight: bold;">Total Commission Fee</td>';
         $html .= '<td style="border-bottom: 1px solid #ddd; padding: 8px; text-align:center; font-weight: bold;">' . htmlspecialchars(number_format($totalCommission, 2)) . '</td>';
         $html .= '</tr>';
     }

@@ -172,169 +172,188 @@ checkUserRole(['Employee']);
     <script>
         function openApproveModal(appointmentId, formType) {
             if (formType === 'sangla-orcr') {
-                Swal.fire({
-                    title: 'Approve Appointment',
-                    html: `
-                   <div class="swal-grid-container">
-                        <div class="grid-input">
-                            <label for="bank-partner">Select Bank Partner:</label>
-                            <select id="bank-partner" class="swal2-input">
-                                <option value=""></option>
-                                <option value="JACCS">JACCS</option>
-                                <option value="ORICO">ORICO</option>
-                                <option value="Banco De Oro">Banco De Oro</option>
-                                <option value="Security Bank">Security Bank</option>
-                                <option value="MayBank">MayBank</option>
-                            </select>
-                        </div>
-                        
-                        <div class="grid-input">
-                            <label for="term">Select Term:</label>
-                            <select id="term" name="term" class="swal2-input" required>
-                                <option value=""></option>
-                                <option value="6">6 months</option>
-                                <option value="12">12 months</option>
-                                <option value="18">18 months</option>
-                                <option value="24">24 months</option>
-                                <option value="30">30 months</option>
-                                <option value="36">36 months</option>
-                                <option value="42">42 months</option>
-                                <option value="48">48 months</option>
-                                <option value="54">54 months</option>
-                                <option value="60">60 months</option>
-                            </select>
-                        </div>
-                        
-                        <div class="grid-input">
-                            <label for="amount-finance">Enter Amount Finance:</label>
-                            <input type="number" id="amount-finance" name="amount_finance" class="swal2-input" required placeholder="e.g., 500000">
-                        </div>
-                        
-                        <div class="grid-input">
-                            <label for="maturity">Enter Maturity:</label>
-                            <input type="date" id="maturity" name="maturity" class="swal2-input" required>
-                        </div>
-                        
-                        <div class="grid-input">
-                            <label for="check-release">Enter Check Release:</label>
-                            <input type="date" id="check-release" name="check_release" class="swal2-input" required>
-                        </div>
-                    </div>
-                        <div style="text-align: left; margin-top: 1rem;" >
-                            <label for="approve-remarks"  style="text-align: left;">Remarks:</label> <br>
-                            <textarea id="approve-remarks" class="swal2-textarea" placeholder="Enter your remarks here..."></textarea>
-                        </div>
-                `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Submit',
-                    showLoaderOnConfirm: true,
-                    preConfirm: () => {
-                        const bankPartner = document.getElementById('bank-partner').value;
-                        const term = document.getElementById('term').value;
-                        const amountFinance = document.getElementById('amount-finance').value;
-                        const maturity = document.getElementById('maturity').value;
-                        const checkRelease = document.getElementById('check-release').value;
-                        const remarks = document.getElementById('approve-remarks').value;
+            Swal.fire({
+            title: 'Approve Appointment',
+            html: `
+               <div class="swal-grid-container">
+            <div class="grid-input">
+            <label for="bank-partner">Select Bank Partner:</label>
+            <select id="bank-partner" class="swal2-input">
+            <option value="">Select bank partner</option>
+            <option value="JACCS">JACCS</option>
+            <option value="ORICO">ORICO</option>
+            <option value="Banco De Oro">Banco De Oro</option>
+            <option value="Security Bank">Security Bank</option>
+            <option value="MayBank">MayBank</option>
+            </select>
+            </div>
+            
+            <div class="grid-input">
+            <label for="term">Select Term:</label>
+            <select id="term" name="term" class="swal2-input" required>
+            <option value="">Select term</option>
+            <option value="6">6 months</option>
+            <option value="12">12 months</option>
+            <option value="18">18 months</option>
+            <option value="24">24 months</option>
+            <option value="30">30 months</option>
+            <option value="36">36 months</option>
+            <option value="42">42 months</option>
+            <option value="48">48 months</option>
+            <option value="54">54 months</option>
+            <option value="60">60 months</option>
+            </select>
+            </div>
+            
+            <div class="grid-input">
+            <label for="amount-finance">Enter Amount Finance:</label>
+            <input type="number" id="amount-finance" name="amount_finance" class="swal2-input" required placeholder="e.g., 500000">
+            </div>
+            
+            <div class="grid-input">
+            <label for="maturity">Enter Maturity:</label>
+            <input type="date" id="maturity" name="maturity" class="swal2-input" required>
+            </div>
+            
+            <div class="grid-input">
+            <label for="check-release">Enter Check Release:</label>
+            <input type="date" id="check-release" name="check_release" class="swal2-input" required min="${new Date().toISOString().split('T')[0]}">
+            </div>
+            </div>
+            <div style="text-align: left; margin-top: 1rem;" >
+            <label for="approve-remarks"  style="text-align: left;">Remarks:</label> <br>
+            <textarea id="approve-remarks" class="swal2-textarea" placeholder="Enter your remarks here..."></textarea>
+            </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+            const bankPartner = document.getElementById('bank-partner').value;
+            const term = document.getElementById('term').value;
+            const amountFinance = document.getElementById('amount-finance').value;
+            const maturity = document.getElementById('maturity').value;
+            const checkRelease = document.getElementById('check-release').value;
+            const remarks = document.getElementById('approve-remarks').value;
 
-                        const today = new Date().toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
 
-                        if (!bankPartner) {
-                            Swal.showValidationMessage('Please select a bank partner.');
-                            return false;
-                        }
+            if (!bankPartner) {
+            Swal.showValidationMessage('Please select a bank partner.');
+            return false;
+            }
 
-                        if (!term) {
-                            Swal.showValidationMessage('Please select a term.');
-                            return false;
-                        }
+            if (!term) {
+            Swal.showValidationMessage('Please select a term.');
+            return false;
+            }
 
-                        if (!amountFinance) {
-                            Swal.showValidationMessage('Please enter the amount finance.');
-                            return false;
-                        }
+            if (!amountFinance) {
+            Swal.showValidationMessage('Please enter the amount finance.');
+            return false;
+            }
 
-                        if (!maturity) {
-                            Swal.showValidationMessage('Please enter the maturity date.');
-                            return false;
-                        }
+            if (amountFinance < 200000) {
+            Swal.showValidationMessage('Amount finance must be at least 200,000.');
+            return false;
+            }
 
-                        if (maturity < today) {
-                            Swal.showValidationMessage('Maturity date cannot be in the past.');
-                            return false;
-                        }
+            if (!maturity) {
+            Swal.showValidationMessage('Please enter the maturity date.');
+            return false;
+            }
 
-                        const maturityDate = new Date(maturity);
-                        if (maturityDate.getDay() === 0 || maturityDate.getDay() === 7) {
-                            Swal.showValidationMessage('Maturity date cannot be on a sunday.');
-                            return false;
-                        }
+            if (maturity < today) {
+            Swal.showValidationMessage('Maturity date cannot be in the past.');
+            return false;
+            }
 
-                        if (!checkRelease) {
-                            Swal.showValidationMessage('Please enter the check release date.');
-                            return false;
-                        }
+            const maturityDate = new Date(maturity);
+            if (maturityDate.getDay() === 0 || maturityDate.getDay() === 7) {
+            Swal.showValidationMessage('Maturity date cannot be on a sunday.');
+            return false;
+            }
 
-                        if (checkRelease < today) {
-                            Swal.showValidationMessage('Check release date cannot be in the past.');
-                            return false;
-                        }
+            if (!checkRelease) {
+            Swal.showValidationMessage('Please enter the check release date.');
+            return false;
+            }
 
-                        const checkReleaseDate = new Date(checkRelease);
-                        if (checkReleaseDate.getDay() === 0 || checkReleaseDate.getDay() === 7) {
-                            Swal.showValidationMessage('Check release date cannot be on a sunday.');
-                            return false;
-                        }
+            if (checkRelease < today) {
+            Swal.showValidationMessage('Check release date cannot be in the past.');
+            return false;
+            }
 
-                        if (!remarks) {
-                            Swal.showValidationMessage('Please enter your remarks.');
-                            return false;
-                        }
+            const checkReleaseDate = new Date(checkRelease);
+            if (checkReleaseDate.getDay() === 0 || checkReleaseDate.getDay() === 7) {
+            Swal.showValidationMessage('Check release date cannot be on a sunday.');
+            return false;
+            }
 
-                        document.querySelector('.loading-overlay').style.display = 'block';
-                        document.querySelector('.loading-spinner').style.display = 'block';
+            if (!remarks) {
+            Swal.showValidationMessage('Please enter your remarks.');
+            return false;
+            }
 
-                        return fetch('processes/approve-sangla-orcr.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            body: `appointment_id=${appointmentId}&bank_partner=${encodeURIComponent(bankPartner)}&remarks=${encodeURIComponent(remarks)}&term=${encodeURIComponent(term)}&amount_finance=${encodeURIComponent(amountFinance)}&maturity=${encodeURIComponent(maturity)}&check_release=${encodeURIComponent(checkRelease)}`
-                        })
-                            .then(response => {
-                                document.querySelector('.loading-overlay').style.display = 'none';
-                                document.querySelector('.loading-spinner').style.display = 'none';
-                                if (!response.ok) {
-                                    throw new Error(response.statusText)
-                                }
-                                return response.text()
-                            })
-                            .catch(error => {
-                                document.querySelector('.loading-overlay').style.display = 'none';
-                                document.querySelector('.loading-spinner').style.display = 'none';
-                                Swal.showValidationMessage(`Request failed: ${error}`)
-                            })
-                    },
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    didOpen: () => {
-                        document.body.classList.remove('swal2-shown', 'swal2-height-auto');
-                    },
-                    didClose: () => {
-                        document.body.classList.remove('swal2-shown', 'swal2-height-auto');
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'Approved!',
-                            text: 'The appointment has been approved.',
-                            icon: 'success'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    }
-                });
+            document.querySelector('.loading-overlay').style.display = 'block';
+            document.querySelector('.loading-spinner').style.display = 'block';
+
+            return fetch('processes/approve-sangla-orcr.php', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `appointment_id=${appointmentId}&bank_partner=${encodeURIComponent(bankPartner)}&remarks=${encodeURIComponent(remarks)}&term=${encodeURIComponent(term)}&amount_finance=${encodeURIComponent(amountFinance)}&maturity=${encodeURIComponent(maturity)}&check_release=${encodeURIComponent(checkRelease)}`
+            })
+            .then(response => {
+            document.querySelector('.loading-overlay').style.display = 'none';
+            document.querySelector('.loading-spinner').style.display = 'none';
+            if (!response.ok) {
+            throw new Error(response.statusText)
+            }
+            return response.text()
+            })
+            .catch(error => {
+            document.querySelector('.loading-overlay').style.display = 'none';
+            document.querySelector('.loading-spinner').style.display = 'none';
+            Swal.showValidationMessage(`Request failed: ${error}`)
+            })
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+            didOpen: () => {
+            document.body.classList.remove('swal2-shown', 'swal2-height-auto');
+
+            // Add event listener to auto-populate maturity date based on term
+            const termSelect = document.getElementById('term');
+            const maturityInput = document.getElementById('maturity');
+            termSelect.addEventListener('change', () => {
+            const selectedTerm = parseInt(termSelect.value);
+            if (selectedTerm) {
+            const today = new Date();
+            today.setMonth(today.getMonth() + selectedTerm);
+            maturityInput.value = today.toISOString().split('T')[0];
             } else {
-                // Redirect to payment-ui.php for 'brand-new' or 'second-hand'
-                window.location.href = `payment-ui.php?appointment_id=${appointmentId}&form_type=${formType}`;
+            maturityInput.value = '';
+            }
+            });
+            },
+            didClose: () => {
+            document.body.classList.remove('swal2-shown', 'swal2-height-auto');
+            }
+            }).then((result) => {
+            if (result.isConfirmed) {
+            Swal.fire({
+            title: 'Approved!',
+            text: 'The appointment has been approved.',
+            icon: 'success'
+            }).then(() => {
+            location.reload();
+            });
+            }
+            });
+            } else {
+            // Redirect to payment-ui.php for 'brand-new' or 'second-hand'
+            window.location.href = `payment-ui.php?appointment_id=${appointmentId}&form_type=${formType}`;
             }
         }
 

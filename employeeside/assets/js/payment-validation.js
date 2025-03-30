@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const amountFinanceField = document.getElementById("amount-finance");
-        if (amountFinanceField && (amountFinanceField.value === "" || parseFloat(amountFinanceField.value) < 50000)) {
+        if (amountFinanceField && (amountFinanceField.value === "" || parseFloat(amountFinanceField.value) < 200000)) {
             amountFinanceField.classList.add("is-invalid");
             amountFinanceField.classList.remove("is-valid");
         }
@@ -178,9 +178,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (field.value === "" || isNaN(parseFloat(field.value))) {
                     isValid = false;
                     setFeedback(field, "Please provide a valid amount finance.");
-                } else if (parseFloat(field.value) < 50000) {
+                } else if (parseFloat(field.value) < 200000) {
                     isValid = false;
-                    setFeedback(field, "Amount finance should be at least 50000.");
+                    setFeedback(field, "Amount finance should be at least 200000.");
                 }
             }
         } else if (field.tagName.toLowerCase() === "select" && field.value === "") {

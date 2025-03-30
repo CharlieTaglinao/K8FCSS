@@ -105,9 +105,9 @@ if (isset($_GET['generate_pdf'])) {
     }
     $columns = ['Client Name', 'Transaction ID', 'Form Type', 'Payment Description', 'Amount'];
     $outputFileName = 'Sales_Report_' . date('Y-m-d_H-i-s') . '.pdf';
-    $includeTotal = true; // Set to true or false based on your requirement
+    $totalAmount = true; // Set to true or false based on your requirement
     $includeStatus = false; // Exclude the status column for sales report
-    generatePDF($data, 'Sales Report', $columns, $outputFileName, $includeTotal, $includeStatus);
+    generatePDF($data, 'Sales Report', $columns, $outputFileName, $totalAmount, $includeStatus);
     exit;
 }
 

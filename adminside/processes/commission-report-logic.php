@@ -109,8 +109,10 @@ if (isset($_GET['generate_pdf'])) {
     }
     $columns = ['Client Name', 'Unit', 'Amount Finance', 'Commission Fee'];
     $outputFileName = 'Commission_Report_' . date('Y-m-d_H-i-s') . '.pdf';
-    $includeTotal = true; // Include total amount and commission fee
-    generatePDF($data, 'Commission Report', $columns, $outputFileName, $includeTotal, false);
+    $includeAmount = true; // Include total amount
+    $includeCommission = true; // Include commission fee
+
+    generatePDF($data, 'Commission Report', $columns, $outputFileName, $includeAmount,$includeCommission, false);
     exit;
 }
 

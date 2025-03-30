@@ -124,10 +124,11 @@ if (isset($_GET['generate_pdf'])) {
     }
     $columns = ['Date', 'Client Name', 'Contact Number', 'Bank', 'Remarks', 'Status', 'Unit', 'Term', 'Amount Finance', 'Date Booked', 'Maturity', 'Check Release'];
     $outputFileName = 'Booked_Account_Report_' . date('Y-m-d_H-i-s') . '.pdf';
-    $includeTotal = false; // Set to true or false based on your requirement
+    $includeAmount = false; // Do not include the amount column for application report
+    $includeComissionFee = false; // Do not include the amount column for application report
     $includeStatus = true; // Include the status column for application report 
     $orientation = 'L'; // Set orientation to landscape
-    generatePDF($data, 'Booked Account Report', $columns, $outputFileName, $includeTotal, $includeStatus, $orientation);
+    generatePDF($data, 'Booked Account Report', $columns, $outputFileName, $includeAmount,$includeComissionFee, $includeStatus, $orientation);
     exit;
 }
 

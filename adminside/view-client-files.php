@@ -89,9 +89,10 @@ $fileResult = $fileStmt->get_result();
             </div>
 
             <div class="container">
-                <a href="<?php echo $_SERVER['HTTP_REFERER'] ?? 'javascript:history.back()'; ?>" class="back-button">
+            <a href="<?php echo $_SERVER['HTTP_REFERER'] ?? 'javascript:history.back()'; ?>" class="back-button">
                     <span class="material-icons-outlined">arrow_back</span> Back
                 </a>
+
 
                 <div class="client-files-container">
                     <h2 class="client-files-title">Documents of <?php echo $firstName . ' ' . $lastName; ?></h2>
@@ -100,14 +101,22 @@ $fileResult = $fileStmt->get_result();
                             <div class="file-card">
                                 <div class="file-name"><?php echo htmlspecialchars($row['file_name']); ?></div>
                                 <div class="file-action-buttons">
-                                    <a class="edit-button" id="preview-view-client-files" data-file-path="../uploads/<?php echo htmlspecialchars($email); ?>/<?php echo htmlspecialchars($row['file_name']); ?>">Preview</a>
+                                    <?php 
+                                        $type = $row['file_description'] === 'ORCR File' ? 'orcr' : 'client';
+                                        if ($type === 'orcr') {
+                                            $filePath = "../clientside/uploads/orcr/" . htmlspecialchars($email) . "/" . htmlspecialchars($row['transaction_id']) . "/" . htmlspecialchars($row['file_name']);
+                                        } else {
+                                            $filePath = "../uploads/" . htmlspecialchars($email) . "/" . htmlspecialchars($row['file_name']);
+                                        }
+                                    ?>
+                                    <a class="edit-button" id="preview-view-client-files" data-file-path="<?php echo $filePath; ?>">Preview</a>
                                     <?php if ($row['file_description'] === 'ORCR File'): ?>
                                         <a class="edit-button" id="download-view-client-files"
-                                            href="processes/download.php?file=<?php echo urlencode($row['file_name']); ?>&type=orcr&email=<?php echo urlencode($email); ?>&transaction_id=<?php echo urlencode($row['transaction_id']); ?>"
+                                            href="processes/download.php?file=<?php echo htmlspecialchars($row['file_name']); ?>&type=orcr&email=<?php echo htmlspecialchars($email); ?>&transaction_id=<?php echo htmlspecialchars($row['transaction_id']); ?>"
                                             download>Download</a>
                                     <?php else: ?>
                                         <a class="edit-button" id="download-view-client-files"
-                                            href="processes/download.php?file=<?php echo urlencode($row['file_name']); ?>&type=client&email=<?php echo urlencode($email); ?>"
+                                            href="processes/download.php?file=<?php echo htmlspecialchars($row['file_name']); ?>&type=client&email=<?php echo htmlspecialchars($email); ?>"
                                             download>Download</a>
                                     <?php endif; ?>
                                 </div>

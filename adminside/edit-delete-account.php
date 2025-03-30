@@ -72,14 +72,12 @@ include 'processes/edit-delete-logic.php';
     $(document).ready(function () {
         $('.btn_edit').on('click', function () {
             var userId = $(this).data('id');
-            console.log('Edit button clicked for user ID:', userId);
 
             $.ajax({
-                url: 'edit-delete-account.php',
+                url: 'processes/edit-delete-logic.php',
                 type: 'GET',
                 data: { id: userId },
                 success: function (response) {
-                    console.log('AJAX response:', response);
                     var user = JSON.parse(response);
                     Swal.fire({
                         title: 'Edit User',
@@ -157,7 +155,7 @@ include 'processes/edit-delete-logic.php';
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: 'edit-delete-account.php',
+                                url: 'processes/edit-delete-logic.php',
                                 type: 'POST',
                                 data: {
                                     update_user: true,
@@ -174,7 +172,6 @@ include 'processes/edit-delete-logic.php';
                                     role: result.value.role
                                 },
                                 success: function (response) {
-                                    console.log('Update response:', response);
                                     var res = JSON.parse(response);
                                     if (res.status === 'success') {
                                         Swal.fire('Updated!', 'User details have been updated.', 'success').then(() => {
@@ -193,7 +190,6 @@ include 'processes/edit-delete-logic.php';
 
         $('.btn_delete').on('click', function () {
             var userId = $(this).data('id');
-            console.log('Delete button clicked for user ID:', userId);
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -206,14 +202,13 @@ include 'processes/edit-delete-logic.php';
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'edit-delete-account.php',
+                        url: 'processes/edit-delete-logic.php',
                         type: 'POST',
                         data: {
                             delete_user: true,
                             user_id: userId
                         },
                         success: function (response) {
-                            console.log('Delete response:', response);
                             var res = JSON.parse(response);
                             if (res.status === 'success') {
                                 Swal.fire('Deleted!', 'User has been deleted.', 'success').then(() => {

@@ -1,8 +1,8 @@
 <?php
-
-include '../settings/authenticate.php';
+// Fix the include paths with proper directory traversal
+include __DIR__ . '/../../settings/authenticate.php';
 checkUserRole(['Admin']);
-include '../settings/config.php';
+include __DIR__ . '/../../settings/config.php';
 
 // Number of users per page
 $users_per_page = 15;
@@ -33,18 +33,73 @@ if (!$result) {
 
 // Handle delete action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
+    // Start output buffering to prevent any unwanted output
+    ob_start();
+    
     $user_id = (int) $_POST['user_id'];
-    $delete_query = "DELETE FROM users WHERE id = $user_id";
-    if ($conn->query($delete_query) === TRUE) {
+    
+    try {
+        // Start transaction
+        $conn->begin_transaction();
+        
+        // First get the user's email to delete related records in activity_log and files tables
+        $get_user_email_query = "SELECT email FROM users WHERE id = ?";
+        $stmt = $conn->prepare($get_user_email_query);
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        $email_result = $stmt->get_result();
+        
+        if ($email_result->num_rows > 0) {
+            $user_data = $email_result->fetch_assoc();
+            $user_email = $user_data['email'];
+            
+            // Delete records from activity_log
+            $delete_activity_log_query = "DELETE FROM activity_log WHERE user_email = ?";
+            $stmt = $conn->prepare($delete_activity_log_query);
+            $stmt->bind_param('s', $user_email);
+            $stmt->execute();
+            
+            // Delete records from files table
+            $delete_files_query = "DELETE FROM files WHERE user_email = ?";
+            $stmt = $conn->prepare($delete_files_query);
+            $stmt->bind_param('s', $user_email);
+            $stmt->execute();
+        }
+        
+        // Delete related sessions
+        $delete_sessions_query = "DELETE FROM sessions WHERE user_id = ?";
+        $stmt = $conn->prepare($delete_sessions_query);
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        
+        // Finally delete the user
+        $delete_query = "DELETE FROM users WHERE id = ?";
+        $stmt = $conn->prepare($delete_query);
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        
+        // Commit transaction
+        $conn->commit();
+        
+        // Clean any output before sending JSON
+        ob_clean();
         echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => $conn->error]);
+    } catch (Exception $e) {
+        // Rollback transaction on error
+        $conn->rollback();
+        
+        // Clean any output before sending JSON
+        ob_clean();
+        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }
     exit;
 }
 
 // Handle AJAX request for updating user details
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
+    // Start output buffering
+    ob_start();
+    
     $user_id = (int) $_POST['user_id'];
     $first_name = $_POST['first_name'];
     $middle_name = $_POST['middle_name'];
@@ -61,6 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
     $stmt = $conn->prepare($update_query);
     $stmt->bind_param('sssissssssi', $first_name, $middle_name, $last_name, $age, $gender, $dob, $address, $email, $phone, $role, $user_id);
 
+    // Clean any output before sending JSON
+    ob_clean();
+    
     if ($stmt->execute()) {
         echo json_encode(['status' => 'success']);
     } else {
@@ -71,10 +129,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
 
 // Handle AJAX request for fetching user details
 if (isset($_GET['id'])) {
+    // Start output buffering
+    ob_start();
+    
     $user_id = (int) $_GET['id'];
-    $query = "SELECT * FROM users WHERE id = $user_id";
-    $result = $conn->query($query);
+    $query = "SELECT * FROM users WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
+    // Clean any output before sending JSON
+    ob_clean();
+    
     if ($result->num_rows === 0) {
         echo json_encode(['status' => 'error', 'message' => 'User not found.']);
     } else {

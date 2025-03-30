@@ -15,7 +15,7 @@ function generateTransactionID()
         $part2 .= $characters[rand(0, $charactersLength - 1)];
     }
 
-    // Format and return the transaction ID
-    return '2024-' . $part1 . '-' . $part2;
+    // Format and return the transaction ID with the current year
+    return date('Y') . '-' . $part1 . '-' . $part2;
 }
 ?>

@@ -44,7 +44,7 @@ $fileSql = "
     SELECT ORCR_filename AS file_name, 'ORCR File' AS file_description, appointed_at AS upload_date, fsa.transaction_id
     FROM forms_sanglaorcr_applicants fsa
     JOIN appointments a ON fsa.transaction_id = a.transaction_id
-    WHERE a.email = ?
+    WHERE a.email = ? AND ORCR_filename IS NOT NULL
     ORDER BY file_name $sort_order
 ";
 $fileStmt = $conn->prepare($fileSql);

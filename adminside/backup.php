@@ -106,7 +106,7 @@ $message = isset($_POST['message']) ? $_POST['message'] : null;
                             <h5 class="charts-card-title">Select All</h5>
                         </div>
                     </div>
-                    <div class="row g-4">
+                    <div class="row">
                         <?php foreach ($tables as $table): ?>
                             <div class="col-md-4">
                                 <div class="charts-card shadow-sm p-4 text-center" 
@@ -120,54 +120,11 @@ $message = isset($_POST['message']) ? $_POST['message'] : null;
                      
                 </form>
 
-                <!-- Recover Form -->
-                <form action="processes/recover-data.php" method="POST" enctype="multipart/form-data" id="recoverForm" class="mt-5">
-                    <h3 class="mb-4 text-center">Recover Database</h3>
-                    <div class="mb-3">
-                        <label for="sqlFile" class="form-label">Upload SQL File</label>
-                        <input type="file" class="form-control" id="sqlFile" name="sqlFile" accept=".sql" required>
-                    </div>
-                    <div class="text-center">
-                        <button type="button" class="btn btn-danger" onclick="promptForRecoverPassword()">Recover</button>
-                    </div>
-                </form>
             </div>
         </main>
     </div>
     <script>
-        function promptForRecoverPassword() {
-            Swal.fire({
-                title: 'Enter Password',
-                input: 'password',
-                inputLabel: 'Please enter your account password',
-                inputPlaceholder: 'Enter your password',
-                inputAttributes: {
-                    maxlength: 255,
-                    autocapitalize: 'off',
-                    autocorrect: 'off'
-                },
-                showCancelButton: true,
-                confirmButtonText: 'Submit',
-                preConfirm: (password) => {
-                    if (!password) {
-                        Swal.showValidationMessage('Password is required');
-                    }
-                    return password;
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = document.getElementById('recoverForm');
-                    const passwordInput = document.createElement('input');
-                    passwordInput.type = 'hidden';
-                    passwordInput.name = 'password';
-                    passwordInput.value = result.value;
-                    form.appendChild(passwordInput);
-
-                    form.submit();
-                }
-            });
-        }
-
+    
         function promptForPassword(action) {
             Swal.fire({
                 title: 'Enter Password',

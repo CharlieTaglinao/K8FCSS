@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
 
     if (!$email) {
-        echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+        echo "<form id='redirectForm' action='../backup.php' method='POST'>
                 <input type='hidden' name='status' value='error'>
                 <input type='hidden' name='message' value='User not logged in. Operation aborted.'>
               </form>
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
 
     if (!$hashedPassword || !password_verify($enteredPassword, $hashedPassword)) {
-        echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+        echo "<form id='redirectForm' action='../backup.php' method='POST'>
                 <input type='hidden' name='status' value='error'>
                 <input type='hidden' name='message' value='Invalid password. Operation aborted.'>
               </form>
@@ -38,7 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedTables = isset($_POST['selectedTables']) ? explode(',', $_POST['selectedTables']) : [];
 
     if (empty($selectedTables)) {
-        echo json_encode(['status' => 'error', 'message' => 'No tables selected.']);
+        echo "<form id='redirectForm' action='../backup.php' method='POST'>
+                <input type='hidden' name='status' value='error'>
+                <input type='hidden' name='message' value='Please select a table to backup data or Extract SQL.'>
+              </form>
+              <script>document.getElementById('redirectForm').submit();</script>";
         exit;
     }
 
@@ -69,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $checkTableResult = $conn->query("SHOW TABLES LIKE '$table'");
             if ($checkTableResult->num_rows === 0) {
                 // Redirect to backup-and-restore.php with an error message for incorrect table name
-                header('Location: ../backup-and-restore.php?status=error&message=Incorrect+table+name:+'.urlencode($table));
+                header('Location: ../backup.php?status=error&message=Incorrect+table+name:+'.urlencode($table));
                 exit;
             }
 
@@ -94,9 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'backup') {
             file_put_contents($backupFile, $sqlDump);
             // Redirect to backup-and-restore.php with a success message via POST
-            echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+            echo "<form id='redirectForm' action='../backup.php' method='POST'>
                     <input type='hidden' name='status' value='success'>
-                    <input type='hidden' name='message' value='Backup created successfully go to you backup folder, located at :" . htmlspecialchars($backupFile) . "'>
+                    <input type='hidden' name='message' value='Backup created successfully. You can download it from: " . htmlspecialchars($baseUrl . "/backups/" . basename($backupFile)) . "'>
                   </form>
                   <script>document.getElementById('redirectForm').submit();</script>";
             exit;
@@ -107,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } catch (Exception $e) {
         // Redirect to backup-and-restore.php with an error message via POST
-        echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+        echo "<form id='redirectForm' action='../backup.php' method='POST'>
                 <input type='hidden' name='status' value='error'>
                 <input type='hidden' name='message' value='" . htmlspecialchars('An error occurred: ' . $e->getMessage()) . "'>
               </form>

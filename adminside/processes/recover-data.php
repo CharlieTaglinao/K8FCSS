@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['sqlFile'])) {
     }
 
     if (!$isAuthenticated) {
-        echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+        echo "<form id='redirectForm' action='../backup.php' method='POST'>
                 <input type='hidden' name='status' value='error'>
                 <input type='hidden' name='message' value='Invalid password. Recovery aborted.'>
               </form>
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['sqlFile'])) {
             $conn->query("SET FOREIGN_KEY_CHECKS = 1");
 
             // Redirect with success message
-            echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+            echo "<form id='redirectForm' action='../backup.php' method='POST'>
                     <input type='hidden' name='status' value='success'>
                     <input type='hidden' name='message' value='Database recovered successfully.'>
                   </form>
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['sqlFile'])) {
             $conn->query("SET FOREIGN_KEY_CHECKS = 1");
 
             // Redirect with error message
-            echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+            echo "<form id='redirectForm' action='../backup.php' method='POST'>
                     <input type='hidden' name='status' value='error'>
                     <input type='hidden' name='message' value='" . htmlspecialchars('Recovery failed: ' . $e->getMessage()) . "'>
                   </form>
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['sqlFile'])) {
         }
     } else {
         // Redirect with error message for invalid file
-        echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+        echo "<form id='redirectForm' action='../backup.php' method='POST'>
                 <input type='hidden' name='status' value='error'>
                 <input type='hidden' name='message' value='Invalid file. Please upload a valid .sql file.'>
               </form>

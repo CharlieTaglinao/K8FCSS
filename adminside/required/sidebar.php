@@ -72,9 +72,14 @@
             </a>
         </li>
         <li class="sidebar-list-item">
-            <a class="title" href="backup-and-restore.php">
-                <span class="material-icons-outlined">backup</span> Back up and Recovery
+            <a class="title" onclick="toggleSubmenu(event, 'settings-submenu')">
+                <span class="material-icons-outlined">settings</span> Settings
             </a>
+            <ul class="submenu" id="settings-submenu">
+                <li class="submenu-item"><a href="backup.php">Back up Data</a></li>
+                <li class="submenu-item"><a href="recovery.php">Restore Data</a></li>
+                
+            </ul>
         </li>
         <li class="sidebar-list-item">
             <a class="logout title" href="javascript:void(0);" onclick="confirmLogout()">
@@ -106,5 +111,5 @@
     document.getElementById('process-submenu').style.display = 'none';
     document.getElementById('report-submenu').style.display = 'none';
     document.getElementById('manage-submenu').style.display = 'none';
-    document.getElementById('pin-submenu').style.display = 'none';
+    document.getElementById('settings-submenu').style.display = 'none';
 </script>

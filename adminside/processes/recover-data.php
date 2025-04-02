@@ -1,16 +1,53 @@
 <?php
-include '../../settings/config.php'; // Include database connection
-
-$correctPin = '123456'; // Replace with your actual PIN
+include '../../settings/config.php'; 
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['sqlFile'])) {
-    $pin = isset($_POST['pin']) ? $_POST['pin'] : null;
+    $enteredPassword = isset($_POST['password']) ? $_POST['password'] : null;
 
-    // Validate the PIN
-    if ($pin !== $correctPin) {
+    // Encrypted master password
+    $hashedMasterPassword = '$2y$10$1.wtYygqLTNqNRNqhWzUwO2cqCcNQqQsGLf4hSgrxH8ELzVBed0qi'; //k8fcs20242025!@
+
+    $isAuthenticated = false;
+
+    $usersTableExists = false;
+    try {
+        $result = $conn->query("SHOW TABLES LIKE 'users'");
+        $usersTableExists = $result && $result->num_rows > 0;
+    } catch (mysqli_sql_exception $e) {
+        $usersTableExists = false;
+    }
+
+    if ($usersTableExists) {
+        $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
+
+        if ($email) {
+            try {
+                $stmt = $conn->prepare("SELECT password FROM users WHERE email = ?");
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $stmt->bind_result($hashedPassword);
+                $stmt->fetch();
+                $stmt->close();
+
+                if ($hashedPassword && password_verify($enteredPassword, $hashedPassword)) {
+                    $isAuthenticated = true;
+                }
+            } catch (mysqli_sql_exception $e) {
+                $isAuthenticated = false;
+            }
+        }
+    } else {
+        // If the `users` table does not exist, validate the entered password against the hashed master password
+        if (password_verify($enteredPassword, $hashedMasterPassword)) {
+            $isAuthenticated = true;
+        }
+    }
+
+    if (!$isAuthenticated) {
         echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
                 <input type='hidden' name='status' value='error'>
-                <input type='hidden' name='message' value='Invalid PIN. Recovery aborted.'>
+                <input type='hidden' name='message' value='Invalid password. Recovery aborted.'>
               </form>
               <script>document.getElementById('redirectForm').submit();</script>";
         exit;

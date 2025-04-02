@@ -1,17 +1,35 @@
 <?php
 include '../../settings/config.php'; // Include database connection
-
-$correctPin = '123456'; // Replace with your actual PIN
+session_start(); // Start session to access logged-in user data
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action']; // Either 'backup' or 'extractsql'
-    $pin = isset($_POST['pin']) ? $_POST['pin'] : null;
+    $enteredPassword = isset($_POST['password']) ? $_POST['password'] : null;
 
-    // Validate the PIN
-    if ($pin !== $correctPin) {
+    // Get the logged-in user's email from the session
+    $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
+
+    if (!$email) {
         echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
                 <input type='hidden' name='status' value='error'>
-                <input type='hidden' name='message' value='Invalid PIN. Operation aborted.'>
+                <input type='hidden' name='message' value='User not logged in. Operation aborted.'>
+              </form>
+              <script>document.getElementById('redirectForm').submit();</script>";
+        exit;
+    }
+
+    // Validate the password from the users table
+    $stmt = $conn->prepare("SELECT password FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->bind_result($hashedPassword);
+    $stmt->fetch();
+    $stmt->close();
+
+    if (!$hashedPassword || !password_verify($enteredPassword, $hashedPassword)) {
+        echo "<form id='redirectForm' action='../backup-and-restore.php' method='POST'>
+                <input type='hidden' name='status' value='error'>
+                <input type='hidden' name='message' value='Invalid password. Operation aborted.'>
               </form>
               <script>document.getElementById('redirectForm').submit();</script>";
         exit;

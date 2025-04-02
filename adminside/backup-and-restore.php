@@ -96,11 +96,11 @@ $message = isset($_POST['message']) ? $_POST['message'] : null;
 
                 <!-- Table Selection Form -->
                 <form action="processes/backup-data.php" method="POST" id="tableSelectionForm">
-                    <h3 class="mb-4 text-center">Select Tables to Back Up or Extract SQL</h3>
+                    <h3 class="mb-4 text-center">Select tables to Back Up or Extract SQL</h3>
                     <div class="col-md">
                     <div class="d-flex justify-content-end mb-4">
-                        <button type="button" class="btn btn-primary me-3" onclick="promptForPin('backup')">Back Up</button>
-                        <button type="button" class="btn btn-secondary" onclick="promptForPin('extractsql')">Extract SQL</button>
+                        <button type="button" class="btn btn-primary me-3" onclick="promptForPassword('backup')">Back Up</button>
+                        <button type="button" class="btn btn-secondary" onclick="promptForPassword('extractsql')">Extract SQL</button>
                     </div>
                         <div class="charts-card shadow-sm p-4 text-center" id="selectAllCard" onclick="toggleSelectAll()">
                             <h5 class="charts-card-title">Select All</h5>
@@ -128,64 +128,81 @@ $message = isset($_POST['message']) ? $_POST['message'] : null;
                         <input type="file" class="form-control" id="sqlFile" name="sqlFile" accept=".sql" required>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-danger" onclick="return confirmRecover()">Recover</button>
+                        <button type="button" class="btn btn-danger" onclick="promptForRecoverPassword()">Recover</button>
                     </div>
                 </form>
             </div>
         </main>
     </div>
     <script>
-        // Confirm recovery action
-        function confirmRecover() {
-            return confirm("Are you sure you want to recover the database? This action will overwrite existing data.");
-        }
-
-        function promptForPin(action) {
+        function promptForRecoverPassword() {
             Swal.fire({
-                title: 'Are you sure?',
-                text: `Do you want to proceed with ${action === 'backup' ? 'Backup' : 'Extract SQL'}?`,
-                icon: 'warning',
+                title: 'Enter Password',
+                input: 'password',
+                inputLabel: 'Please enter your account password',
+                inputPlaceholder: 'Enter your password',
+                inputAttributes: {
+                    maxlength: 255,
+                    autocapitalize: 'off',
+                    autocorrect: 'off'
+                },
                 showCancelButton: true,
-                confirmButtonText: 'Yes, proceed',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: 'Submit',
+                preConfirm: (password) => {
+                    if (!password) {
+                        Swal.showValidationMessage('Password is required');
+                    }
+                    return password;
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Enter PIN',
-                        input: 'password',
-                        inputLabel: 'Please enter your administrator PIN',
-                        inputPlaceholder: 'Enter PIN',
-                        inputAttributes: {
-                            maxlength: 6,
-                            autocapitalize: 'off',
-                            autocorrect: 'off'
-                        },
-                        showCancelButton: true,
-                        confirmButtonText: 'Submit',
-                        preConfirm: (pin) => {
-                            if (!pin) {
-                                Swal.showValidationMessage('PIN is required');
-                            }
-                            return pin;
-                        }
-                    }).then((pinResult) => {
-                        if (pinResult.isConfirmed) {
-                            const form = document.getElementById('tableSelectionForm');
-                            const pinInput = document.createElement('input');
-                            pinInput.type = 'hidden';
-                            pinInput.name = 'pin';
-                            pinInput.value = pinResult.value;
-                            form.appendChild(pinInput);
+                    const form = document.getElementById('recoverForm');
+                    const passwordInput = document.createElement('input');
+                    passwordInput.type = 'hidden';
+                    passwordInput.name = 'password';
+                    passwordInput.value = result.value;
+                    form.appendChild(passwordInput);
 
-                            const actionInput = document.createElement('input');
-                            actionInput.type = 'hidden';
-                            actionInput.name = 'action';
-                            actionInput.value = action;
-                            form.appendChild(actionInput);
+                    form.submit();
+                }
+            });
+        }
 
-                            form.submit();
-                        }
-                    });
+        function promptForPassword(action) {
+            Swal.fire({
+                title: 'Enter Password',
+                input: 'password',
+                inputLabel: 'Please enter your account password',
+                inputPlaceholder: 'Enter your password',
+                inputAttributes: {
+                    maxlength: 255,
+                    autocapitalize: 'off',
+                    autocorrect: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                preConfirm: (password) => {
+                    if (!password) {
+                        Swal.showValidationMessage('Password is required');
+                    }
+                    return password;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('tableSelectionForm');
+                    const passwordInput = document.createElement('input');
+                    passwordInput.type = 'hidden';
+                    passwordInput.name = 'password';
+                    passwordInput.value = result.value;
+                    form.appendChild(passwordInput);
+
+                    const actionInput = document.createElement('input');
+                    actionInput.type = 'hidden';
+                    actionInput.name = 'action';
+                    actionInput.value = action;
+                    form.appendChild(actionInput);
+
+                    form.submit();
                 }
             });
         }

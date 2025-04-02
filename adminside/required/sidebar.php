@@ -72,15 +72,6 @@
             </a>
         </li>
         <li class="sidebar-list-item">
-            <a class="title" onclick="toggleSubmenu(event, 'pin-submenu')">
-            <span class="material-icons-outlined">pin</span> PIN
-            </a>
-            <ul class="submenu" id="pin-submenu">
-            <li class="submenu-item"><a href="configure-pin.php">Configure PIN</a></li>
-            <li class="submenu-item"><a href="update-pin.php">Update PIN</a></li>
-            </ul>
-        </li>
-        <li class="sidebar-list-item">
             <a class="title" href="backup-and-restore.php">
                 <span class="material-icons-outlined">backup</span> Back up and Recovery
             </a>

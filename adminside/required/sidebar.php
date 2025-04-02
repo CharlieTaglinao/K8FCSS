@@ -31,15 +31,14 @@
         </li>
         <li class="sidebar-list-item">
             <a class="title" onclick="toggleSubmenu(event, 'manage-submenu')">
-                <span class="material-icons-outlined">manage_accounts</span> Management
+            <span class="material-icons-outlined">manage_accounts</span> Management
             </a>
             <ul class="submenu" id="manage-submenu">
-                <li class="submenu-item"><a href="manage-account.php">Create Account</a></li>
-                <li class="submenu-item"><a href="edit-delete-account.php">Update Account</a></li>
-                <li class="submenu-item"><a href="show-active-inactive.php">Active Status</a></li>
-                <li class="submenu-item"><a href="client-details.php">Account Statement</a></li>
-                <li class="submenu-item"><a href="all-client-files.php">File</a></li>
-
+            <li class="submenu-item"><a href="manage-account.php">Create Account</a></li>
+            <li class="submenu-item"><a href="edit-delete-account.php">Update Account</a></li>
+            <li class="submenu-item"><a href="show-active-inactive.php">Active Status</a></li>
+            <li class="submenu-item"><a href="client-details.php">Account Statement</a></li>
+            <li class="submenu-item"><a href="all-client-files.php">File</a></li>
             </ul>
         </li>
 
@@ -73,6 +72,20 @@
             </a>
         </li>
         <li class="sidebar-list-item">
+            <a class="title" onclick="toggleSubmenu(event, 'pin-submenu')">
+            <span class="material-icons-outlined">pin</span> PIN
+            </a>
+            <ul class="submenu" id="pin-submenu">
+            <li class="submenu-item"><a href="configure-pin.php">Configure PIN</a></li>
+            <li class="submenu-item"><a href="update-pin.php">Update PIN</a></li>
+            </ul>
+        </li>
+        <li class="sidebar-list-item">
+            <a class="title" href="backup-and-restore.php">
+                <span class="material-icons-outlined">backup</span> Back up and Recovery
+            </a>
+        </li>
+        <li class="sidebar-list-item">
             <a class="logout title" href="javascript:void(0);" onclick="confirmLogout()">
                 <span class="material-icons-outlined">logout</span> Logout
             </a>
@@ -102,4 +115,5 @@
     document.getElementById('process-submenu').style.display = 'none';
     document.getElementById('report-submenu').style.display = 'none';
     document.getElementById('manage-submenu').style.display = 'none';
+    document.getElementById('pin-submenu').style.display = 'none';
 </script>

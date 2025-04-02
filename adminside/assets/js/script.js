@@ -399,3 +399,71 @@ function printPdfBlob(blob) {
     }
   };
 }
+
+// start of the script for backup and extract sql
+  const selectedTables = new Set();
+        let allSelected = false;
+
+        // Toggle individual card selection
+        function toggleCardSelection(card, tableName) {
+            if (card.classList.contains('selected')) {
+                card.classList.remove('selected');
+                selectedTables.delete(tableName); // Remove from the set
+            } else {
+                card.classList.add('selected');
+                selectedTables.add(tableName); // Add to the set
+            }
+            updateSelectedTablesInput();
+        }
+
+        // Toggle "Select All" functionality
+        function toggleSelectAll() {
+            const cards = document.querySelectorAll('.charts-card:not(#selectAllCard)');
+            allSelected = !allSelected;
+
+            cards.forEach(card => {
+                const tableName = card.querySelector('.charts-card-title').textContent;
+                if (allSelected) {
+                    if (!card.classList.contains('selected')) {
+                        card.classList.add('selected');
+                        selectedTables.add(tableName); // Add to the set
+                    }
+                } else {
+                    if (card.classList.contains('selected')) {
+                        card.classList.remove('selected');
+                        selectedTables.delete(tableName); // Remove from the set
+                    }
+                }
+            });
+
+            updateSelectedTablesInput();
+        }
+
+        // Update the hidden input field with the selected tables
+        function updateSelectedTablesInput() {
+            document.getElementById('selectedTables').value = Array.from(selectedTables).join(',');
+        }
+
+        // Confirm action using SweetAlert
+        function confirmAction(action) {
+            const actionText = action === 'backup' ? 'Back Up' : 'Extract SQL';
+            Swal.fire({
+                title: `Are you sure you want to ${actionText}?`,
+                text: "This action cannot be undone.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#585a5e",
+                confirmButtonText: `Yes`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('tableSelectionForm');
+                    const actionInput = document.createElement('input');
+                    actionInput.type = 'hidden';
+                    actionInput.name = 'action';
+                    actionInput.value = action;
+                    form.appendChild(actionInput);
+                    form.submit();
+                }
+            });
+        }

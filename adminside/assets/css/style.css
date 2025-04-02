@@ -23,7 +23,7 @@ body {
   text-decoration: none;
   display: block;
   color: #9e9ea4;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .submenu-item:hover {
@@ -131,7 +131,7 @@ body {
 
 .sidebar-list-item {
   padding: 20px 20px 20px 20px;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .sidebar-list-item:hover {

@@ -233,12 +233,19 @@
                         <div class="mb-3">
                             <label for="bank-partner" class="form-label">Select Bank Partner: <span class="text-danger">*</span></label>
                             <select id="bank-partner" name="bank_partner" class="form-select" required>
-                                <option value=""></option>
-                                <option value="JACCS">JACCS</option>
-                                <option value="ORICO">ORICO</option>
-                                <option value="Banco De Oro">Banco De Oro</option>
-                                <option value="Security Bank">Security Bank</option>
-                                <option value="MayBank">MayBank</option>
+                                <option value="">Select a bank partner</option>
+                                <?php
+                                $bankQuery = "SELECT bank_name FROM bank";
+                                $bankResult = $conn->query($bankQuery);
+
+                                if ($bankResult->num_rows > 0) {
+                                    while ($bankRow = $bankResult->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($bankRow['bank_name']) . '">' . htmlspecialchars($bankRow['bank_name']) . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="">No banks available</option>';
+                                }
+                                ?>
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>
@@ -330,11 +337,18 @@
                                 <label for="bank-partner" class="form-label">Select Bank Partner: <span class="text-danger">*</span></label> <br>
                                 <select id="bank-partner" name="bank_partner" class="form-select" required>
                                     <option value="">Select a bank partner</option>
-                                    <option value="JACCS">JACCS</option>
-                                    <option value="ORICO">ORICO</option>
-                                    <option value="Banco De Oro">Banco De Oro</option>
-                                    <option value="Security Bank">Security Bank</option>
-                                    <option value="MayBank">MayBank</option>
+                                    <?php
+                                    $bankQuery = "SELECT bank_name FROM bank";
+                                    $bankResult = $conn->query($bankQuery);
+
+                                    if ($bankResult->num_rows > 0) {
+                                        while ($bankRow = $bankResult->fetch_assoc()) {
+                                            echo '<option value="' . htmlspecialchars($bankRow['bank_name']) . '">' . htmlspecialchars($bankRow['bank_name']) . '</option>';
+                                        }
+                                    } else {
+                                        echo '<option value="">No banks available</option>';
+                                    }
+                                    ?>
                                 </select>
                                 <div class="invalid-feedback"></div>
                             </div>

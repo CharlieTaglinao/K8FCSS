@@ -229,8 +229,8 @@ function confirmAction(button, action) {
                 document.querySelector('.loading-overlay').style.display = 'none';
                 document.querySelector('.loading-spinner').style.display = 'none';
                 Swal.fire({
-                    title: 'Success!',
-                    text: 'The appointment has been accepted.',
+                    title: action === 'accept' ? 'Successfully Accepted' : 'Successfully Declined',
+                    text: action === 'accept' ? 'The appointment has been accepted.' : 'The appointment has been declined.',
                     icon: 'success',
                     confirmButtonText: 'Okay',
                     didOpen: () => {
@@ -240,7 +240,7 @@ function confirmAction(button, action) {
                         document.body.classList.remove('swal2-shown', 'swal2-height-auto');
                     }
                 }).then(() => {
-                    window.location.href = 'acceptedAppointment.php';
+                    window.location.href = 'archives.php';
                 });
             })
             .catch(error => {
@@ -250,7 +250,7 @@ function confirmAction(button, action) {
                     title: 'Error!',
                     text: 'There was an error processing the appointment.',
                     icon: 'error',
-                    confirmButtonText: 'OK',
+                    confirmButtonText: 'Okay',
                     didOpen: () => {
                         document.body.classList.remove('swal2-shown', 'swal2-height-auto');
                     },

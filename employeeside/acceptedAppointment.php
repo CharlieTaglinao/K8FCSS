@@ -179,12 +179,19 @@ checkUserRole(['Employee']);
             <div class="grid-input">
             <label for="bank-partner">Select Bank Partner:</label>
             <select id="bank-partner" class="swal2-input">
-            <option value="">Select bank partner</option>
-            <option value="JACCS">JACCS</option>
-            <option value="ORICO">ORICO</option>
-            <option value="Banco De Oro">Banco De Oro</option>
-            <option value="Security Bank">Security Bank</option>
-            <option value="MayBank">MayBank</option>
+            <option value="">Select a bank partner</option>
+            <?php
+            $bankQuery = "SELECT bank_name FROM bank";
+            $bankResult = $conn->query($bankQuery);
+
+            if ($bankResult->num_rows > 0) {
+                while ($bankRow = $bankResult->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($bankRow['bank_name']) . '">' . htmlspecialchars($bankRow['bank_name']) . '</option>';
+                }
+            } else {
+                echo '<option value="">No banks available</option>';
+            }
+            ?>
             </select>
             </div>
             
@@ -364,12 +371,19 @@ checkUserRole(['Employee']);
                <div class="grid-input" id="decline-bank-partner">
                     <label for="bank-partner">Select Bank Partner:</label>
                     <select id="bank-partner" class="swal2-input">
-                        <option value=""></option>
-                        <option value="JACCS">JACCS</option>
-                        <option value="ORICO">ORICO</option>
-                        <option value="Banco De Oro">Banco De Oro</option>
-                        <option value="Security Bank">Security Bank</option>
-                        <option value="MayBank">MayBank</option>
+                        <option value="">Select a bank partner</option>
+                        <?php
+                        $bankQuery = "SELECT bank_name FROM bank";
+                        $bankResult = $conn->query($bankQuery);
+
+                        if ($bankResult->num_rows > 0) {
+                            while ($bankRow = $bankResult->fetch_assoc()) {
+                                echo '<option value="' . htmlspecialchars($bankRow['bank_name']) . '">' . htmlspecialchars($bankRow['bank_name']) . '</option>';
+                            }
+                        } else {
+                            echo '<option value="">No banks available</option>';
+                        }
+                        ?>
                     </select>
                 </div>
                 <div style="text-align: left; margin-top: 1rem;">

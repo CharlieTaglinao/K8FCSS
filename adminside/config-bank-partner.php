@@ -63,7 +63,7 @@ include '../settings/config.php';
                                 echo '<div class="row-item">' . htmlspecialchars($row['created_at']) . '</div>';
                                 echo '<div class="row-item">
                                         <a href="edit-bank.php?id=' . htmlspecialchars($row['id']) . '">Edit</a>
-                                        <a href="delete-bank.php?id=' . htmlspecialchars($row['id']) . '">Delete</a>
+                                        <a href="#" class="delete-link" data-id="' . htmlspecialchars($row['id']) . '">Delete</a>
                                       </div>';
                                 echo '</div>';
                             }
@@ -79,6 +79,27 @@ include '../settings/config.php';
         </main>
     </div>
     <script src="assets/js/script.js"></script>
+    <script>
+        document.querySelectorAll('.delete-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const bankId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#585a5e',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `delete-bank.php?id=${bankId}`;
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

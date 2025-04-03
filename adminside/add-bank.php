@@ -1,5 +1,6 @@
 <?php 
 include '../settings/config.php';
+session_start(); // Start the session
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bankName = trim($_POST['bank_name']);
@@ -7,33 +8,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = null;
 
     if (!$bankName) {
-        $status = 'error';
-        $message = 'Bank name cannot be empty.';
+        $_SESSION['status'] = 'error';
+        $_SESSION['message'] = 'Bank name cannot be empty.';
     } else {
-        // Insert the bank name into the database
-        $query = "INSERT INTO bank (bank_name) VALUES (?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $bankName);
+        // Check for the smallest unused ID
+        $query = "SELECT MIN(t1.id + 1) AS next_id 
+                  FROM bank t1 
+                  LEFT JOIN bank t2 ON t1.id + 1 = t2.id 
+                  WHERE t2.id IS NULL";
+        $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+        $nextId = $row['next_id'] ?? null;
+
+        if ($nextId) {
+            // Insert using the smallest unused ID
+            $query = "INSERT INTO bank (id, bank_name) VALUES (?, ?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("is", $nextId, $bankName);
+        } else {
+            // Insert normally if no deleted IDs are available
+            $query = "INSERT INTO bank (bank_name) VALUES (?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $bankName);
+        }
 
         if ($stmt->execute()) {
-            $status = 'success';
-            $message = 'Bank added successfully.';
+            $_SESSION['status'] = 'success';
+            $_SESSION['message'] = 'Bank added successfully.';
         } else {
-            $status = 'error';
-            $message = 'Failed to add bank. Please try again.';
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = 'Failed to add bank. Please try again.';
         }
 
         $stmt->close();
     }
 
-    // Redirect to the same page to display the alert
-    header("Location: add-bank.php?status=$status&message=" . urlencode($message));
+    // Redirect to config-bank-partner without query parameters
+    header("Location: config-bank-partner");
     exit;
 }
 
-// Retrieve status and message from GET parameters
-$status = $_GET['status'] ?? null;
-$message = $_GET['message'] ?? null;
+// Retrieve status and message from session
+$status = $_SESSION['status'] ?? null;
+$message = $_SESSION['message'] ?? null;
+
+// Clear session status and message after retrieval
+unset($_SESSION['status'], $_SESSION['message']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +89,7 @@ $message = $_GET['message'] ?? null;
                 </a>
                 <!-- Display alert if status and message are set -->
                 <?php if ($status && $message): ?>
-                    <div class="alert alert-<?php echo $status === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show" role="alert">
+                    <div class="alert <?php echo $status === 'success' ? 'alert-success' : ($status === 'info' ? 'alert-info' : 'alert-primary'); ?> alert-dismissible fade show" role="alert">
                         <?php echo htmlspecialchars($message); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>

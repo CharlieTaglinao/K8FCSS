@@ -1,5 +1,12 @@
 <?php 
 include '../settings/config.php';
+session_start(); // Start the session
+
+$status = $_SESSION['status'] ?? null;
+$message = $_SESSION['message'] ?? null;
+
+// Clear the session variables after retrieving them
+unset($_SESSION['status'], $_SESSION['message']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,8 +38,8 @@ include '../settings/config.php';
 
             <div class="container">
                 <!-- Display alert if status and message are set -->
-                <?php if (isset($status) && isset($message)): ?>
-                    <div class="alert alert-<?php echo $status === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show" role="alert">
+                <?php if ($status && $message): ?>
+                    <div class="alert <?php echo $status === 'success' ? 'alert-success' : ($status === 'info' ? 'alert-info' : 'alert-primary'); ?> alert-dismissible fade show" role="alert">
                         <?php echo htmlspecialchars($message); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>

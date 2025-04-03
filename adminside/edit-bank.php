@@ -1,12 +1,15 @@
 <?php 
 include '../settings/config.php';
+session_start(); // Start the session
 
 $bankId = $_GET['id'] ?? null;
 $status = null;
 $message = null;
 
 if (!$bankId) {
-    header("Location: manage-banks.php?status=error&message=" . urlencode("Bank ID is required."));
+    $_SESSION['status'] = 'error';
+    $_SESSION['message'] = 'Bank ID is required.';
+    header("Location: config-bank-partner");
     exit;
 }
 
@@ -20,7 +23,9 @@ $bank = $result->fetch_assoc();
 $stmt->close();
 
 if (!$bank) {
-    header("Location: manage-banks.php?status=error&message=" . urlencode("Bank not found."));
+    $_SESSION['status'] = 'error';
+    $_SESSION['message'] = 'Bank not found.';
+    header("Location: config-bank-partner");
     exit;
 }
 
@@ -28,8 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bankName = trim($_POST['bank_name']);
 
     if (!$bankName) {
-        $status = 'error';
-        $message = 'Bank name cannot be empty.';
+        $_SESSION['status'] = 'error';
+        $_SESSION['message'] = 'Bank name cannot be empty.';
+    } elseif ($bankName === $bank['bank_name']) {
+        $_SESSION['status'] = 'info';
+        $_SESSION['message'] = 'Nothing made changes.';
     } else {
         // Update the bank name in the database
         $query = "UPDATE bank SET bank_name = ? WHERE id = ?";
@@ -37,24 +45,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("si", $bankName, $bankId);
 
         if ($stmt->execute()) {
-            $status = 'success';
-            $message = 'Bank updated successfully.';
+            $_SESSION['status'] = 'success';
+            $_SESSION['message'] = 'Successfully updated a bank, ID: ' . $bankId;
         } else {
-            $status = 'error';
-            $message = 'Failed to update bank. Please try again.';
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = 'Failed to update bank. Please try again.';
         }
 
         $stmt->close();
     }
 
-    // Redirect to the same page to display the alert
-    header("Location: edit-bank.php?id=$bankId&status=$status&message=" . urlencode($message));
+    // Redirect to config-bank-partner.php without query parameters
+    header("Location: config-bank-partner");
     exit;
 }
 
-// Retrieve status and message from GET parameters
-$status = $_GET['status'] ?? null;
-$message = $_GET['message'] ?? null;
+// Retrieve status and message from session
+$status = $_SESSION['status'] ?? null;
+$message = $_SESSION['message'] ?? null;
+
+// Clear session status and message after retrieval
+unset($_SESSION['status'], $_SESSION['message']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -90,7 +101,7 @@ $message = $_GET['message'] ?? null;
                 </a>
                 <!-- Display alert if status and message are set -->
                 <?php if ($status && $message): ?>
-                    <div class="alert alert-<?php echo $status === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show" role="alert">
+                    <div class="alert <?php echo $status === 'success' ? 'alert-success' : ($status === 'info' ? 'alert-info' : 'alert-primary'); ?> alert-dismissible fade show" role="alert">
                         <?php echo htmlspecialchars($message); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>

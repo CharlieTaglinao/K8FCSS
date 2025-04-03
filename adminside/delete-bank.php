@@ -1,5 +1,6 @@
 <?php
 include '../settings/config.php';
+session_start(); // Start the session
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
@@ -9,18 +10,24 @@ if (isset($_GET['id'])) {
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {
-        // Redirect with success message
-        header("Location: config-bank-partner.php?status=success&message=Bank+deleted+successfully");
+        // Store success message in session
+        $_SESSION['status'] = 'success';
+        $_SESSION['message'] = 'Bank deleted successfully.';
     } else {
-        // Redirect with error message
-        header("Location: config-bank-partner.php?status=error&message=Failed+to+delete+bank");
+        // Store error message in session
+        $_SESSION['status'] = 'error';
+        $_SESSION['message'] = 'Failed to delete bank.';
     }
 
     $stmt->close();
 } else {
-    // Redirect if no ID is provided
-    header("Location: config-bank-partner.php?status=error&message=Invalid+request");
+    // Store invalid request message in session
+    $_SESSION['status'] = 'error';
+    $_SESSION['message'] = 'Invalid request.';
 }
 
+// Redirect to config-bank-partner.php without query parameters
+header("Location: config-bank-partner");
 $conn->close();
+exit;
 ?>

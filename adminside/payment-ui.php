@@ -81,13 +81,19 @@ ob_start();
 
                             <label for="bank_partner">Select Bank Partner:</label>
                             <select id="bank_partner" name="bank_partner" required>
-                                <option value="">--Select Bank Partner--</option>
-                                <option value="JACCS">JACCS</option>
-                                <option value="ORICO">ORICO</option>
-                                <option value="Banco De Oro">Banco De Oro</option>
-                                <option value="Security Bank">Security Bank</option>
-                                <option value="MayBank">MayBank</option>
-                                <!-- Add more bank options as needed -->
+                            <option value="">Select a bank partner</option>
+                                <?php
+                                $bankQuery = "SELECT bank_name FROM bank";
+                                $bankResult = $conn->query($bankQuery);
+
+                                if ($bankResult->num_rows > 0) {
+                                    while ($bankRow = $bankResult->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($bankRow['bank_name']) . '">' . htmlspecialchars($bankRow['bank_name']) . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="">No banks available</option>';
+                                }
+                                ?>
                             </select>
 
                             <?php if ($form_type !== 'sangla-orcr') { ?>
@@ -143,13 +149,19 @@ ob_start();
 
                             <label for="bank_partner">Select Bank Partner:</label>
                             <select id="bank_partner" name="bank_partner" required>
-                                <option value="">--Select Bank Partner--</option>
-                                <option value="JACCS">JACCS</option>
-                                <option value="ORICO">ORICO</option>
-                                <option value="Banco De Oro">Banco De Oro</option>
-                                <option value="Security Bank">Security Bank</option>
-                                <option value="MayBank">MayBank</option>
-                                <!-- Add more bank options as needed -->
+                            <option value="">Select a bank partner</option>
+                                <?php
+                                $bankQuery = "SELECT bank_name FROM bank";
+                                $bankResult = $conn->query($bankQuery);
+
+                                if ($bankResult->num_rows > 0) {
+                                    while ($bankRow = $bankResult->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($bankRow['bank_name']) . '">' . htmlspecialchars($bankRow['bank_name']) . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="">No banks available</option>';
+                                }
+                                ?>
                             </select>
                             <textarea id="remarksForDecline" name="remarksForDecline" required
                                 placeholder="Ex. Cancelled by Client"></textarea>

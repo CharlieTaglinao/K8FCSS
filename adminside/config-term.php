@@ -14,7 +14,7 @@ unset($_SESSION['status'], $_SESSION['message']);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Configure Bank</title>
+    <title>Configure Term</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -41,7 +41,7 @@ unset($_SESSION['status'], $_SESSION['message']);
 
         <main class="main-container">
             <div class="main-title text-center">
-                <h2 class="fw-bold">Configure bank partner</h2>
+                <h2 class="fw-bold">Configure term value</h2>
             </div>
 
             <div class="container">
@@ -55,24 +55,23 @@ unset($_SESSION['status'], $_SESSION['message']);
 
                 <!-- Table Selection Form -->
                 <div class="table-wrapper">
-                    <div class="row mt-3">
-                        <div class="col text-start">
-                            <button id="bulk-delete-btn" class="btn btn-primary">Delete Selected</button>
-                        </div>
-                        <div class="col text-end">
-                            <a href="add-bank" class="btn btn-success">+ Add Bank</a>
-                        </div>
+                <div class="row mt-3">
+                    <div class="col text-start">
+                        <button id="bulk-delete-btn" class="btn btn-danger d-none">Delete Selected</button>
                     </div>
+                    <div class="col text-end">
+                        <a href="add-term" class="btn btn-primary">+ Add term</a>
+                    </div>
+                </div>
 
-                    <input type="hidden" id="selected-ids" name="selected_ids" value="">
+                <input type="hidden" id="selected-ids" name="selected_ids" value="">
 
                     <div class="table">
                         <div class="table-header text-light">
                             <div class="header-item">ID</div>
-                            <div class="header-item">Bank Name</div>
+                            <div class="header-item">Term</div>
                             <div class="header-item">Created at</div>
                             <div class="header-item">Updated at</div>
-                            <div class="header-item">Action</div>
                         </div>
 
                         <?php
@@ -83,27 +82,26 @@ unset($_SESSION['status'], $_SESSION['message']);
                         $offset = ($page - 1) * $limit;
 
                         // Count total records
-                        $total_query = "SELECT COUNT(*) AS total FROM bank";
+                        $total_query = "SELECT COUNT(*) AS total FROM terms";
                         $total_result = $conn->query($total_query);
                         $total_row = $total_result->fetch_assoc();
                         $total_records = $total_row['total'];
                         $total_pages = ceil($total_records / $limit);
 
                         // Fetch paginated records sorted by the most recently added
-                        $query = "SELECT * FROM bank ORDER BY id ASC LIMIT $limit OFFSET $offset";
+                        $query = "SELECT * FROM terms ORDER BY id ASC LIMIT $limit OFFSET $offset";
                         $result = $conn->query($query);
 
                         // Display paginated records
+                        $selectedIds = [];
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                echo '<div class="table-row text-light selectable-row" data-id="' . htmlspecialchars($row['id']) . '">';
+                                $isSelected = in_array($row['id'], $selectedIds) ? 'selected' : '';
+                                echo '<div class="table-row text-light selectable-row ' . $isSelected . '" data-id="' . htmlspecialchars($row['id']) . '">';
                                 echo '<div class="row-item">' . htmlspecialchars($row['id']) . '</div>';
-                                echo '<div class="row-item">' . htmlspecialchars($row['bank_name']) . '</div>';
+                                echo '<div class="row-item">' . htmlspecialchars($row['term_value']) . ' Months' . '</div>';
                                 echo '<div class="row-item">' . date('F j, Y g:i:s A', strtotime($row['created_at'])) . '</div>';
                                 echo '<div class="row-item">' . (!empty($row['updated_at']) ? date('F j, Y g:i:s A', strtotime($row['updated_at'])) : '-') . '</div>';
-                                echo '<div class="row-item">
-                                        <a href="edit-bank?id=' . htmlspecialchars($row['id']) . '">Edit</a>
-                                      </div>';
                                 echo '</div>';
                             }
                         } else {
@@ -113,9 +111,10 @@ unset($_SESSION['status'], $_SESSION['message']);
                         }
                         ?>
                     </div>
+                    
                 </div>
 
-                <div class="pagination" id="bank-pagination">
+                <div class="pagination" id="pending-pagination">
                     <?php if ($total_pages > 1): ?>
                         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                             <a href="?page=<?php echo $i; ?>" class="pagination-link <?php echo ($i === $page) ? 'active' : ''; ?>">
@@ -133,11 +132,11 @@ unset($_SESSION['status'], $_SESSION['message']);
         const rows = document.querySelectorAll('.selectable-row');
         const selectedIdsInput = document.getElementById('selected-ids');
         const paginationLinks = document.querySelectorAll('.pagination-link');
-        const selectedRows = new Set(JSON.parse(localStorage.getItem('selectedBankIds') || '[]')); // Use localStorage to persist selected IDs
+        const selectedRows = new Set(JSON.parse(localStorage.getItem('selectedTermIds') || '[]')); // Use localStorage to persist selected IDs
 
         function updateSelectedIds() {
             selectedIdsInput.value = JSON.stringify(Array.from(selectedRows));
-            localStorage.setItem('selectedBankIds', selectedIdsInput.value); // Save selected IDs to localStorage
+            localStorage.setItem('selectedTermIds', selectedIdsInput.value); // Save selected IDs to localStorage
             bulkDeleteBtn.classList.toggle('d-none', selectedRows.size === 0);
         }
 
@@ -184,7 +183,7 @@ unset($_SESSION['status'], $_SESSION['message']);
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect to bulk delete handler with selected IDs
-                    window.location.href = `delete-bank.php?ids=${Array.from(selectedRows).join(',')}`;
+                    window.location.href = `delete-term.php?ids=${Array.from(selectedRows).join(',')}`;
                 }
             });
         });
@@ -192,7 +191,7 @@ unset($_SESSION['status'], $_SESSION['message']);
         document.querySelectorAll('.delete-link').forEach(link => {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
-                const bankId = this.getAttribute('data-id');
+                const termId = this.getAttribute('data-id');
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -203,7 +202,7 @@ unset($_SESSION['status'], $_SESSION['message']);
                     confirmButtonText: 'Yes'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = `delete-bank.php?id=${bankId}`;
+                        window.location.href = `delete-term.php?id=${termId}`;
                     }
                 });
             });

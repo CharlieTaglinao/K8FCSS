@@ -83,12 +83,12 @@ ob_start();
                             <select id="bank_partner" name="bank_partner" required>
                             <option value="">Select a bank partner</option>
                                 <?php
-                                $bankQuery = "SELECT bank_name FROM bank";
-                                $bankResult = $conn->query($bankQuery);
+                                $termQuery = "SELECT bank_name FROM bank";
+                                $termQuery = $conn->query($termQuery);
 
-                                if ($bankResult->num_rows > 0) {
-                                    while ($bankRow = $bankResult->fetch_assoc()) {
-                                        echo '<option value="' . htmlspecialchars($bankRow['bank_name']) . '">' . htmlspecialchars($bankRow['bank_name']) . '</option>';
+                                if ($termQuery->num_rows > 0) {
+                                    while ($termRow = $termQuery->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($termRow['bank_name']) . '">' . htmlspecialchars($termRow['bank_name']) . '</option>';
                                     }
                                 } else {
                                     echo '<option value="">No banks available</option>';
@@ -112,17 +112,17 @@ ob_start();
                             
                             <label for="term">Select Term:</label>
                             <select id="term" name="term" required>
-                                <option value="">Select term</option>
-                                <option value="6">6 months</option>
-                                <option value="12">12 months</option>
-                                <option value="18">18 months</option>
-                                <option value="24">24 months</option>
-                                <option value="30">30 months</option>
-                                <option value="36">36 months</option>
-                                <option value="42">42 months</option>
-                                <option value="48">48 months</option>
-                                <option value="54">54 months</option>
-                                <option value="60">60 months</option>
+                                <?php 
+                                $termQuery = "SELECT term_value FROM terms";
+                                $termQuery = $conn->query($termQuery);
+
+                                if ($termQuery->num_rows > 0) {
+                                    while ($termRow = $termQuery->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($termRow['term_value']) . '">' . htmlspecialchars($termRow['term_value']) .' Months'. '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="">No terms value available</option>';
+                                }?>
                             </select>
 
                             <label for="amount-finance">Enter Amount Finance:</label>
@@ -151,12 +151,12 @@ ob_start();
                             <select id="bank_partner" name="bank_partner" required>
                             <option value="">Select a bank partner</option>
                                 <?php
-                                $bankQuery = "SELECT bank_name FROM bank";
-                                $bankResult = $conn->query($bankQuery);
+                                $termQuery = "SELECT bank_name FROM bank";
+                                $termQuery = $conn->query($termQuery);
 
-                                if ($bankResult->num_rows > 0) {
-                                    while ($bankRow = $bankResult->fetch_assoc()) {
-                                        echo '<option value="' . htmlspecialchars($bankRow['bank_name']) . '">' . htmlspecialchars($bankRow['bank_name']) . '</option>';
+                                if ($termQuery->num_rows > 0) {
+                                    while ($termRow = $termQuery->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($termRow['bank_name']) . '">' . htmlspecialchars($termRow['bank_name']) . '</option>';
                                     }
                                 } else {
                                     echo '<option value="">No banks available</option>';

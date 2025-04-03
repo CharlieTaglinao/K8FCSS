@@ -47,7 +47,7 @@
             </a>
             <ul class="submenu" id="configure-submenu">
             <li class="submenu-item"><a href="config-bank-partner">Bank Partner</a></li>
-            <li class="submenu-item"><a href="#">Term</a></li>
+            <li class="submenu-item"><a href="config-term">Term</a></li>
             </ul>
         </li>
 

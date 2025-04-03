@@ -37,7 +37,7 @@ if (isset($_SESSION['user_email'])) {
             }
             if ($stmt->execute()) {
                 // Fetch client details from the database
-                $query = "SELECT email, clientname, form_type, remarks FROM appointments WHERE transaction_id = ?";
+                $query = "SELECT email, clientname, form_type, remarks,payment_description FROM appointments WHERE transaction_id = ?";
                 $stmt = $conn->prepare($query);
                 $stmt->bind_param('s', $transaction_id);
                 $stmt->execute();
@@ -53,6 +53,10 @@ if (isset($_SESSION['user_email'])) {
                     // Send the appropriate email based on the action
                     if ($action === 'approve') {
                         $emailResult = sendRecieveEmail($email, $clientname, $form_type, $transaction_id, $remarks);
+                        $congratulationsResult = sendCongratulationsEmail($email, $clientname, $form_type, $transaction_id);
+                        if ($congratulationsResult !== true) {
+                            echo "Action completed but congratulations email could not be sent. Error: $congratulationsResult";
+                        }
                     } elseif ($action === 'decline') {
                         $emailResult = sendNotReceiveEmail($email, $clientname, $form_type, $transaction_id, $remarks);
                     }

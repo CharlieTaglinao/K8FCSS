@@ -240,7 +240,7 @@ function confirmAction(button, action) {
                         document.body.classList.remove('swal2-shown', 'swal2-height-auto');
                     }
                 }).then(() => {
-                    window.location.href = 'archives.php';
+                    window.location.href = 'acceptedAppointment';
                 });
             })
             .catch(error => {

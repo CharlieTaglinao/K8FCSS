@@ -199,16 +199,17 @@ checkUserRole(['Employee']);
             <label for="term">Select Term:</label>
             <select id="term" name="term" class="swal2-input" required>
             <option value="">Select term</option>
-            <option value="6">6 months</option>
-            <option value="12">12 months</option>
-            <option value="18">18 months</option>
-            <option value="24">24 months</option>
-            <option value="30">30 months</option>
-            <option value="36">36 months</option>
-            <option value="42">42 months</option>
-            <option value="48">48 months</option>
-            <option value="54">54 months</option>
-            <option value="60">60 months</option>
+             <?php 
+                                $termQuery = "SELECT term_value FROM terms";
+                                $termQuery = $conn->query($termQuery);
+
+                                if ($termQuery->num_rows > 0) {
+                                    while ($termRow = $termQuery->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($termRow['term_value']) . '">' . htmlspecialchars($termRow['term_value']) .' Months'. '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="">No terms value available</option>';
+                                }?>
             </select>
             </div>
             

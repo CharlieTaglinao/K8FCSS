@@ -58,6 +58,7 @@ unset($_SESSION['status'], $_SESSION['message']);
                 <div class="row mt-3">
                     <div class="col text-start">
                         <button id="bulk-delete-btn" class="btn btn-danger d-none">Delete Selected</button>
+                        <button id="deselect-all-btn" class="btn btn-secondary d-none">Deselect All</button> <!-- Initially hidden -->
                     </div>
                     <div class="col text-end">
                         <a href="add-term" class="btn btn-primary">+ Add term</a>
@@ -72,6 +73,7 @@ unset($_SESSION['status'], $_SESSION['message']);
                             <div class="header-item">Term</div>
                             <div class="header-item">Created at</div>
                             <div class="header-item">Updated at</div>
+                            <div class="header-item">Action</div>
                         </div>
 
                         <?php
@@ -102,6 +104,9 @@ unset($_SESSION['status'], $_SESSION['message']);
                                 echo '<div class="row-item">' . htmlspecialchars($row['term_value']) . ' Months' . '</div>';
                                 echo '<div class="row-item">' . date('F j, Y g:i:s A', strtotime($row['created_at'])) . '</div>';
                                 echo '<div class="row-item">' . (!empty($row['updated_at']) ? date('F j, Y g:i:s A', strtotime($row['updated_at'])) : '-') . '</div>';
+                                echo '<div class="row-item">
+                                <a href="edit-term?id=' . htmlspecialchars($row['id']) . '">Edit</a>
+                                 </div>';
                                 echo '</div>';
                             }
                         } else {
@@ -129,6 +134,7 @@ unset($_SESSION['status'], $_SESSION['message']);
     <script src="assets/js/script.js"></script>
     <script>
         const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
+        const deselectAllBtn = document.getElementById('deselect-all-btn'); // Reference to the Deselect All button
         const rows = document.querySelectorAll('.selectable-row');
         const selectedIdsInput = document.getElementById('selected-ids');
         const paginationLinks = document.querySelectorAll('.pagination-link');
@@ -137,7 +143,9 @@ unset($_SESSION['status'], $_SESSION['message']);
         function updateSelectedIds() {
             selectedIdsInput.value = JSON.stringify(Array.from(selectedRows));
             localStorage.setItem('selectedTermIds', selectedIdsInput.value); // Save selected IDs to localStorage
-            bulkDeleteBtn.classList.toggle('d-none', selectedRows.size === 0);
+            const hasSelectedRows = selectedRows.size > 0;
+            bulkDeleteBtn.classList.toggle('d-none', !hasSelectedRows); // Show/hide Delete Selected button
+            deselectAllBtn.classList.toggle('d-none', !hasSelectedRows); // Show/hide Deselect All button
         }
 
         function toggleRowSelection(row) {
@@ -186,6 +194,12 @@ unset($_SESSION['status'], $_SESSION['message']);
                     window.location.href = `delete-term.php?ids=${Array.from(selectedRows).join(',')}`;
                 }
             });
+        });
+
+        deselectAllBtn.addEventListener('click', function () {
+            selectedRows.clear(); // Clear all selected rows
+            rows.forEach(row => row.classList.remove('selected')); // Remove the selected class from all rows
+            updateSelectedIds(); // Update the hidden input and localStorage
         });
 
         document.querySelectorAll('.delete-link').forEach(link => {

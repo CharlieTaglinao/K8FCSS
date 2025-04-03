@@ -9,12 +9,12 @@ $message = null;
 if (!$bankId) {
     $_SESSION['status'] = 'error';
     $_SESSION['message'] = 'Bank ID is required.';
-    header("Location: config-bank-partner");
+    header("Location: config-term");
     exit;
 }
 
 // Fetch the current bank details
-$query = "SELECT bank_name FROM bank WHERE id = ?";
+$query = "SELECT term_value FROM terms WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $bankId);
 $stmt->execute();
@@ -25,22 +25,22 @@ $stmt->close();
 if (!$bank) {
     $_SESSION['status'] = 'error';
     $_SESSION['message'] = 'Bank not found.';
-    header("Location: config-bank-partner");
+    header("Location: config-term");
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $bankName = trim($_POST['bank_name']);
+    $bankName = trim($_POST['term_value']);
 
     if (!$bankName) {
         $_SESSION['status'] = 'error';
-        $_SESSION['message'] = 'Bank name cannot be empty.';
-    } elseif ($bankName === $bank['bank_name']) {
+        $_SESSION['message'] = 'Term value cannot be empty.';
+    } elseif ($bankName === $bank['term_value']) {
         $_SESSION['status'] = 'info';
         $_SESSION['message'] = 'Nothing made changes.';
     } else {
         // Update the bank name in the database
-        $query = "UPDATE bank SET bank_name = ? WHERE id = ?";
+        $query = "UPDATE terms SET term_value = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("si", $bankName, $bankId);
 
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Redirect to config-bank-partner.php without query parameters
-    header("Location: config-bank-partner");
+    header("Location: config-term");
     exit;
 }
 
@@ -73,7 +73,7 @@ unset($_SESSION['status'], $_SESSION['message']);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Edit bank name</title>
+    <title>Edit term value</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -92,7 +92,7 @@ unset($_SESSION['status'], $_SESSION['message']);
 
         <main class="main-container">
             <div class="main-title text-center">
-                <h2 class="fw-bold">Edit Bank</h2>
+                <h2 class="fw-bold">Edit term</h2>
             </div>
 
             <div class="container">
@@ -107,15 +107,15 @@ unset($_SESSION['status'], $_SESSION['message']);
                     </div>
                 <?php endif; ?>
                     
-                <form action="edit-bank.php?id=<?php echo htmlspecialchars($bankId); ?>" method="POST" class="needs-validation" novalidate>
+                <form action="edit-term.php?id=<?php echo htmlspecialchars($bankId); ?>" method="POST" class="needs-validation" novalidate>
                     <div class="mb-3">
-                        <label for="bankName" class="form-label">Bank Name</label>
-                        <input type="text" class="form-control" id="bankName" name="bank_name" value="<?php echo htmlspecialchars($bank['bank_name']); ?>" required>
-                        <div class="invalid-feedback" id="bankNameError">
+                        <label for="termValue" class="form-label">Term value</label>
+                        <input type="text" class="form-control" id="termValue" name="term_value" value="<?php echo htmlspecialchars($bank['term_value']); ?>" required>
+                        <div class="invalid-feedback" id="termValueError">
                             Bank name cannot be empty.
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update Bank</button>
+                    <button type="submit" class="btn btn-primary">Update term</button>
                 </form>
             </div>
         </main>
@@ -125,23 +125,23 @@ unset($_SESSION['status'], $_SESSION['message']);
         // Live validation script
         (function () {
             'use strict';
-            const bankNameInput = document.getElementById('bankName');
-            const bankNameError = document.getElementById('bankNameError');
+            const termValueInput = document.getElementById('termValue');
+            const termValueError = document.getElementById('termValueError');
 
             // Add input event listener for live validation
-            bankNameInput.addEventListener('input', function () {
-                const value = bankNameInput.value.trim();
-                const regex = /^[a-zA-Z\s]+$/; // Only letters and spaces are allowed
+            termValueInput.addEventListener('input', function () {
+            const value = termValueInput.value.trim();
+            const regex = /^\d{1,5}$/; // Only numbers with a maximum of 5 digits
 
-                if (!value || !regex.test(value)) {
-                    bankNameInput.classList.add('is-invalid');
-                    bankNameError.style.display = 'block';
-                    bankNameError.textContent = 'Only letters and spaces are allowed.';
-                } else {
-                    bankNameInput.classList.remove('is-invalid');
-                    bankNameInput.classList.add('is-valid');
-                    bankNameError.style.display = 'none';
-                }
+            if (!regex.test(value)) {
+                termValueInput.classList.add('is-invalid');
+                termValueError.style.display = 'block';
+                termValueError.textContent = 'Only numbers with a maximum of 5 digits are
+            } else {
+                termValueInput.classList.remove('is-invalid');
+                termValueInput.classList.add('is-valid');
+                termValueError.style.display = 'none';
+            }
             });
         })();
     </script>

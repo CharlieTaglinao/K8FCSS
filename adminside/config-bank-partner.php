@@ -57,7 +57,8 @@ unset($_SESSION['status'], $_SESSION['message']);
                 <div class="table-wrapper">
                     <div class="row mt-3">
                         <div class="col text-start">
-                            <button id="bulk-delete-btn" class="btn btn-primary">Delete Selected</button>
+                            <button id="bulk-delete-btn" class="btn btn-primary d-none">Delete Selected</button>
+                            <button id="deselect-all-btn" class="btn btn-secondary d-none">Deselect All</button> <!-- Initially hidden -->
                         </div>
                         <div class="col text-end">
                             <a href="add-bank" class="btn btn-success">+ Add Bank</a>
@@ -134,11 +135,14 @@ unset($_SESSION['status'], $_SESSION['message']);
         const selectedIdsInput = document.getElementById('selected-ids');
         const paginationLinks = document.querySelectorAll('.pagination-link');
         const selectedRows = new Set(JSON.parse(localStorage.getItem('selectedBankIds') || '[]')); // Use localStorage to persist selected IDs
+        const deselectAllBtn = document.getElementById('deselect-all-btn'); // Reference to the Deselect All button
 
         function updateSelectedIds() {
             selectedIdsInput.value = JSON.stringify(Array.from(selectedRows));
             localStorage.setItem('selectedBankIds', selectedIdsInput.value); // Save selected IDs to localStorage
-            bulkDeleteBtn.classList.toggle('d-none', selectedRows.size === 0);
+            const hasSelectedRows = selectedRows.size > 0;
+            bulkDeleteBtn.classList.toggle('d-none', !hasSelectedRows); // Show/hide Delete Selected button
+            deselectAllBtn.classList.toggle('d-none', !hasSelectedRows); // Show/hide Deselect All button
         }
 
         function toggleRowSelection(row) {
@@ -187,6 +191,12 @@ unset($_SESSION['status'], $_SESSION['message']);
                     window.location.href = `delete-bank.php?ids=${Array.from(selectedRows).join(',')}`;
                 }
             });
+        });
+
+        deselectAllBtn.addEventListener('click', function () {
+            selectedRows.clear(); // Clear all selected rows
+            rows.forEach(row => row.classList.remove('selected')); // Remove the selected class from all rows
+            updateSelectedIds(); // Update the hidden input and localStorage
         });
 
         document.querySelectorAll('.delete-link').forEach(link => {
